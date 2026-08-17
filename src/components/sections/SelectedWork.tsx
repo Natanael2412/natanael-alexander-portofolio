@@ -1,0 +1,210 @@
+"use client";
+
+import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
+
+const PROJECTS = [
+  {
+    slug: "ac",
+    title: "AC Production",
+    tags: "Production · Visual",
+    image: "/images/work/AC.png",
+    year: "2026",
+  },
+  {
+    slug: "evory",
+    title: "Evory",
+    tags: "Branding · Design",
+    image: "/images/work/evory.png",
+    year: "2026",
+  },
+  {
+    slug: "tangwin",
+    title: "Tangwin Cut Studio",
+    tags: "Identity · Digital",
+    image: "/images/work/tangwincutstudio.png",
+    year: "2025",
+  },
+];
+
+export default function SelectedWork() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const titleLeftRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  const handleNavigate = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+
+    // Cinematic exit transition
+    gsap.to(".work-section", {
+      opacity: 0,
+      scale: 0.95,
+      duration: 0.8,
+      ease: "power3.inOut",
+      onComplete: () => {
+        router.push("/work");
+      }
+    });
+  };
+
+  useGSAP(
+    () => {
+      if (!sectionRef.current) return;
+
+      const cards = gsap.utils.toArray(".work-card");
+      const wrapper = document.querySelector(".cards-wrapper");
+      
+      if (!wrapper || cards.length === 0) return;
+
+      // Calculate the step size (card height + gap)
+      // Card is 60vh, gap is 5vh (we will use CSS variables or calculate dynamically)
+      // To be safe and responsive, we can just use yPercent
+      // Total translation is 100% of the wrapper minus the height of one card
+      
+      const ctx = gsap.context(() => {
+        const updateCards = () => {
+          const viewportCenter = window.innerHeight / 2;
+          
+          cards.forEach(card => {
+            const rect = (card as HTMLElement).getBoundingClientRect();
+            const cardCenter = rect.top + rect.height / 2;
+            const distFromCenter = Math.abs(viewportCenter - cardCenter);
+            
+            const maxDist = window.innerHeight * 0.5;
+            let progress = 1 - (distFromCenter / maxDist);
+            if (progress < 0) progress = 0;
+            
+            const minScale = 0.75;
+            const currentScale = minScale + (1 - minScale) * progress;
+            
+            gsap.set(card, {
+              scale: currentScale,
+              filter: `brightness(${0.3 + progress * 0.7})`,
+              opacity: 0.5 + progress * 0.5
+            });
+            
+            if (progress > 0.8) {
+              card.classList.add('is-active');
+            } else {
+              card.classList.remove('is-active');
+            }
+          });
+        };
+
+        // Set initial CSS state explicitly for the first frame
+        // This avoids getBoundingClientRect calculating wrong viewport distances when off-screen
+        gsap.set(cards[0], { scale: 1, filter: 'brightness(1)', opacity: 1 });
+        cards[0].classList.add('is-active');
+        
+        for (let i = 1; i < cards.length; i++) {
+          gsap.set(cards[i], { scale: 0.75, filter: 'brightness(0.3)', opacity: 0.5 });
+          cards[i].classList.remove('is-active');
+        }
+
+        // Pin the section and animate the cards wrapper up
+        gsap.to(".cards-wrapper", {
+          y: () => {
+            const cardHeight = (cards[0] as HTMLElement).offsetHeight;
+            const gap = window.innerHeight * 0.02; // 2vh gap
+            const step = cardHeight + gap;
+            return -(step * (cards.length - 1));
+          },
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top top", // Pin when the section reaches the very top of viewport
+            end: () => `+=${window.innerHeight * 1.5}`, // Reduced slightly since we have no snap to wait for
+            pin: true,
+            scrub: 1, // Smooth scrub without snapping
+            onUpdate: updateCards
+          },
+        });
+        
+        // Force initial render state
+        ScrollTrigger.refresh();
+      }, sectionRef);
+
+      return () => ctx.revert();
+    },
+    { scope: sectionRef }
+  );
+
+  return (
+    <section
+      ref={sectionRef}
+      className="work-section w-full h-screen bg-[var(--paper)] flex relative overflow-hidden"
+      id="work"
+      aria-label="Selected work"
+    >
+      {/* LEFT: Static Title Area */}
+      <div className="w-full md:w-[45%] h-full flex flex-col justify-center px-8 md:px-20 relative z-20 pointer-events-none" ref={titleLeftRef}>
+        <h2 className="work-section__title pointer-events-auto">
+          SELECTED
+          <br />
+          <em style={{ fontStyle: "italic" }}>WORK</em>
+        </h2>
+        
+        <Link 
+          href="/portofolio"
+          className="mt-8 md:mt-12 group flex flex-col w-max pointer-events-auto"
+        >
+          <div className="flex items-center gap-2 font-montserrat text-sm md:text-base tracking-[0.2em] uppercase font-bold text-black pointer-events-auto">
+            VIEW FULL ARCHIVE 
+            <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 group-hover:rotate-45" strokeWidth={2.5} />
+          </div>
+          <span className="mt-1 w-0 h-[2px] bg-black transition-all duration-300 group-hover:w-full self-start"></span>
+        </Link>
+      </div>
+
+      {/* RIGHT: Vertical Snapping Carousel */}
+      <div className="w-full md:w-[55%] h-full absolute right-0 top-0 pointer-events-none">
+        <div className="cards-wrapper w-full absolute top-[20vh] flex flex-col gap-[2vh] items-center pointer-events-auto">
+          {PROJECTS.map((project) => (
+            <article
+              key={project.slug}
+              className="work-card group relative w-[85%] md:w-[85%] h-[60vh] shrink-0 z-10 shadow-2xl will-change-transform"
+              role="listitem"
+              id={`work-card-${project.slug}`}
+              tabIndex={0}
+              aria-label={`Project: ${project.title}`}
+            >
+              <div className="w-full h-full relative overflow-hidden bg-black">
+                <Image
+                  src={project.image}
+                  alt={project.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 60vw"
+                  className="work-card__image object-cover"
+                />
+                {/* Dark Gradient Overlay at bottom left */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 transition-opacity duration-500 [.is-active_&]:opacity-100" />
+                
+                {/* Text inside the image - shows only when active */}
+                <div className="absolute inset-x-6 bottom-6 md:inset-x-12 md:bottom-12 flex justify-between items-end opacity-0 translate-y-4 transition-all duration-500 [.is-active_&]:opacity-100 [.is-active_&]:translate-y-0 pointer-events-none">
+                  <div>
+                    <h3 className="font-playfair text-2xl md:text-5xl font-black text-white leading-none mb-1 md:mb-2 tracking-tighter uppercase">{project.title}</h3>
+                    <p className="font-montserrat text-xs md:text-sm font-bold text-white/80 tracking-[0.2em] uppercase">{project.tags}</p>
+                  </div>
+                  <div className="text-white font-playfair font-black text-lg md:text-2xl opacity-60">
+                    {project.year}
+                  </div>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
