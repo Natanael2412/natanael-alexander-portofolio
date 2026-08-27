@@ -38,7 +38,7 @@ export default function ContactFooter() {
             {/* Outline text effect, italic */}
             <div 
               className="text-transparent italic" 
-              style={{ WebkitTextStroke: "2px rgba(255, 255, 255, 0.9)", textStroke: "2px rgba(255, 255, 255, 0.9)" }}
+              style={{ WebkitTextStroke: "2px rgba(255, 255, 255, 0.9)" }}
             >
               create
             </div>

@@ -1,6 +1,4 @@
 import { ImageResponse } from 'next/og';
-import { readFileSync } from 'fs';
-import { join } from 'path';
 
 export const runtime = 'nodejs';
 
@@ -9,8 +7,6 @@ export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
 export default function Image() {
-  const fontData = readFileSync(join(process.cwd(), 'public/fonts/PlayfairDisplay-Bold.ttf'));
-
   return new ImageResponse(
     (
       <div
@@ -23,7 +19,6 @@ export default function Image() {
           alignItems: 'center',
           justifyContent: 'center',
           color: '#FFFFFF',
-          fontFamily: 'Playfair Display',
         }}
       >
         <div style={{ display: 'flex', fontSize: 180, fontWeight: 700, letterSpacing: '-0.04em', marginBottom: '20px' }}>
@@ -36,13 +31,6 @@ export default function Image() {
     ),
     {
       ...size,
-      fonts: [
-        {
-          name: 'Playfair Display',
-          data: fontData,
-          style: 'normal',
-        },
-      ],
     }
   );
 }

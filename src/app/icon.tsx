@@ -1,6 +1,4 @@
 import { ImageResponse } from 'next/og';
-import { readFileSync } from 'fs';
-import { join } from 'path';
 
 export const runtime = 'nodejs';
 
@@ -12,8 +10,6 @@ export const size = {
 export const contentType = 'image/png';
 
 export default function Icon() {
-  const fontData = readFileSync(join(process.cwd(), 'public/fonts/PlayfairDisplay-Bold.ttf'));
-
   return new ImageResponse(
     (
       <div
@@ -25,7 +21,6 @@ export default function Icon() {
           alignItems: 'center',
           justifyContent: 'center',
           color: '#FFFFFF',
-          fontFamily: 'Playfair Display',
           fontSize: 18,
           fontWeight: 700,
         }}
@@ -35,13 +30,6 @@ export default function Icon() {
     ),
     {
       ...size,
-      fonts: [
-        {
-          name: 'Playfair Display',
-          data: fontData,
-          style: 'normal',
-        },
-      ],
     }
   );
 }

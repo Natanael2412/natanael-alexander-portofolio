@@ -62,7 +62,7 @@ export default function SelectedWork() {
     () => {
       if (!sectionRef.current) return;
 
-      const cards = gsap.utils.toArray(".work-card");
+      const cards = gsap.utils.toArray(".work-card") as HTMLElement[];
       const wrapper = document.querySelector(".cards-wrapper");
       
       if (!wrapper || cards.length === 0) return;
