@@ -1,10 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import FooterShader from "@/components/global/FooterShader";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger, useGSAP);
+}
 
 export default function ContactFooter() {
   const [timeStr, setTimeStr] = useState("");
+  const footerRef = useRef<HTMLElement>(null);
+
 
   useEffect(() => {
     const updateTime = () => {
@@ -24,70 +33,60 @@ export default function ContactFooter() {
   }, []);
 
   return (
-    <footer className="relative w-full min-h-[50vh] h-[60vh] bg-[#0a0a0a] overflow-hidden" id="contact" aria-label="Contact section">
-      {/* Background Shader Component - Full width, gradient handled by shader */}
+    <footer
+      ref={footerRef}
+      className="relative w-full bg-[#0a0a0a] overflow-hidden flex flex-col justify-between min-h-[55vh]"
+      id="contact"
+      aria-label="Contact section"
+    >
+      {/* Background Shader */}
       <FooterShader className="absolute inset-0 z-0" />
-      
-      {/* Foreground Content */}
-      <div className="relative z-20 flex flex-col justify-between h-full px-8 md:px-16 pt-16 md:pt-24 pb-10 md:pb-16 text-white pointer-events-none min-h-[60vh] md:min-h-[500px]">
-        
-        {/* 2. The Hook (Giant Typography) */}
-        <div className="mt-0">
-          <h2 className="font-playfair text-6xl md:text-8xl leading-[0.9] tracking-tighter select-none">
-            <div className="text-white">Let&apos;s</div>
-            {/* Outline text effect, italic */}
-            <div 
-              className="text-transparent italic" 
-              style={{ WebkitTextStroke: "2px rgba(255, 255, 255, 0.9)" }}
-            >
-              create
-            </div>
-            <div className="text-white">together.</div>
-          </h2>
-        </div>
 
-        {/* Bottom Wrapper */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end w-full mt-auto gap-8">
-          
-          {/* 3. Tautan Konversi (Bottom Left) */}
-          <nav className="flex flex-col md:flex-row gap-6 md:gap-10 font-montserrat text-base md:text-lg tracking-widest uppercase font-medium pointer-events-auto">
-            <a 
-              href="https://mail.google.com/mail/?view=cm&fs=1&to=natanaelalexandergani@gmail.com" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="hover:text-gray-300 transition-colors duration-300 relative group"
-            >
-              Email
-              <span className="absolute -bottom-2 left-0 w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full"></span>
-            </a>
-            <a 
-              href="https://wa.me/6288996555999" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="hover:text-gray-300 transition-colors duration-300 relative group"
-            >
-              WhatsApp
-              <span className="absolute -bottom-2 left-0 w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full"></span>
-            </a>
-            <a 
-              href="https://instagram.com/natanaelalexander_" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="hover:text-gray-300 transition-colors duration-300 relative group"
-            >
-              Instagram
-              <span className="absolute -bottom-2 left-0 w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full"></span>
-            </a>
-          </nav>
-
-          {/* 4. Micro-Aesthetics (Bottom Right) */}
-          <div className="flex flex-col w-full md:w-auto text-left md:text-right text-sm text-white/80 font-sans tracking-wider space-y-1 drop-shadow-md">
-            <p>{timeStr || "SEMARANG, ID — --:--:-- WIB"}</p>
-            <p>© {new Date().getFullYear()} NATANAEL ALEXANDER. ALL RIGHTS RESERVED.</p>
+      {/* TOP CONTENT: CTA & Nav */}
+      <div className="relative z-20 flex flex-col sm:flex-row sm:justify-between sm:items-start gap-8 sm:gap-4
+        px-6 sm:px-10 md:px-16
+        pt-16 sm:pt-20 md:pt-28
+        text-white w-full"
+      >
+        {/* CTA Typography */}
+        <h2 className="font-playfair text-5xl sm:text-6xl md:text-7xl lg:text-[100px] xl:text-[130px] leading-[0.88] tracking-tighter select-none shrink-0">
+          <div className="text-white">Let&apos;s make it</div>
+          <div
+            className="text-transparent italic"
+            style={{ WebkitTextStroke: "1.5px rgba(255,255,255,0.9)" }}
+          >
+            happen.
           </div>
-          
-        </div>
+        </h2>
+
+        {/* Nav Links */}
+        <nav className="flex flex-col items-start sm:items-end gap-4 sm:gap-5 font-montserrat text-base sm:text-lg md:text-xl lg:text-2xl tracking-widest uppercase font-medium sm:mt-1">
+          <a href="https://mail.google.com/mail/?view=cm&fs=1&to=natanaelalexandergani@gmail.com" target="_blank" rel="noopener noreferrer" className="hover:text-gray-300 transition-colors relative group">
+            Email<span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full" />
+          </a>
+          <a href="https://wa.me/6288996555999" target="_blank" rel="noopener noreferrer" className="hover:text-gray-300 transition-colors relative group">
+            WhatsApp<span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full" />
+          </a>
+          <a href="https://instagram.com/natanaelalexander_" target="_blank" rel="noopener noreferrer" className="hover:text-gray-300 transition-colors relative group">
+            Instagram<span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full" />
+          </a>
+          <a href="https://anugerahventures.com" target="_blank" rel="noopener noreferrer" className="hover:text-gray-300 transition-colors relative group">
+            Anugerahventures.com<span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full" />
+          </a>
+        </nav>
       </div>
+
+      {/* BOTTOM CONTENT: Meta Info (In document flow, will never overlap) */}
+      <div className="relative z-20 px-6 sm:px-10 md:px-16 pb-24 sm:pb-28 md:pb-32 mt-32 md:mt-64 flex flex-col gap-1 pointer-events-none w-full">
+        <p className="font-montserrat text-xs sm:text-sm md:text-base tracking-wider text-white/40">
+          {timeStr || "SEMARANG, ID — --:--:-- WIB"}
+        </p>
+        <p className="font-montserrat text-xs sm:text-sm md:text-base tracking-wider text-white/30">
+          © {new Date().getFullYear()} NATANAEL ALEXANDER. ALL RIGHTS RESERVED.
+        </p>
+      </div>
+
     </footer>
   );
 }
+

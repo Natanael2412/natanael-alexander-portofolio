@@ -1,0 +1,27 @@
+{
+  "trackRect": {},
+  "trackStyles": "translate: none; rotate: none; scale: none; transform: translate3d(-0.0007px, 0px, 0px);",
+  "cardsCount": 40,
+  "cardsInfo": [
+    {
+      "rect": {},
+      "style": "width: 62.195vh; height: 35vh; filter: brightness(0.6);"
+    },
+    {
+      "rect": {},
+      "style": "width: 63.0187vh; height: 35.4635vh; filter: brightness(0.6);"
+    },
+    {
+      "rect": {},
+      "style": "width: 86.0058vh; height: 48.3995vh; filter: brightness(1);"
+    },
+    {
+      "rect": {},
+      "style": "width: 168.815vh; height: 95vh; filter: brightness(0.6);"
+    },
+    {
+      "rect": {},
+      "style": "width: 168.815vh; height: 95vh; filter: brightness(0.6);"
+    }
+  ]
+}

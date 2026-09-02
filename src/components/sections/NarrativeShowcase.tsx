@@ -12,7 +12,7 @@ const PANELS = [
   {
     id: "education",
     index: "01",
-    image: "/images/formal.png",
+    image: "/images/formal.webp",
     imageAlt: "Natanael in university formal attire",
     imagePosition: "left",
     title: "Academic\nFoundation",
@@ -25,7 +25,7 @@ const PANELS = [
   {
     id: "casual",
     index: "02",
-    image: "/images/casual.jpg",
+    image: "/images/casual.webp",
     imageAlt: "Natanael casual portrait",
     imagePosition: "right",
     title: "Beyond\nthe Screen",
@@ -38,7 +38,7 @@ const PANELS = [
   {
     id: "team",
     index: "03",
-    image: "/images/team.jpg",
+    image: "/images/team.webp",
     imageAlt: "Natanael and team at elegant venue",
     imagePosition: "left",
     title: "Built on\nCollaboration",
@@ -146,7 +146,7 @@ export default function NarrativeShowcase() {
                       src={panel.image}
                       alt={panel.imageAlt}
                       fill
-                      sizes="50vw"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
                       style={{ objectFit: "cover", objectPosition: "center top" }}
                       priority={panel.index === "01"}
                     />
@@ -165,7 +165,7 @@ export default function NarrativeShowcase() {
                       src={panel.image}
                       alt={panel.imageAlt}
                       fill
-                      sizes="50vw"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
                       style={{ objectFit: "cover", objectPosition: "center top" }}
                     />
                   </div>

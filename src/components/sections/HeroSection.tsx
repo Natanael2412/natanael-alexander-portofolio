@@ -28,134 +28,148 @@ export default function HeroSection() {
     () => {
       if (!sectionRef.current || !overlayRef.current || !aboutWrapperRef.current) return;
 
-      const ctx = gsap.context(() => {
-        // Entrance animation
-        const tl = gsap.timeline({ delay: 0.4 }); // Dipangkas dari 2.6 detik menjadi 0.4 detik
-        tl.fromTo(
-          sectionRef.current,
-          { opacity: 0 },
-          { opacity: 1, duration: 1.2, ease: "expo.out" }
-        )
-          .fromTo(
-            indexRef.current,
-            { opacity: 0, y: -10 },
-            { opacity: 1, y: 0, duration: 0.8, ease: "expo.out" },
-            "-=0.6"
-          )
-          .fromTo(
-            taglineRef.current,
-            { opacity: 0, y: 15 },
-            { opacity: 1, y: 0, duration: 0.8, ease: "expo.out" },
-            "-=0.6"
-          )
-          .fromTo(
-            scrollHintRef.current,
+      // ── Desktop only: horizontal pinned scroll experience ──
+      const mm = gsap.matchMedia();
+
+      mm.add("(min-width: 1024px)", () => {
+        const ctx = gsap.context(() => {
+          // Entrance animation
+          const tl = gsap.timeline({ delay: 0.4 });
+          tl.fromTo(
+            sectionRef.current,
             { opacity: 0 },
-            { opacity: 1, duration: 0.6 },
-            "-=0.4"
-          );
+            { opacity: 1, duration: 1.2, ease: "expo.out" }
+          )
+            .fromTo(
+              indexRef.current,
+              { opacity: 0, y: -10 },
+              { opacity: 1, y: 0, duration: 0.8, ease: "expo.out" },
+              "-=0.6"
+            )
+            .fromTo(
+              taglineRef.current,
+              { opacity: 0, y: 15 },
+              { opacity: 1, y: 0, duration: 0.8, ease: "expo.out" },
+              "-=0.6"
+            )
+            .fromTo(
+              scrollHintRef.current,
+              { opacity: 0 },
+              { opacity: 1, duration: 0.6 },
+              "-=0.4"
+            );
 
-        // Scroll animation 1: Hero transparency
-        ScrollTrigger.create({
-          trigger: sectionRef.current,
-          start: "top top",
-          end: "bottom bottom",
-          scrub: true,
-          onUpdate: (self) => {
-            const p = self.progress;
-            const bgAlpha = 1 - p;
-            if (overlayRef.current) {
-               overlayRef.current.style.backgroundColor = `rgba(255, 255, 255, ${bgAlpha})`;
-            }
-            const textVal = Math.round(p * 255);
-            const textColor = `rgb(${textVal}, ${textVal}, ${textVal})`;
-            if (nameLeftRef.current) nameLeftRef.current.style.color = textColor;
-            if (nameRightRef.current) nameRightRef.current.style.color = textColor;
-            const labelVal = Math.round(60 + (p * 195)); 
-            const labelColor = `rgb(${labelVal}, ${labelVal}, ${labelVal})`;
-            if (indexRef.current) indexRef.current.style.color = labelColor;
-            if (taglineRef.current) taglineRef.current.style.color = labelColor;
-            if (scrollHintRef.current) {
-              scrollHintRef.current.style.color = labelColor;
-              const line = scrollHintRef.current.querySelector(".hero__scroll-line") as HTMLElement | null;
-              if (line) line.style.backgroundColor = labelColor;
-            }
-          },
-        });
-
-        // Mimic native scroll for the image inside the sticky container
-        gsap.to(imgRef.current, {
-          y: () => {
-            if (!imgRef.current) return 0;
-            const overflow = imgRef.current.offsetHeight - window.innerHeight;
-            // Scroll down to 80% of the image (leaves a bit more of the bottom hidden)
-            return overflow > 0 ? -(overflow * 0.8) : 0;
-          },
-          ease: "none",
-          scrollTrigger: {
+          // Scroll animation 1: Hero transparency
+          ScrollTrigger.create({
             trigger: sectionRef.current,
             start: "top top",
             end: "bottom bottom",
             scrub: true,
-          }
-        });
-
-        // Scroll animation 2: Shrink Photo to Frame & About Section Horizontal Scroll
-        const panels = panelsRef.current.filter(Boolean);
-        
-        const scrollTl = gsap.timeline({
-          scrollTrigger: {
-            id: "about-scroll",
-            trigger: sectionRef.current,
-            start: "bottom bottom", // Trigger exactly when the bottom of the photo hits the bottom of the viewport
-            pin: true, // Pin the entire Hero section
-            scrub: true,
-            snap: {
-              // Menghitung persis posisi snap setiap panel 
-              // (0 = Start, lalu 1/3, 5/9, 7/9, 1 untuk 4 panel) -> karena skrg 2 panel, biarkan GSAP menghitung
-              snapTo: [0, ...panels.map((_, i) => (0.5 + i + 1) / (0.5 + panels.length))],
-              duration: { min: 1.0, max: 1.8 }, // Dibuat sangat lambat dan halus
-              delay: 0, 
-              ease: "power3.inOut" // Easing super smooth
+            onUpdate: (self) => {
+              const p = self.progress;
+              const bgAlpha = 1 - p;
+              if (overlayRef.current) {
+                 overlayRef.current.style.backgroundColor = `rgba(255, 255, 255, ${bgAlpha})`;
+              }
+              const textVal = Math.round(p * 255);
+              const textColor = `rgb(${textVal}, ${textVal}, ${textVal})`;
+              if (nameLeftRef.current) nameLeftRef.current.style.color = textColor;
+              if (nameRightRef.current) nameRightRef.current.style.color = textColor;
+              const labelVal = Math.round(60 + (p * 195)); 
+              const labelColor = `rgb(${labelVal}, ${labelVal}, ${labelVal})`;
+              if (indexRef.current) indexRef.current.style.color = labelColor;
+              if (taglineRef.current) taglineRef.current.style.color = labelColor;
+              if (scrollHintRef.current) {
+                scrollHintRef.current.style.color = labelColor;
+                const line = scrollHintRef.current.querySelector(".hero__scroll-line") as HTMLElement | null;
+                if (line) line.style.backgroundColor = labelColor;
+              }
             },
-            end: () => `+=${window.innerWidth * panels.length}`,
-          },
-        });
+          });
 
-        // Phase A: Shrink the photo into a frame
-        gsap.set(photoContainerRef.current, { clipPath: "inset(0% 0%)" });
-        scrollTl.fromTo(
-          photoContainerRef.current,
-          { clipPath: "inset(0% 0%)" },
-          {
-            clipPath: "inset(4vh 4vw)", // smaller frame without rounded edges
-            ease: "power2.inOut",
-            duration: window.innerWidth * 0.5,
-          },
-          0
+          // Mimic native scroll for the image inside the sticky container
+          gsap.to(imgRef.current, {
+            y: () => {
+              if (!imgRef.current) return 0;
+              const overflow = imgRef.current.offsetHeight - window.innerHeight;
+              return overflow > 0 ? -(overflow * 0.8) : 0;
+            },
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top top",
+              end: "bottom bottom",
+              scrub: true,
+            }
+          });
+
+          // Scroll animation 2: Shrink Photo to Frame & About Section Horizontal Scroll
+          const panels = panelsRef.current.filter(Boolean);
+          
+          const scrollTl = gsap.timeline({
+            scrollTrigger: {
+              id: "about-scroll",
+              trigger: sectionRef.current,
+              start: "bottom bottom",
+              pin: true,
+              scrub: true,
+              snap: {
+                snapTo: [0, ...panels.map((_, i) => (0.5 + i + 1) / (0.5 + panels.length))],
+                duration: { min: 1.0, max: 1.8 },
+                delay: 0, 
+                ease: "power3.inOut"
+              },
+              end: () => `+=${window.innerWidth * panels.length}`,
+            },
+          });
+
+          // Phase A: Shrink the photo into a frame
+          gsap.set(photoContainerRef.current, { clipPath: "inset(0% 0%)" });
+          scrollTl.fromTo(
+            photoContainerRef.current,
+            { clipPath: "inset(0% 0%)" },
+            {
+              clipPath: "inset(4vh 4vw)",
+              ease: "power2.inOut",
+              duration: window.innerWidth * 0.5,
+            },
+            0
+          );
+
+          // Fade out text overlay
+          scrollTl.to(
+            overlayRef.current,
+            {
+              opacity: 0,
+              duration: window.innerWidth * 0.25,
+              ease: "power2.in",
+            },
+            window.innerWidth * 0.25
+          );
+
+          // Phase B: Move about wrapper
+          scrollTl.to(aboutWrapperRef.current, {
+            xPercent: -100,
+            ease: "none",
+            duration: window.innerWidth * panels.length,
+          }, window.innerWidth * 0.5);
+
+        }, sectionRef);
+
+        return () => ctx.revert();
+      });
+
+      // ── Mobile: simple entrance fade, no GSAP scroll hijack ──
+      mm.add("(max-width: 1023px)", () => {
+        const tl = gsap.timeline({ delay: 0.2 });
+        tl.fromTo(
+          sectionRef.current,
+          { opacity: 0 },
+          { opacity: 1, duration: 0.8, ease: "expo.out" }
         );
+      });
 
-        // Fade out text overlay
-        scrollTl.to(
-          overlayRef.current,
-          {
-            opacity: 0,
-            duration: window.innerWidth * 0.25,
-            ease: "power2.in",
-          },
-          window.innerWidth * 0.25
-        );
-
-        // Phase B: Move about wrapper
-        scrollTl.to(aboutWrapperRef.current, {
-          xPercent: -100, // Move the entire wrapper left
-          ease: "none",
-          duration: window.innerWidth * panels.length,
-        }, window.innerWidth * 0.5);
-
-      }, sectionRef);
-
-      return () => ctx.revert();
+      return () => mm.revert();
     },
     { scope: sectionRef }
   );
@@ -196,8 +210,8 @@ export default function HeroSection() {
         <div className="hero__bg-photo" ref={photoContainerRef}>
           <Image
             ref={imgRef}
-            src="/images/team.jpg"
-            alt="Natanael Alexander and team"
+            src="/images/Hero.webp"
+            alt="Natanael Alexander Hero"
             width={1920}
             height={2560}
             priority
@@ -207,13 +221,13 @@ export default function HeroSection() {
           <div className="hero__photo-vignette" aria-hidden="true" />
         </div>
 
-      {/* Layer 2: About Section Panels (Sliding in from the right over the photo) */}
+      {/* Layer 2: About Section Panels (Horizontal on desktop, Vertical stack on mobile) */}
       <div className="about-wrapper" ref={aboutWrapperRef} id="about">
         {/* Panel 1: THE MINDSET + Casual Photo */}
-        <div className="w-[100vw] h-[100vh] flex flex-row" ref={(el) => { panelsRef.current[0] = el; }}>
+        <div className="w-[100vw] min-h-screen lg:h-[100vh] flex flex-col lg:flex-row" ref={(el) => { panelsRef.current[0] = el; }}>
           
-          {/* Left: 50% Text */}
-          <div className="w-1/2 h-full flex flex-col justify-center bg-[var(--chalk)] relative z-10" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)" }}>
+          {/* Left: Text */}
+          <div className="w-full lg:w-1/2 flex-1 flex flex-col justify-center bg-[var(--chalk)] relative z-10" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(3rem, 8vh, 6rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}>
             <div className="w-full">
               <span className="about__label">01 / THE MINDSET</span>
               <h2 className="about__title">THE CATALYST.</h2>
@@ -227,23 +241,24 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Right: 50% Photo */}
-          <div className="w-1/2 h-full relative bg-[var(--chalk)]">
+          {/* Right: Photo */}
+          <div className="w-full lg:w-1/2 h-[50svh] lg:h-full relative bg-[var(--chalk)]">
             <Image 
-              src="/images/casual.jpg" 
+              src="/images/casual.webp" 
               alt="Natanael Alexander Casual" 
               fill 
               className="object-cover object-center" 
+              sizes="(max-width: 1024px) 100vw, 50vw"
             />
           </div>
 
         </div>
 
         {/* Panel 2: THE FOUNDATION + Formal Photo */}
-        <div className="w-[100vw] h-[100vh] flex flex-row" ref={(el) => { panelsRef.current[1] = el; }}>
+        <div className="w-[100vw] min-h-screen lg:h-[100vh] flex flex-col lg:flex-row" ref={(el) => { panelsRef.current[1] = el; }}>
           
-          {/* Left: 50% Text */}
-          <div className="w-1/2 h-full flex flex-col justify-center bg-[var(--chalk)] relative z-10" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)" }}>
+          {/* Left: Text */}
+          <div className="w-full lg:w-1/2 flex-1 flex flex-col justify-center bg-[var(--chalk)] relative z-10" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(3rem, 8vh, 6rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}>
             <div className="w-full">
               <span className="about__label">02 / THE FOUNDATION</span>
               <h2 className="about__title">DUAL PERSPECTIVE.</h2>
@@ -253,13 +268,14 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Right: 50% Photo */}
-          <div className="w-1/2 h-full relative bg-[var(--chalk)]">
+          {/* Right: Photo */}
+          <div className="w-full lg:w-1/2 h-[50svh] lg:h-full relative bg-[var(--chalk)]">
             <Image 
-              src="/images/formal.png" 
+              src="/images/formal.webp" 
               alt="Natanael Alexander Formal" 
               fill 
               className="object-cover object-center" 
+              sizes="(max-width: 1024px) 100vw, 50vw"
             />
           </div>
 

@@ -131,7 +131,7 @@ function createShader(gl: WebGLRenderingContext, type: number, source: string) {
   return shader;
 }
 
-export default function LogoShader({ className, imageUrl = "/images/logo-weatso.png" }: { className?: string, imageUrl?: string }) {
+export default function LogoShader({ className, imageUrl = "/images/logo-weatso.webp" }: { className?: string, imageUrl?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: -1000, y: -1000 }); // Default offscreen
 

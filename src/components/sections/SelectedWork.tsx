@@ -11,31 +11,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const PROJECTS = [
-  {
-    slug: "ac",
-    title: "AC Production",
-    tags: "Production · Visual",
-    image: "/images/work/AC.png",
-    year: "2026",
-  },
-  {
-    slug: "evory",
-    title: "Evory",
-    tags: "Branding · Design",
-    image: "/images/work/evory.png",
-    year: "2026",
-  },
-  {
-    slug: "tangwin",
-    title: "Tangwin Cut Studio",
-    tags: "Identity · Digital",
-    image: "/images/work/tangwincutstudio.png",
-    year: "2025",
-  },
-];
+import { Project } from "@/lib/supabase";
 
-export default function SelectedWork() {
+export default function SelectedWork({ projects = [] }: { projects: Project[] }) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const titleLeftRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -62,80 +40,77 @@ export default function SelectedWork() {
     () => {
       if (!sectionRef.current) return;
 
-      const cards = gsap.utils.toArray(".work-card") as HTMLElement[];
-      const wrapper = document.querySelector(".cards-wrapper");
-      
-      if (!wrapper || cards.length === 0) return;
+      const mm = gsap.matchMedia();
 
-      // Calculate the step size (card height + gap)
-      // Card is 60vh, gap is 5vh (we will use CSS variables or calculate dynamically)
-      // To be safe and responsive, we can just use yPercent
-      // Total translation is 100% of the wrapper minus the height of one card
-      
-      const ctx = gsap.context(() => {
-        const updateCards = () => {
-          const viewportCenter = window.innerHeight / 2;
-          
-          cards.forEach(card => {
-            const rect = (card as HTMLElement).getBoundingClientRect();
-            const cardCenter = rect.top + rect.height / 2;
-            const distFromCenter = Math.abs(viewportCenter - cardCenter);
+      mm.add("(min-width: 1024px)", () => {
+        const cards = gsap.utils.toArray(".work-card") as HTMLElement[];
+        const wrapper = document.querySelector(".cards-wrapper");
+        
+        if (!wrapper || cards.length === 0) return;
+
+        const ctx = gsap.context(() => {
+          const updateCards = () => {
+            const viewportCenter = window.innerHeight / 2;
             
-            const maxDist = window.innerHeight * 0.5;
-            let progress = 1 - (distFromCenter / maxDist);
-            if (progress < 0) progress = 0;
-            
-            const minScale = 0.75;
-            const currentScale = minScale + (1 - minScale) * progress;
-            
-            gsap.set(card, {
-              scale: currentScale,
-              filter: `brightness(${0.3 + progress * 0.7})`,
-              opacity: 0.5 + progress * 0.5
+            cards.forEach(card => {
+              const rect = (card as HTMLElement).getBoundingClientRect();
+              const cardCenter = rect.top + rect.height / 2;
+              const distFromCenter = Math.abs(viewportCenter - cardCenter);
+              
+              const maxDist = window.innerHeight * 0.5;
+              let progress = 1 - (distFromCenter / maxDist);
+              if (progress < 0) progress = 0;
+              
+              const minScale = 0.75;
+              const currentScale = minScale + (1 - minScale) * progress;
+              
+              gsap.set(card, {
+                scale: currentScale,
+                filter: `brightness(${0.3 + progress * 0.7})`,
+                opacity: 0.5 + progress * 0.5
+              });
+              
+              if (progress > 0.8) {
+                card.classList.add('is-active');
+              } else {
+                card.classList.remove('is-active');
+              }
             });
-            
-            if (progress > 0.8) {
-              card.classList.add('is-active');
-            } else {
-              card.classList.remove('is-active');
-            }
+          };
+
+          gsap.set(cards[0], { scale: 1, filter: 'brightness(1)', opacity: 1 });
+          cards[0].classList.add('is-active');
+          
+          for (let i = 1; i < cards.length; i++) {
+            gsap.set(cards[i], { scale: 0.75, filter: 'brightness(0.3)', opacity: 0.5 });
+            cards[i].classList.remove('is-active');
+          }
+
+          gsap.to(".cards-wrapper", {
+            y: () => {
+              const cardHeight = (cards[0] as HTMLElement).offsetHeight;
+              const gap = window.innerHeight * 0.02;
+              const step = cardHeight + gap;
+              return -(step * (cards.length - 1));
+            },
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top top",
+              end: () => `+=${window.innerHeight * 1.5}`,
+              pin: true,
+              scrub: 1,
+              onUpdate: updateCards
+            },
           });
-        };
+          
+          ScrollTrigger.refresh();
+        }, sectionRef);
 
-        // Set initial CSS state explicitly for the first frame
-        // This avoids getBoundingClientRect calculating wrong viewport distances when off-screen
-        gsap.set(cards[0], { scale: 1, filter: 'brightness(1)', opacity: 1 });
-        cards[0].classList.add('is-active');
-        
-        for (let i = 1; i < cards.length; i++) {
-          gsap.set(cards[i], { scale: 0.75, filter: 'brightness(0.3)', opacity: 0.5 });
-          cards[i].classList.remove('is-active');
-        }
+        return () => ctx.revert();
+      });
 
-        // Pin the section and animate the cards wrapper up
-        gsap.to(".cards-wrapper", {
-          y: () => {
-            const cardHeight = (cards[0] as HTMLElement).offsetHeight;
-            const gap = window.innerHeight * 0.02; // 2vh gap
-            const step = cardHeight + gap;
-            return -(step * (cards.length - 1));
-          },
-          ease: "none",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top top", // Pin when the section reaches the very top of viewport
-            end: () => `+=${window.innerHeight * 1.5}`, // Reduced slightly since we have no snap to wait for
-            pin: true,
-            scrub: 1, // Smooth scrub without snapping
-            onUpdate: updateCards
-          },
-        });
-        
-        // Force initial render state
-        ScrollTrigger.refresh();
-      }, sectionRef);
-
-      return () => ctx.revert();
+      return () => mm.revert();
     },
     { scope: sectionRef }
   );
@@ -170,7 +145,7 @@ export default function SelectedWork() {
       {/* RIGHT: Vertical Snapping Carousel */}
       <div className="w-full md:w-[55%] h-full absolute right-0 top-0 pointer-events-none">
         <div className="cards-wrapper w-full absolute top-[20vh] flex flex-col gap-[2vh] items-center pointer-events-auto">
-          {PROJECTS.map((project) => (
+          {projects.map((project) => (
             <article
               key={project.slug}
               className="work-card group relative w-[85%] md:w-[85%] h-[60vh] shrink-0 z-10 shadow-2xl will-change-transform"
@@ -180,13 +155,24 @@ export default function SelectedWork() {
               aria-label={`Project: ${project.title}`}
             >
               <div className="w-full h-full relative overflow-hidden bg-black">
-                <Image
-                  src={project.image}
-                  alt={project.title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 60vw"
-                  className="work-card__image object-cover"
-                />
+                {project.hero_image_url?.endsWith(".mp4") || project.hero_image_url?.endsWith(".webm") ? (
+                  <video
+                    src={project.hero_image_url}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="work-card__image object-cover w-full h-full absolute inset-0"
+                  />
+                ) : (
+                  <Image
+                    src={project.hero_image_url || "/images/work/AC.webp"}
+                    alt={project.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 60vw"
+                    className="work-card__image object-cover"
+                  />
+                )}
                 {/* Dark Gradient Overlay at bottom left */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 transition-opacity duration-500 [.is-active_&]:opacity-100" />
                 
@@ -194,7 +180,7 @@ export default function SelectedWork() {
                 <div className="absolute inset-x-6 bottom-6 md:inset-x-12 md:bottom-12 flex justify-between items-end opacity-0 translate-y-4 transition-all duration-500 [.is-active_&]:opacity-100 [.is-active_&]:translate-y-0 pointer-events-none">
                   <div>
                     <h3 className="font-playfair text-2xl md:text-5xl font-black text-white leading-none mb-1 md:mb-2 tracking-tighter uppercase">{project.title}</h3>
-                    <p className="font-montserrat text-xs md:text-sm font-bold text-white/80 tracking-[0.2em] uppercase">{project.tags}</p>
+                    <p className="font-montserrat text-xs md:text-sm font-bold text-white/80 tracking-[0.2em] uppercase">{project.role}</p>
                   </div>
                   <div className="text-white font-playfair font-black text-lg md:text-2xl opacity-60">
                     {project.year}

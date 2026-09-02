@@ -11,21 +11,21 @@ const BASE_PROJECTS = [
     slug: "ac",
     title: "AC Production",
     tags: "Production · Visual",
-    image: "/images/work/AC.png",
+    image: "/images/work/AC.webp",
     year: "2026",
   },
   {
     slug: "evory",
     title: "Evory",
     tags: "Branding · Design",
-    image: "/images/work/evory.png",
+    image: "/images/work/evory.webp",
     year: "2026",
   },
   {
     slug: "tangwin",
     title: "Tangwin Cut Studio",
     tags: "Identity · Digital",
-    image: "/images/work/tangwincutstudio.png",
+    image: "/images/work/tangwincutstudio.webp",
     year: "2025",
   },
 ];
@@ -116,6 +116,7 @@ export default function GameSelectionCarousel() {
                   alt={project.title}
                   fill
                   className="object-cover object-center"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
                 />
                 
                 {/* Gradient Overlay for Text - Hides on Hover */}

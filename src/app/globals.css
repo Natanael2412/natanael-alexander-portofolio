@@ -61,7 +61,7 @@ h1, h2, h3, h4, h5 {
   inset: 0;
   z-index: 9998;
   pointer-events: none;
-  opacity: 0.035;
+  opacity: 0.12;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 200px 200px;
@@ -279,6 +279,17 @@ h1, h2, h3, h4, h5 {
   0%   { transform: scaleX(0); opacity: 0; }
   40%  { transform: scaleX(1); opacity: 1; }
   100% { transform: scaleX(1); opacity: 0; }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-100%); }
+}
+
+.animate-marquee {
+  animation: marquee 20s linear infinite;
+  display: flex;
+  white-space: nowrap;
 }
 
 /* ── Narrative Section ── */
@@ -798,5 +809,169 @@ body:has(button:hover) .cursor-ring {
   .cursor-dot,
   .cursor-ring {
     display: none;
+  }
+}
+
+/* ================================================================
+   RESPONSIVE — Mobile-first breakpoints
+   ================================================================ */
+
+/* ── Hero: Mobile (< 1024px) → vertical stack, no GSAP horizontal ── */
+@media (max-width: 1023px) {
+  .hero {
+    height: auto;
+    min-height: 100svh;
+  }
+
+  .hero__bg-photo {
+    position: relative;
+    height: 100svh;
+    top: unset;
+  }
+
+  .hero__img {
+    height: 100svh;
+  }
+
+  /* About wrapper: switch from absolute/pinned to normal vertical flow */
+  .about-wrapper {
+    position: relative;
+    left: 0;
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+    z-index: 5;
+  }
+
+  /* Override grid placement so it appears below the photo */
+  .about-wrapper {
+    grid-area: unset;
+  }
+}
+
+/* ── About Panels: 50/50 split → full-width stack on mobile ── */
+@media (max-width: 1023px) {
+  /* All 50/50 flex rows in AboutVertical become stacked columns */
+  .about-panel-row {
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: auto !important;
+  }
+
+  .about-panel-row > div {
+    width: 100% !important;
+  }
+
+  /* Image half becomes fixed height on mobile */
+  .about-panel-row .about-panel-image {
+    height: 50svh;
+    min-height: 300px;
+  }
+}
+
+/* ── SelectedWork: mobile layout ── */
+@media (max-width: 1023px) {
+  .work-section {
+    display: flex;
+    flex-direction: column;
+    height: auto !important;
+    overflow: visible !important;
+    padding: 4rem 1.5rem 2rem;
+  }
+
+  /* Left title block: not sticky, just inline */
+  .work-section > div:first-child {
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin-bottom: 2rem;
+  }
+
+  /* Right carousel container: not absolute, just flow */
+  .work-section > div:last-child {
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  /* Cards wrapper: horizontal scrollable snap on mobile */
+  .cards-wrapper {
+    position: relative !important;
+    top: unset !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    gap: 1rem !important;
+    padding: 1rem 0 1.5rem !important;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    /* Hide scrollbar */
+    scrollbar-width: none;
+  }
+
+  .cards-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Each work card: fixed size, horizontal snap */
+  .work-card {
+    width: 80vw !important;
+    flex-shrink: 0 !important;
+    height: 60vw !important;
+    scroll-snap-align: center;
+    /* Reset GSAP-applied transforms on mobile */
+    transform: none !important;
+    filter: brightness(1) !important;
+    opacity: 1 !important;
+    scale: 1 !important;
+  }
+
+  /* Always show card content on mobile (not just .is-active) */
+  .work-card .absolute.inset-0.bg-gradient-to-t {
+    opacity: 1 !important;
+  }
+
+  .work-card .absolute.inset-x-6 {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
+}
+
+/* ── InfiniteArchiveGrid: horizontal → 2-col grid on mobile ── */
+@media (max-width: 1023px) {
+  /* Override: section becomes normal flow (not overflow hidden + pinned) */
+  .archive-section-mobile {
+    height: auto !important;
+    overflow: visible !important;
+  }
+}
+
+/* ── About section title scale on small screens ── */
+@media (max-width: 767px) {
+  .about__title {
+    font-size: clamp(1.75rem, 9vw, 4rem);
+  }
+
+  .about__text {
+    font-size: clamp(0.8rem, 3.5vw, 1rem);
+  }
+
+  .about__label {
+    font-size: clamp(0.5rem, 2.5vw, 0.65rem);
+  }
+}
+
+/* ── Work section title scale ── */
+@media (max-width: 767px) {
+  .work-section__title {
+    font-size: clamp(2.5rem, 14vw, 5rem);
+  }
+}
+
+/* ── ContactFooter: stack links vertically on small screens ── */
+@media (max-width: 767px) {
+  footer h2 {
+    font-size: clamp(3rem, 15vw, 6rem) !important;
   }
 }
