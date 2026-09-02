@@ -159,20 +159,86 @@ export default function HeroSection() {
         return () => ctx.revert();
       });
 
-      // ── Mobile: simple entrance fade, no GSAP scroll hijack ──
+      // ── Mobile: entrance fade + same scroll-driven overlay & text color as desktop ──
       mm.add("(max-width: 1023px)", () => {
+        // Entrance animation
         const tl = gsap.timeline({ delay: 0.2 });
         tl.fromTo(
           sectionRef.current,
           { opacity: 0 },
           { opacity: 1, duration: 0.8, ease: "expo.out" }
+        ).fromTo(
+          indexRef.current,
+          { opacity: 0, y: -8 },
+          { opacity: 1, y: 0, duration: 0.6, ease: "expo.out" },
+          "-=0.4"
         );
+
+        // Scroll animation: same overlay fade + text-to-white as desktop
+        ScrollTrigger.create({
+          trigger: sectionRef.current,
+          start: "top top",
+          // Fade completes after scrolling exactly one viewport height
+          // (when the sticky photo has been "fully revealed")
+          end: () => `+=${window.innerHeight}`,
+          scrub: true,
+          onUpdate: (self) => {
+            const p = self.progress;
+
+            // White overlay fades to transparent
+            const bgAlpha = 1 - p;
+            if (overlayRef.current) {
+              overlayRef.current.style.backgroundColor = `rgba(255, 255, 255, ${bgAlpha})`;
+            }
+
+            // Name text: black → white
+            const textVal = Math.round(p * 255);
+            const textColor = `rgb(${textVal}, ${textVal}, ${textVal})`;
+            if (nameLeftRef.current) nameLeftRef.current.style.color = textColor;
+            if (nameRightRef.current) nameRightRef.current.style.color = textColor;
+
+            // Index label: dark-grey → white
+            const labelVal = Math.round(60 + (p * 195));
+            const labelColor = `rgb(${labelVal}, ${labelVal}, ${labelVal})`;
+            if (indexRef.current) indexRef.current.style.color = labelColor;
+          },
+        });
       });
 
       return () => mm.revert();
     },
     { scope: sectionRef }
   );
+
+  // ── Mobile panel fade-in with IntersectionObserver (Opsi B) ──
+  useEffect(() => {
+    if (window.innerWidth >= 1024) return; // desktop only uses GSAP
+    const panels = panelsRef.current.filter(Boolean) as HTMLDivElement[];
+    if (!panels.length) return;
+
+    // Set initial state
+    panels.forEach(panel => {
+      panel.style.opacity = '0';
+      panel.style.transform = 'translateY(40px)';
+      panel.style.transition = 'opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1)';
+    });
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            (entry.target as HTMLElement).style.opacity = '1';
+            (entry.target as HTMLElement).style.transform = 'translateY(0)';
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    panels.forEach(panel => observer.observe(panel));
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <section
@@ -183,6 +249,7 @@ export default function HeroSection() {
     >
       {/* Layer 1: Overlay stuck to viewport via CSS position: sticky */}
       <div className="hero__overlay-wrapper" ref={overlayRef} style={{ backgroundColor: "rgba(255, 255, 255, 1)" }}>
+        {/* Index label */}
         <span ref={indexRef} className="hero__index" style={{ color: "rgb(60, 60, 60)" }}>
           Portfolio &nbsp;&bull;&nbsp; {new Date().getFullYear()}
         </span>
@@ -196,8 +263,17 @@ export default function HeroSection() {
           </span>
         </h1>
 
+        {/* Desktop: tagline + scroll hint | Mobile: desktop-only notice */}
         <p ref={taglineRef} className="hero__tagline" style={{ color: "rgb(60, 60, 60)" }}>
           Creative Digital Architect
+        </p>
+
+        {/* Mobile-only: "Best on Desktop" notice — hidden on lg+ */}
+        <p
+          className="lg:hidden absolute bottom-6 left-0 right-0 text-center font-montserrat tracking-widest uppercase text-[0.6rem] sm:text-[0.65rem] px-4"
+          style={{ color: "rgba(60,60,60,0.7)" }}
+        >
+          ✦ Open on Laptop / Desktop for best experience
         </p>
 
         <div ref={scrollHintRef} className="hero__scroll-hint" style={{ color: "rgb(60, 60, 60)" }}>
@@ -232,7 +308,7 @@ export default function HeroSection() {
               <span className="about__label">01 / THE MINDSET</span>
               <h2 className="about__title">THE CATALYST.</h2>
               <p className="about__text">
-                &quot;Saya Natanael Alexander. Rutinitas yang monoton tidak pernah menjadi tempat saya. Sebagai seorang problem solver, kompleksitas adalah hal yang menghidupkan passion saya. Kebuntuan teknis maupun bisnis bukanlah batas akhir. Prinsip eksekusi saya sederhana:&quot;
+                &quot;Saya Natanael Alexander. Rutinitas yang monoton tidak pernah menjadi tempat saya. Sebagai seorang <i>problem solver</i>, kompleksitas adalah hal yang menghidupkan <i>passion</i> saya. Kebuntuan teknis maupun bisnis bukanlah batas akhir. Prinsip eksekusi saya sederhana:&quot;
                 <br/><br/>
                 <span className="font-playfair italic text-[1.1em] font-medium tracking-wide">
                   &quot;Tidak ada hal yang tidak mungkin, hanya ada tidak mau.&quot;

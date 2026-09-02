@@ -25,7 +25,7 @@ export default function AboutVertical() {
             <span className="about__label">03 / THE PHILOSOPHY</span>
             <h2 className="about__title">CREATIVE DIGITAL ARCHITECT.</h2>
             <p className="about__text">
-              &quot;Dalam membangun ekosistem digital, kode yang bersih dengan technical debt minim adalah bare minimum. Nilai sesungguhnya dari sebuah arsitektur IT terletak pada kemampuannya menghadirkan Business Intelligence, mempercepat efisiensi operasional, dan membungkus solusi kompleks tersebut dalam estetika visual yang memukau.&quot;
+              &quot;Dalam membangun ekosistem digital, kode yang bersih dengan <i>technical debt</i> minim adalah <i>bare minimum</i>. Nilai sesungguhnya dari sebuah arsitektur IT terletak pada kemampuannya menghadirkan <i>Business Intelligence</i>, mempercepat efisiensi operasional, dan membungkus solusi kompleks tersebut dalam estetika visual yang memukau.&quot;
             </p>
           </div>
         </div>
@@ -39,10 +39,10 @@ export default function AboutVertical() {
         <div className="w-full lg:w-1/2 flex flex-col justify-center bg-[var(--chalk)] relative z-10" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(3rem, 8vh, 6rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}>
           <div className="w-full">
             <span className="about__label">04 / PRODUCTION LEADERSHIP</span>
-            <h2 className="about__title">WEATSO | Bespoke IT Consultancy &amp; Digital Presence.</h2>
+            <h2 className="about__title" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>WEATSO | Bespoke IT Consultancy &amp; Digital Presence.</h2>
             <p className="about__text font-bold mb-2">Production Lead &amp; Technical Engineer</p>
             <p className="about__text">
-              &quot;Memimpin tim lintas fungsi dari tahap negosiasi klien hingga deployment. Saya merancang arsitektur solusi yang paling optimal secara bisnis dan teknis, mengorkestrasi alur kerja tim, memantau progres pengembangan, dan turun langsung menulis kode saat eksekusi menuntut presisi absolut.&quot;
+              &quot;Memimpin tim lintas fungsi dari tahap negosiasi klien hingga <i>deployment</i>. Saya merancang arsitektur solusi yang paling optimal secara bisnis dan teknis, mengorkestrasi alur kerja tim, memantau progres pengembangan, dan turun langsung menulis kode saat eksekusi menuntut presisi absolut.&quot;
             </p>
           </div>
         </div>

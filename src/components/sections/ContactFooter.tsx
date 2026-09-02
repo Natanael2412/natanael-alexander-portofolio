@@ -49,7 +49,7 @@ export default function ContactFooter() {
         text-white w-full"
       >
         {/* CTA Typography */}
-        <h2 className="font-playfair text-5xl sm:text-6xl md:text-7xl lg:text-[100px] xl:text-[130px] leading-[0.88] tracking-tighter select-none shrink-0">
+        <h2 className="font-playfair text-[2.4rem] sm:text-5xl md:text-6xl lg:text-[90px] xl:text-[120px] leading-[0.88] tracking-tighter select-none shrink-0 max-w-full">
           <div className="text-white">Let&apos;s make it</div>
           <div
             className="text-transparent italic"

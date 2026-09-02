@@ -122,8 +122,8 @@ export default function SelectedWork({ projects = [] }: { projects: Project[] })
       id="work"
       aria-label="Selected work"
     >
-      {/* LEFT: Static Title Area */}
-      <div className="w-full md:w-[45%] h-full flex flex-col justify-center px-8 md:px-20 relative z-20 pointer-events-none" ref={titleLeftRef}>
+      {/* LEFT: Static Title Area — hidden on mobile, shown inline above carousel */}
+      <div className="hidden lg:flex w-full lg:w-[45%] h-full flex-col justify-center px-8 lg:px-20 relative z-20 pointer-events-none" ref={titleLeftRef}>
         <h2 className="work-section__title pointer-events-auto">
           SELECTED
           <br />
@@ -132,25 +132,43 @@ export default function SelectedWork({ projects = [] }: { projects: Project[] })
         
         <Link 
           href="/portofolio"
-          className="mt-8 md:mt-12 group flex flex-col w-max pointer-events-auto"
+          className="mt-8 lg:mt-12 group flex flex-col w-max pointer-events-auto"
         >
-          <div className="flex items-center gap-2 font-montserrat text-sm md:text-base tracking-[0.2em] uppercase font-bold text-black pointer-events-auto">
+          <div className="flex items-center gap-2 font-montserrat text-sm lg:text-base tracking-[0.2em] uppercase font-bold text-black pointer-events-auto">
             VIEW FULL ARCHIVE 
-            <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 group-hover:rotate-45" strokeWidth={2.5} />
+            <ArrowUpRight className="w-4 h-4 lg:w-5 lg:h-5 transition-transform duration-300 group-hover:rotate-45" strokeWidth={2.5} />
           </div>
           <span className="mt-1 w-0 h-[2px] bg-black transition-all duration-300 group-hover:w-full self-start"></span>
         </Link>
       </div>
 
-      {/* RIGHT: Vertical Snapping Carousel */}
-      <div className="w-full md:w-[55%] h-full absolute right-0 top-0 pointer-events-none">
-        <div className="cards-wrapper w-full absolute top-[20vh] flex flex-col gap-[2vh] items-center pointer-events-auto">
+      {/* MOBILE: Title block stacked above the carousel */}
+      <div className="lg:hidden absolute top-0 left-0 w-full z-20 pointer-events-none pt-10 px-6">
+        <h2 className="work-section__title pointer-events-auto">
+          SELECTED <em style={{ fontStyle: "italic" }}>WORK</em>
+        </h2>
+        <Link 
+          href="/portofolio"
+          className="mt-4 group inline-flex flex-col w-max pointer-events-auto"
+        >
+          <div className="flex items-center gap-2 font-montserrat text-xs tracking-[0.2em] uppercase font-bold text-black">
+            VIEW FULL ARCHIVE 
+            <ArrowUpRight className="w-3 h-3 transition-transform duration-300 group-hover:rotate-45" strokeWidth={2.5} />
+          </div>
+          <span className="mt-1 w-0 h-[2px] bg-black transition-all duration-300 group-hover:w-full self-start"></span>
+        </Link>
+      </div>
+
+      {/* RIGHT: Vertical Snapping Carousel (desktop) / Peek Carousel (mobile) */}
+      <div className="w-full lg:w-[55%] h-full absolute right-0 top-0 pointer-events-none lg:pr-[4vw]">
+        {/* Desktop: vertical carousel */}
+        <div className="cards-wrapper hidden lg:flex w-full absolute top-[20vh] flex-col gap-[2vh] items-center pointer-events-auto">
           {projects.map((project) => (
             <article
               key={project.slug}
-              className="work-card group relative w-[85%] md:w-[85%] h-[60vh] shrink-0 z-10 shadow-2xl will-change-transform"
+              className="work-card group relative w-[80%] lg:w-[80%] h-[60vh] shrink-0 z-10 shadow-2xl will-change-transform"
               role="listitem"
-              id={`work-card-${project.slug}`}
+              id={`work-card-desktop-${project.slug}`}
               tabIndex={0}
               aria-label={`Project: ${project.title}`}
             >
@@ -173,22 +191,75 @@ export default function SelectedWork({ projects = [] }: { projects: Project[] })
                     className="work-card__image object-cover"
                   />
                 )}
-                {/* Dark Gradient Overlay at bottom left */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 transition-opacity duration-500 [.is-active_&]:opacity-100" />
-                
-                {/* Text inside the image - shows only when active */}
-                <div className="absolute inset-x-6 bottom-6 md:inset-x-12 md:bottom-12 flex justify-between items-end opacity-0 translate-y-4 transition-all duration-500 [.is-active_&]:opacity-100 [.is-active_&]:translate-y-0 pointer-events-none">
+                <div className="absolute inset-x-6 bottom-6 lg:inset-x-12 lg:bottom-12 flex justify-between items-end opacity-0 translate-y-4 transition-all duration-500 [.is-active_&]:opacity-100 [.is-active_&]:translate-y-0 pointer-events-none">
                   <div>
-                    <h3 className="font-playfair text-2xl md:text-5xl font-black text-white leading-none mb-1 md:mb-2 tracking-tighter uppercase">{project.title}</h3>
-                    <p className="font-montserrat text-xs md:text-sm font-bold text-white/80 tracking-[0.2em] uppercase">{project.role}</p>
+                    <h3 className="font-playfair text-2xl lg:text-5xl font-black text-white leading-none mb-1 lg:mb-2 tracking-tighter uppercase">{project.title}</h3>
+                    <p className="font-montserrat text-xs lg:text-sm font-bold text-white/80 tracking-[0.2em] uppercase">{project.role}</p>
                   </div>
-                  <div className="text-white font-playfair font-black text-lg md:text-2xl opacity-60">
+                  <div className="text-white font-playfair font-black text-lg lg:text-2xl opacity-60">
                     {project.year}
                   </div>
                 </div>
               </div>
             </article>
           ))}
+        </div>
+
+        {/* Mobile: 3-card peek carousel — center card prominent, sides clipped */}
+        <div
+          className="lg:hidden absolute inset-0 flex items-center overflow-hidden pointer-events-auto"
+          style={{ paddingTop: '140px' }}
+        >
+          <div
+            className="flex gap-3 overflow-x-auto snap-x snap-mandatory w-full h-full items-center"
+            style={{
+              scrollbarWidth: 'none',
+              paddingLeft: 'calc(50% - 42vw)', // center first card
+              paddingRight: 'calc(50% - 42vw)',
+            }}
+          >
+            {projects.map((project) => (
+              <article
+                key={`mobile-${project.slug}`}
+                className="snap-center shrink-0 relative rounded-sm overflow-hidden shadow-xl"
+                style={{ width: '84vw', height: '56vw' }}
+                role="listitem"
+                id={`work-card-mobile-${project.slug}`}
+                aria-label={`Project: ${project.title}`}
+              >
+                {project.hero_image_url?.endsWith(".mp4") || project.hero_image_url?.endsWith(".webm") ? (
+                  <video
+                    src={project.hero_image_url}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="w-full h-full object-cover absolute inset-0"
+                  />
+                ) : (
+                  <Image
+                    src={project.hero_image_url || "/images/work/AC.webp"}
+                    alt={project.title}
+                    fill
+                    sizes="90vw"
+                    className="object-cover"
+                  />
+                )}
+                {/* Always-visible overlay on mobile */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                <div className="absolute inset-x-4 bottom-4 flex justify-between items-end">
+                  <div>
+                    <h3 className="font-playfair text-xl font-black text-white leading-none mb-1 tracking-tighter uppercase">{project.title}</h3>
+                    <p className="font-montserrat text-[0.6rem] font-bold text-white/70 tracking-[0.2em] uppercase">{project.role}</p>
+                  </div>
+                  <div className="text-white font-playfair font-black text-base opacity-60">
+                    {project.year}
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </div>
     </section>
