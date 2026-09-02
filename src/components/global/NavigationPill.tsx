@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -16,11 +17,15 @@ const NAV_ITEMS = [
 ];
 
 export default function NavigationPill() {
+  const pathname = usePathname();
   const pillRef = useRef<HTMLElement>(null);
   const itemRefs = useRef<HTMLAnchorElement[]>([]);
   const idleTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useGSAP(() => {
+    // If we're on a portfolio detail page, do not mount the GSAP logic
+    if (pathname.startsWith("/portfolio/")) return;
+    
     if (!pillRef.current) return;
 
     let lastScrollY = window.scrollY;
@@ -74,7 +79,7 @@ export default function NavigationPill() {
         const contactSection = document.getElementById("contact");
         
         // GUARD: Only run ScrollSpy if we are actually on a page that has these sections (like the homepage)
-        // This prevents the URL from being forcefully reset to '/' when on the /portofolio page.
+        // This prevents the URL from being forcefully reset to '/' when on the /portfolio page.
         if (!aboutSection && !workSection && !contactSection) return;
         
         const halfScreen = window.innerHeight / 2;
@@ -141,7 +146,7 @@ export default function NavigationPill() {
     return () => cleanups.forEach((fn) => fn());
   }, []);
 
-  return (
+  return pathname.startsWith("/portfolio/") ? null : (
     <nav
       ref={pillRef}
       className="nav-pill"

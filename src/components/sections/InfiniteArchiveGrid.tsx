@@ -9,9 +9,11 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
+import { useRouter } from "next/navigation";
 import { Project } from "@/lib/supabase";
 
 export default function InfiniteArchiveGrid({ projects = [] }: { projects: Project[] }) {
+  const router = useRouter();
   const YEARS = ["ALL", ...Array.from(new Set(projects.map(p => String(p.year))))].sort((a, b) => b.localeCompare(a));
   
   const [activeYear, setActiveYear] = useState("ALL");
@@ -124,9 +126,9 @@ export default function InfiniteArchiveGrid({ projects = [] }: { projects: Proje
       <section className="relative w-full min-h-screen bg-[#f5f5f5]">
         {/* Header */}
         <div className="w-full p-6 pt-16 flex justify-between items-start">
-          <Link href="/" className="font-montserrat text-xs tracking-widest uppercase text-black hover:opacity-50 transition-opacity">
+          <button onClick={() => router.push('/')} className="font-montserrat text-xs tracking-widest uppercase text-black hover:opacity-50 transition-opacity">
             ← Back
-          </Link>
+          </button>
           <div className="flex flex-col items-end gap-2">
             <span className="font-montserrat text-xs tracking-[0.2em] uppercase text-black/50 mb-1">Filter</span>
             <div className="flex gap-3 flex-wrap justify-end">
@@ -159,9 +161,10 @@ export default function InfiniteArchiveGrid({ projects = [] }: { projects: Proje
         {/* 2-column grid */}
         <div className="px-4 pb-16 grid grid-cols-2 gap-3">
           {filteredProjects.map((project, idx) => (
-            <div
+            <Link
+              href={`/portfolio/${project.slug}`}
               key={`mobile-${project.slug}-${idx}`}
-              className="relative overflow-hidden bg-black aspect-[4/5]"
+              className="relative block overflow-hidden bg-black aspect-[4/5]"
             >
               {project.hero_image_url?.endsWith(".mp4") || project.hero_image_url?.endsWith(".webm") ? (
                 <video
@@ -186,7 +189,7 @@ export default function InfiniteArchiveGrid({ projects = [] }: { projects: Proje
                 <h3 className="font-playfair text-base text-white font-black uppercase tracking-tighter leading-tight">{project.title}</h3>
                 <p className="font-montserrat text-[10px] font-bold text-white/70 tracking-[0.15em] uppercase mt-1">{project.role}</p>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
@@ -198,9 +201,9 @@ export default function InfiniteArchiveGrid({ projects = [] }: { projects: Proje
         
         {/* Navbar & Filter */}
         <div className="absolute top-0 left-0 w-full p-8 md:p-12 z-50 flex justify-between items-start pointer-events-none mix-blend-difference text-white">
-          <Link href="/" className="font-montserrat text-sm tracking-widest uppercase hover:opacity-50 transition-opacity pointer-events-auto">
+          <button onClick={() => router.push('/')} className="font-montserrat text-sm tracking-widest uppercase hover:opacity-50 transition-opacity pointer-events-auto">
             ← Back
-          </Link>
+          </button>
 
           {/* Year Filter */}
           <div className="flex flex-col items-end gap-2 pointer-events-auto">
@@ -239,9 +242,10 @@ export default function InfiniteArchiveGrid({ projects = [] }: { projects: Proje
           <div ref={trackRef} className="flex items-end gap-0 w-max h-full pointer-events-auto border-b border-black">
             {displayProjects.map((project, idx) => {
               return (
-                <div 
+                <Link 
+                  href={`/portfolio/${project.slug}`}
                   key={`track-${project.slug}-${idx}`} 
-                  className={`archive-card shrink-0 group relative overflow-hidden bg-black cursor-pointer will-change-[width,height]`}
+                  className={`archive-card block shrink-0 group relative overflow-hidden bg-black cursor-pointer will-change-[width,height]`}
                   style={{ width: "25vw", height: "40vh" }} // Initial small state
                 >
                   {project.hero_image_url?.endsWith(".mp4") || project.hero_image_url?.endsWith(".webm") ? (
@@ -269,7 +273,7 @@ export default function InfiniteArchiveGrid({ projects = [] }: { projects: Proje
                     <h3 className="font-playfair text-3xl md:text-5xl text-white font-black uppercase tracking-tighter">{project.title}</h3>
                     <p className="font-montserrat text-xs md:text-sm font-bold text-white/80 tracking-[0.2em] uppercase mt-2">{project.role}</p>
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>

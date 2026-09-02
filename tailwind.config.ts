@@ -27,6 +27,20 @@ const config: Config = {
         "expo-out": "cubic-bezier(0.16, 1, 0.3, 1)",
         "expo-in": "cubic-bezier(0.7, 0, 0.84, 0)",
       },
+      animation: {
+        'marquee': 'marquee 35s linear infinite',
+        'marquee-reverse': 'marquee-reverse 35s linear infinite',
+      },
+      keyframes: {
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+        'marquee-reverse': {
+          '0%': { transform: 'translateX(-50%)' },
+          '100%': { transform: 'translateX(0%)' },
+        },
+      },
     },
   },
   plugins: [],

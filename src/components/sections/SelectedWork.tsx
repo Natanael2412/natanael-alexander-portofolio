@@ -31,7 +31,7 @@ export default function SelectedWork({ projects = [] }: { projects: Project[] })
       duration: 0.8,
       ease: "power3.inOut",
       onComplete: () => {
-        router.push("/work");
+        router.push("/portfolio");
       }
     });
   };
@@ -131,7 +131,8 @@ export default function SelectedWork({ projects = [] }: { projects: Project[] })
         </h2>
         
         <Link 
-          href="/portofolio"
+          href="/portfolio"
+          onClick={handleNavigate}
           className="mt-8 lg:mt-12 group flex flex-col w-max pointer-events-auto"
         >
           <div className="flex items-center gap-2 font-montserrat text-sm lg:text-base tracking-[0.2em] uppercase font-bold text-black pointer-events-auto">
@@ -148,7 +149,8 @@ export default function SelectedWork({ projects = [] }: { projects: Project[] })
           SELECTED <em style={{ fontStyle: "italic" }}>WORK</em>
         </h2>
         <Link 
-          href="/portofolio"
+          href="/portfolio"
+          onClick={handleNavigate}
           className="mt-4 group inline-flex flex-col w-max pointer-events-auto"
         >
           <div className="flex items-center gap-2 font-montserrat text-xs tracking-[0.2em] uppercase font-bold text-black">
@@ -164,10 +166,10 @@ export default function SelectedWork({ projects = [] }: { projects: Project[] })
         {/* Desktop: vertical carousel */}
         <div className="cards-wrapper hidden lg:flex w-full absolute top-[20vh] flex-col gap-[2vh] items-center pointer-events-auto">
           {projects.map((project) => (
-            <article
+            <Link
+              href={`/portfolio/${project.slug}`}
               key={project.slug}
               className="work-card group relative w-[80%] lg:w-[80%] h-[60vh] shrink-0 z-10 shadow-2xl will-change-transform"
-              role="listitem"
               id={`work-card-desktop-${project.slug}`}
               tabIndex={0}
               aria-label={`Project: ${project.title}`}
@@ -202,7 +204,7 @@ export default function SelectedWork({ projects = [] }: { projects: Project[] })
                   </div>
                 </div>
               </div>
-            </article>
+            </Link>
           ))}
         </div>
 
@@ -220,11 +222,11 @@ export default function SelectedWork({ projects = [] }: { projects: Project[] })
             }}
           >
             {projects.map((project) => (
-              <article
+              <Link
+                href={`/portfolio/${project.slug}`}
                 key={`mobile-${project.slug}`}
                 className="snap-center shrink-0 relative rounded-sm overflow-hidden shadow-xl"
                 style={{ width: '84vw', height: '56vw' }}
-                role="listitem"
                 id={`work-card-mobile-${project.slug}`}
                 aria-label={`Project: ${project.title}`}
               >
@@ -257,7 +259,7 @@ export default function SelectedWork({ projects = [] }: { projects: Project[] })
                     {project.year}
                   </div>
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
         </div>
