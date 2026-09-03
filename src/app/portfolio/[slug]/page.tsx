@@ -27,6 +27,7 @@ export default async function ProjectPage({
     .from("projects")
     .select("*")
     .eq("slug", slug)
+    .eq("is_personal_published", true)
     .single();
 
   if (!project) {

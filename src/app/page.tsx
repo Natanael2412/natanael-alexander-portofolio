@@ -11,6 +11,7 @@ export default async function Home() {
     .from('projects')
     .select('slug, title, description, client, role, year, hero_image_url, tech_stack')
     .eq('is_personal_published', true)
+    .eq('is_personal_featured', true)
     .order('sort_order', { ascending: true })
     .order('created_at', { ascending: false });
 
