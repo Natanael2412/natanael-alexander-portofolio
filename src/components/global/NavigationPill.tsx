@@ -23,8 +23,8 @@ export default function NavigationPill() {
   const idleTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useGSAP(() => {
-    // If we're on a portfolio detail page, do not mount the GSAP logic
-    if (pathname.startsWith("/portfolio/")) return;
+    // If we're on a portfolio page, do not mount the GSAP logic
+    if (pathname.startsWith("/portfolio")) return;
     
     if (!pillRef.current) return;
 
@@ -111,7 +111,7 @@ export default function NavigationPill() {
       trigger.kill();
       if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
     };
-  }, []);
+  }, [pathname]);
 
   // Magnetic effect on each nav item
   useEffect(() => {
@@ -146,7 +146,7 @@ export default function NavigationPill() {
     return () => cleanups.forEach((fn) => fn());
   }, []);
 
-  return pathname.startsWith("/portfolio/") ? null : (
+  return pathname.startsWith("/portfolio") ? null : (
     <nav
       ref={pillRef}
       className="nav-pill"

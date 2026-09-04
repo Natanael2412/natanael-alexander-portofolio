@@ -33,14 +33,74 @@ export default function InfiniteArchiveGrid({ projects = [] }: { projects: Proje
     ? projects 
     : projects.filter(p => String(p.year) === activeYear);
 
-  // Provide a massive number of clones for a practically infinite scroll experience
-  const minItemsRequired = 40; 
+  // Provide enough clones for a practically infinite experience (but efficient)
+  // 15 items is lightweight for React but wide enough for auto-scroll.
+  const minItemsRequired = 15; 
   let displayProjects = [...filteredProjects];
   if (displayProjects.length > 0) {
     while (displayProjects.length < minItemsRequired) {
       displayProjects = [...displayProjects, ...filteredProjects];
     }
   }
+
+  // --- HYBRID MARQUEE (AUTO-SCROLL) ---
+  useEffect(() => {
+    if (isMobile) return;
+    
+    let idleTimer: NodeJS.Timeout;
+    let isIdle = false;
+
+    const startAutoScroll = () => {
+      isIdle = true;
+      const lenis = (window as any).lenis;
+      if (lenis) {
+        // Native Lenis scroll: scroll to bottom over a long duration with linear easing
+        const distance = document.body.scrollHeight - lenis.scroll;
+        const speed = 500; // pixels per second
+        lenis.scrollTo(document.body.scrollHeight, { 
+          duration: distance / speed,
+          easing: (t: number) => t, // Linear ease for constant marquee speed
+        });
+      } else {
+        // Fallback for non-Lenis
+        const distance = document.body.scrollHeight - window.scrollY;
+        gsap.to(window, {
+          scrollTo: document.body.scrollHeight,
+          duration: distance / 100,
+          ease: "none"
+        });
+      }
+    };
+
+    const resetIdle = () => {
+      isIdle = false;
+      // We DO NOT manually cancel Lenis scroll here because Lenis natively aborts
+      // its scrollTo animation when the user interacts via wheel or touch!
+      // Forcing an immediate scrollTo here destroys the user's scroll momentum.
+      if (!(window as any).lenis) {
+        gsap.killTweensOf(window);
+      }
+      
+      clearTimeout(idleTimer);
+      // Start auto-scroll after 2 seconds of no interaction
+      idleTimer = setTimeout(startAutoScroll, 2000);
+    };
+
+    window.addEventListener('wheel', resetIdle, { passive: true });
+    window.addEventListener('touchstart', resetIdle, { passive: true });
+    window.addEventListener('touchmove', resetIdle, { passive: true });
+    window.addEventListener('keydown', resetIdle, { passive: true });
+
+    resetIdle();
+
+    return () => {
+      window.removeEventListener('wheel', resetIdle);
+      window.removeEventListener('touchstart', resetIdle);
+      window.removeEventListener('touchmove', resetIdle);
+      window.removeEventListener('keydown', resetIdle);
+      clearTimeout(idleTimer);
+    };
+  }, [isMobile]);
 
   useGSAP(() => {
     if (!containerRef.current || !trackRef.current) return;
@@ -69,16 +129,19 @@ export default function InfiniteArchiveGrid({ projects = [] }: { projects: Proje
           let activeIndex = -1;
           let minDistance = Infinity;
           
-          const minHeight = 35;
+          const minHeight = 45;
           const maxHeight = 95;
           
           cards.forEach((card, index) => {
             const rect = card.getBoundingClientRect();
             
-            let progress = rect.left / screenWidth;
+            // The "PROJECT ARCHIVE" text takes up roughly 45% of the left screen.
+            // We want the card to be fully shrunk (0 progress) when it hits the right edge of that text.
+            const textRightEdge = screenWidth * 0.45;
+            let progress = (rect.left - textRightEdge) / (screenWidth - textRightEdge);
             if (progress < 0) progress = 0;
             if (progress > 1) progress = 1;
-            const easeProgress = gsap.parseEase("expo.in")(progress);
+            const easeProgress = gsap.parseEase("none")(progress);
             
             const currentHeight = minHeight + (maxHeight - minHeight) * easeProgress;
             
@@ -166,25 +229,35 @@ export default function InfiniteArchiveGrid({ projects = [] }: { projects: Proje
               key={`mobile-${project.slug}-${idx}`}
               className="relative block overflow-hidden bg-black aspect-[4/5]"
             >
-              {project.hero_image_url?.endsWith(".mp4") || project.hero_image_url?.endsWith(".webm") ? (
-                <video
-                  src={project.hero_image_url}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  className="object-cover object-center w-full h-full absolute inset-0"
-                />
+              {project.hero_image_url ? (
+                project.hero_image_url.endsWith(".mp4") || project.hero_image_url.endsWith(".webm") ? (
+                  <video
+                    src={project.hero_image_url}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="object-cover object-center w-full h-full absolute inset-0"
+                  />
+                ) : (
+                  <Image
+                    src={project.hero_image_url}
+                    alt={project.title}
+                    fill
+                    className="object-cover object-center"
+                    sizes="(max-width: 1024px) 50vw, 30vw"
+                  />
+                )
               ) : (
-                <Image
-                  src={project.hero_image_url || "/images/work/AC.webp"}
-                  alt={project.title}
-                  fill
-                  className="object-cover object-center"
-                  sizes="(max-width: 1024px) 50vw, 30vw"
-                />
+                <div className="absolute inset-0 bg-[#111] flex items-center justify-center">
+                  <span className="text-white/10 font-playfair font-black text-6xl uppercase tracking-tighter">
+                    {project.title.split(' ').map(n => n[0]).join('').substring(0, 2)}
+                  </span>
+                </div>
               )}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+              {/* Always-visible base dark overlay */}
+              <div className="absolute inset-0 bg-black/65" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
               <div className="absolute inset-0 p-4 flex flex-col justify-end">
                 <h3 className="font-playfair text-base text-white font-black uppercase tracking-tighter leading-tight">{project.title}</h3>
                 <p className="font-montserrat text-[10px] font-bold text-white/70 tracking-[0.15em] uppercase mt-1">{project.role}</p>
@@ -248,26 +321,37 @@ export default function InfiniteArchiveGrid({ projects = [] }: { projects: Proje
                   className={`archive-card block shrink-0 group relative overflow-hidden bg-black cursor-pointer will-change-[width,height]`}
                   style={{ width: "25vw", height: "40vh" }} // Initial small state
                 >
-                  {project.hero_image_url?.endsWith(".mp4") || project.hero_image_url?.endsWith(".webm") ? (
-                    <video
-                      src={project.hero_image_url}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      className="object-cover object-center w-full h-full absolute inset-0"
-                    />
+                  {project.hero_image_url ? (
+                    project.hero_image_url.endsWith(".mp4") || project.hero_image_url.endsWith(".webm") ? (
+                      <video
+                        src={project.hero_image_url}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="object-cover object-center w-full h-full absolute inset-0"
+                      />
+                    ) : (
+                      <Image
+                        src={project.hero_image_url}
+                        alt={project.title}
+                        fill
+                        className="object-cover object-center"
+                        sizes="(max-width: 1024px) 50vw, 30vw"
+                      />
+                    )
                   ) : (
-                    <Image
-                      src={project.hero_image_url || "/images/work/AC.webp"}
-                      alt={project.title}
-                      fill
-                      className="object-cover object-center"
-                      sizes="(max-width: 1024px) 50vw, 30vw"
-                    />
+                    <div className="absolute inset-0 bg-[#111] flex items-center justify-center">
+                      <span className="text-white/10 font-playfair font-black text-6xl md:text-8xl uppercase tracking-tighter">
+                        {project.title.split(' ').map(n => n[0]).join('').substring(0, 2)}
+                      </span>
+                    </div>
                   )}
                   
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 transition-opacity duration-300 [.is-active_&]:opacity-100" />
+                  {/* Base dark overlay */}
+                  <div className="absolute inset-0 bg-black/65 transition-colors duration-300 [.is-active_&]:bg-black/40" />
+                  
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 transition-opacity duration-300 [.is-active_&]:opacity-100" />
                   
                   <div className="absolute inset-0 p-8 flex flex-col justify-end opacity-0 translate-y-4 transition-all duration-500 [.is-active_&]:opacity-100 [.is-active_&]:translate-y-0">
                     <h3 className="font-playfair text-3xl md:text-5xl text-white font-black uppercase tracking-tighter">{project.title}</h3>

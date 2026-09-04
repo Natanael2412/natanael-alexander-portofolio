@@ -175,25 +175,37 @@ export default function SelectedWork({ projects = [] }: { projects: Project[] })
               aria-label={`Project: ${project.title}`}
             >
               <div className="w-full h-full relative overflow-hidden bg-black">
-                {project.hero_image_url?.endsWith(".mp4") || project.hero_image_url?.endsWith(".webm") ? (
-                  <video
-                    src={project.hero_image_url}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="work-card__image object-cover w-full h-full absolute inset-0"
-                  />
+                {project.hero_image_url ? (
+                  project.hero_image_url.endsWith(".mp4") || project.hero_image_url.endsWith(".webm") ? (
+                    <video
+                      src={project.hero_image_url}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="work-card__image object-cover w-full h-full absolute inset-0"
+                    />
+                  ) : (
+                    <Image
+                      src={project.hero_image_url}
+                      alt={project.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 60vw"
+                      className="work-card__image object-cover"
+                    />
+                  )
                 ) : (
-                  <Image
-                    src={project.hero_image_url || "/images/work/AC.webp"}
-                    alt={project.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 60vw"
-                    className="work-card__image object-cover"
-                  />
+                  <div className="absolute inset-0 bg-[#111] flex items-center justify-center">
+                    <span className="text-white/10 font-playfair font-black text-[15vw] lg:text-[8vw] uppercase tracking-tighter">
+                      {project.title.split(' ').map(n => n[0]).join('').substring(0, 2)}
+                    </span>
+                  </div>
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 transition-opacity duration-500 [.is-active_&]:opacity-100" />
+                {/* Base dark overlay */}
+                <div className="absolute inset-0 bg-black/65 transition-colors duration-500 [.is-active_&]:bg-black/40" />
+                {/* Hover gradient for text readability */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 transition-opacity duration-500 [.is-active_&]:opacity-100" />
+                
                 <div className="absolute inset-x-6 bottom-6 lg:inset-x-12 lg:bottom-12 flex justify-between items-end opacity-0 translate-y-4 transition-all duration-500 [.is-active_&]:opacity-100 [.is-active_&]:translate-y-0 pointer-events-none">
                   <div>
                     <h3 className="font-playfair text-2xl lg:text-5xl font-black text-white leading-none mb-1 lg:mb-2 tracking-tighter uppercase">{project.title}</h3>
@@ -230,26 +242,36 @@ export default function SelectedWork({ projects = [] }: { projects: Project[] })
                 id={`work-card-mobile-${project.slug}`}
                 aria-label={`Project: ${project.title}`}
               >
-                {project.hero_image_url?.endsWith(".mp4") || project.hero_image_url?.endsWith(".webm") ? (
-                  <video
-                    src={project.hero_image_url}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="w-full h-full object-cover absolute inset-0"
-                  />
+                {project.hero_image_url ? (
+                  project.hero_image_url.endsWith(".mp4") || project.hero_image_url.endsWith(".webm") ? (
+                    <video
+                      src={project.hero_image_url}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-full object-cover absolute inset-0"
+                    />
+                  ) : (
+                    <Image
+                      src={project.hero_image_url}
+                      alt={project.title}
+                      fill
+                      sizes="90vw"
+                      className="object-cover"
+                    />
+                  )
                 ) : (
-                  <Image
-                    src={project.hero_image_url || "/images/work/AC.webp"}
-                    alt={project.title}
-                    fill
-                    sizes="90vw"
-                    className="object-cover"
-                  />
+                  <div className="absolute inset-0 bg-[#111] flex items-center justify-center">
+                    <span className="text-white/10 font-playfair font-black text-[20vw] uppercase tracking-tighter">
+                      {project.title.split(' ').map(n => n[0]).join('').substring(0, 2)}
+                    </span>
+                  </div>
                 )}
-                {/* Always-visible overlay on mobile */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                {/* Always-visible base dark overlay on mobile */}
+                <div className="absolute inset-0 bg-black/65" />
+                {/* Gradient for text readability */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
                 <div className="absolute inset-x-4 bottom-4 flex justify-between items-end">
                   <div>
                     <h3 className="font-playfair text-xl font-black text-white leading-none mb-1 tracking-tighter uppercase">{project.title}</h3>
