@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { supabase, Project } from "@/lib/supabase";
 import ProjectClient from "./ProjectClient";
 
-export const revalidate = 0; // Always fetch live data
+export const revalidate = 1800; // Cache for 30 minutes
 
 export async function generateStaticParams() {
   const { data: projects } = await supabase

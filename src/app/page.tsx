@@ -4,7 +4,7 @@ import SelectedWork from "@/components/sections/SelectedWork";
 import ContactFooter from "@/components/sections/ContactFooter";
 import { supabase, Project } from "@/lib/supabase";
 
-export const revalidate = 0; // Always fetch live data
+export const revalidate = 1800; // Cache for 30 minutes
 
 export default async function Home() {
   const { data, error } = await supabase

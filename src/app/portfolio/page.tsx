@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import InfiniteArchiveGrid from "@/components/sections/InfiniteArchiveGrid";
 import { supabase, Project } from "@/lib/supabase";
 
-export const revalidate = 0; // Always fetch live data
+export const revalidate = 1800; // Cache for 30 minutes
 
 export const metadata: Metadata = {
   title: "Archive — Natanael Alexander",
