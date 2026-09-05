@@ -4,32 +4,101 @@ import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Project } from "@/lib/supabase";
+import { useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+
+// ─── Layout constants ────────────────────────────────────────────────────────
+// Everything lines up to this one value. Change here, changes everywhere.
+const PAD_LEFT = "clamp(1.5rem, 5vw, 6rem)";
 
 export default function ProjectClient({ project }: { project: Project }) {
   const router = useRouter();
   const gallery = project.gallery_urls || [];
-  
-  // Ensure we have enough items to fill the screen width so the seamless loop works perfectly
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const row1Ref = useRef<HTMLDivElement>(null);
+  const row2Ref = useRef<HTMLDivElement>(null);
+
+  // Duplicate until we have enough images to fill the marquee
   let baseGallery = [...gallery];
-  while (baseGallery.length > 0 && baseGallery.length < 6) {
+  while (baseGallery.length > 0 && baseGallery.length < 8) {
     baseGallery = [...baseGallery, ...gallery];
   }
-  
   const reversedGallery = [...baseGallery].reverse();
-  
+
+  // ── GSAP Marquee ──────────────────────────────────────────────────────────
+  useGSAP(() => {
+    if (!row1Ref.current || !row2Ref.current) return;
+
+    const setupMarquee = (rowRef: React.RefObject<HTMLDivElement | null>, speed: number) => {
+      const row = rowRef.current;
+      if (!row) return () => {};
+
+      const cards = gsap.utils.toArray(row.children) as HTMLElement[];
+      if (cards.length === 0) return () => {};
+
+      let currentX = 0;
+      const logicalCards = cards.map(card => {
+        const width = card.getBoundingClientRect().width;
+        const obj = { el: card, x: currentX, width };
+        currentX += width;
+        return obj;
+      });
+
+      const totalWidth = currentX;
+
+      // Pre-wrap for right-moving row so the left isn't empty on load
+      if (speed > 0) {
+        logicalCards.forEach(card => {
+          if (card.x > row.offsetWidth) card.x -= totalWidth;
+        });
+      }
+
+      // Set initial absolute positions
+      logicalCards.forEach(card => {
+        gsap.set(card.el, { position: "absolute", top: 0, left: 0, x: card.x });
+      });
+
+      const ticker = () => {
+        for (const card of logicalCards) {
+          card.x += speed;
+          if (speed < 0 && card.x <= -card.width) card.x += totalWidth;
+          else if (speed > 0 && card.x >= totalWidth - card.width) card.x -= totalWidth;
+          gsap.set(card.el, { x: card.x });
+        }
+      };
+
+      gsap.ticker.add(ticker);
+      return () => gsap.ticker.remove(ticker);
+    };
+
+    const cleanup1 = setupMarquee(row1Ref, -1.0);
+    const cleanup2 = setupMarquee(row2Ref, 1.0);
+    return () => { cleanup1(); cleanup2(); };
+  }, { dependencies: [gallery], scope: containerRef });
+
+  // ── Render ────────────────────────────────────────────────────────────────
   return (
-    <div className="relative w-full min-h-screen bg-[var(--ink)] font-montserrat text-white">
-      {/* Background Media with Dark Overlay for Elegance */}
-      <div className="absolute inset-0 z-0">
+    <div
+      style={{
+        position: "relative",
+        width: "100%",
+        minHeight: "100vh",
+        backgroundColor: "var(--ink)",
+        color: "white",
+        fontFamily: "var(--font-montserrat, sans-serif)",
+        overflow: "hidden",
+      }}
+    >
+      {/* ── Background ──────────────────────────────────────────────────── */}
+      <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
         {project.hero_image_url ? (
           project.hero_image_url.endsWith(".mp4") || project.hero_image_url.endsWith(".webm") ? (
             <video
               src={project.hero_image_url}
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full h-full object-cover"
+              autoPlay loop muted playsInline
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
           ) : (
             <Image
@@ -41,132 +110,238 @@ export default function ProjectClient({ project }: { project: Project }) {
             />
           )
         ) : (
-          <div className="w-full h-full bg-[#111] flex items-center justify-center">
-             <span className="text-white/5 font-playfair font-black text-[30vw] uppercase tracking-tighter">
-               {project.title.split(' ').map(n => n[0]).join('').substring(0, 2)}
-             </span>
+          <div style={{ width: "100%", height: "100%", background: "#111", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <span style={{ color: "rgba(255,255,255,0.05)", fontFamily: "var(--font-playfair)", fontWeight: 900, fontSize: "30vw", textTransform: "uppercase", letterSpacing: "-0.05em" }}>
+              {project.title.split(" ").map((n: string) => n[0]).join("").substring(0, 2)}
+            </span>
           </div>
         )}
-        {/* Soft, deep overlay matching theme - gradient from right to left */}
-        <div className="absolute inset-0 bg-gradient-to-l from-[var(--ink)]/40 via-[var(--ink)]/90 to-[var(--ink)] backdrop-blur-[2px] pointer-events-none" />
+        {/* Dark gradient: solid on left, transparent on right */}
+        <div style={{
+          position: "absolute", inset: 0,
+          background: "linear-gradient(to right, var(--ink) 0%, rgba(7,7,10,0.85) 45%, rgba(7,7,10,0.15) 100%)",
+          pointerEvents: "none",
+        }} />
       </div>
 
-      {/* Main Split-Screen Container */}
-      <div className="relative z-10 w-full flex flex-col lg:flex-row lg:justify-between">
-        
-        {/* LEFT PANEL: Text Content (40% width on desktop) */}
-        <div className="w-full lg:w-[45%] lg:min-h-screen relative flex flex-col justify-start lg:justify-center pt-8 pb-12 lg:py-24 pl-6 pr-6 md:pl-12 lg:pl-32 xl:pl-40 lg:pr-16 z-10">
-          
-          {/* Top: Back Navigation */}
-          <div className="mb-10 md:mb-16 lg:mb-0 lg:absolute lg:top-12 lg:left-16 z-50">
-            <button onClick={() => router.push('/portfolio')} className="font-montserrat text-xs md:text-sm tracking-[0.3em] font-medium uppercase text-white/60 hover:text-white transition-colors flex items-center gap-3 w-max">
-              <span className="text-[16px] leading-none mb-[2px]">&larr;</span> BACK
-            </button>
-          </div>
-
-          <div className="max-w-2xl">
-            {/* Year Badge */}
-            <div className="inline-block px-4 py-1.5 border border-white/20 rounded-full text-xs font-bold tracking-widest text-white/80 mb-6 lg:mb-8 bg-black/20 backdrop-blur-md">
-              {project.year || "2024"}
-            </div>
-
-            {/* Title */}
-            <h1 className="font-playfair font-black text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-[0.9] tracking-tighter uppercase mb-6 lg:mb-8">
-              {project.title}
-            </h1>
-
-            {/* Description */}
-            <p className="font-montserrat text-sm md:text-base leading-relaxed text-white/80 mb-8 lg:mb-12 max-w-xl font-medium">
-              {project.description}
-            </p>
-
-            {/* Grid Stats */}
-            <div className="grid grid-cols-2 gap-y-6 gap-x-8 mb-10 lg:mb-16">
-              <div>
-                <p className="text-[10px] uppercase tracking-[0.2em] text-white/40 mb-2 font-bold">Client</p>
-                <p className="font-medium text-sm md:text-base">{project.client || "Confidential"}</p>
-              </div>
-              <div>
-                <p className="text-[10px] uppercase tracking-[0.2em] text-white/40 mb-2 font-bold">Role</p>
-                <p className="font-medium text-sm md:text-base">{project.role}</p>
-              </div>
-            </div>
-
-            {/* Tech Stack Pills */}
-            {project.tech_stack && project.tech_stack.length > 0 && (
-              <div className="flex flex-wrap gap-2 mb-10 lg:mb-16">
-                {project.tech_stack.map(tech => (
-                  <span key={tech} className="px-3 py-1 bg-white/5 border border-white/10 rounded-sm text-[10px] tracking-widest uppercase text-white/70">
-                    {tech}
-                  </span>
-                ))}
-              </div>
-            )}
-
-            {/* Live Link Button */}
-            {project.live_url && (
-              <a 
-                href={project.live_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative inline-flex items-center gap-4 bg-white text-black px-8 py-4 overflow-hidden"
-              >
-                <span className="relative z-10 font-montserrat text-xs tracking-[0.2em] font-bold uppercase">View Live Project</span>
-                <ArrowRight size={16} className="relative z-10 group-hover:translate-x-1 transition-transform" />
-                <div className="absolute inset-0 bg-white/80 translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300 ease-in-out" />
-              </a>
-            )}
-          </div>
+      {/* ── PAGE LAYOUT ───────────────────────────────────────────────────── */}
+      {/*
+          CSS Grid: 2 columns on desktop (lg+), 1 column on mobile.
+          Col 1 (42%): Back button row + content row
+          Col 2 (58%): Marquee (spans both rows)
+      */}
+      <div
+        ref={containerRef}
+        className="project-layout"
+        style={{
+          position: "relative",
+          zIndex: 10,
+          display: "grid",
+          gridTemplateColumns: "42% 1fr",
+          gridTemplateRows: "auto 1fr",
+          minHeight: "100vh",
+        }}
+      >
+        {/* ── [1,1] BACK button ─────────────────────────────────────────── */}
+        <div style={{
+          gridColumn: "1",
+          gridRow: "1",
+          paddingLeft: PAD_LEFT,
+          paddingTop: "clamp(1.25rem, 3vh, 2.5rem)",
+          paddingBottom: "1.5rem",
+        }}>
+          <button
+            onClick={() => router.push("/portfolio")}
+            style={{
+              display: "inline-flex", alignItems: "center", gap: "0.625rem",
+              background: "none", border: "none",
+              color: "rgba(255,255,255,0.55)",
+              fontFamily: "inherit", fontSize: "0.7rem",
+              letterSpacing: "0.3em", fontWeight: 600,
+              textTransform: "uppercase", cursor: "pointer",
+              transition: "color 0.2s", padding: 0,
+            }}
+            onMouseEnter={e => (e.currentTarget.style.color = "white")}
+            onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.55)")}
+          >
+            <span style={{ fontSize: "1rem", lineHeight: 1 }}>←</span>BACK
+          </button>
         </div>
 
-        {/* RIGHT PANEL: Marquee Gallery (50% width on desktop) */}
+        {/* ── [1,2] LEFT CONTENT ────────────────────────────────────────── */}
+        <div style={{
+          gridColumn: "1",
+          gridRow: "2",
+          paddingLeft: PAD_LEFT,
+          paddingRight: "clamp(1rem, 3vw, 4rem)",
+          paddingBottom: "clamp(2rem, 5vh, 4rem)",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+        }}>
+          {/* Year Badge */}
+          <div style={{
+            display: "inline-block", padding: "0.375rem 1rem",
+            border: "1px solid rgba(255,255,255,0.2)", borderRadius: "9999px",
+            fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.2em",
+            color: "rgba(255,255,255,0.75)", marginBottom: "1.5rem",
+            background: "rgba(0,0,0,0.2)", backdropFilter: "blur(8px)",
+            width: "fit-content",
+          }}>
+            {project.year || "2024"}
+          </div>
+
+          {/* Title */}
+          <h1 style={{
+            fontFamily: "var(--font-playfair)", fontWeight: 900,
+            fontSize: "clamp(2.25rem, 3.5vw, 5rem)",
+            lineHeight: 0.92, letterSpacing: "-0.03em",
+            textTransform: "uppercase", marginBottom: "1.5rem",
+            wordBreak: "break-word", overflowWrap: "break-word",
+          }}>
+            {project.title}
+          </h1>
+
+          {/* Description */}
+          <p style={{
+            fontSize: "clamp(0.8rem, 1vw, 0.95rem)", lineHeight: 1.7,
+            color: "rgba(255,255,255,0.75)", marginBottom: "2rem",
+            fontWeight: 400, maxWidth: "42ch",
+          }}>
+            {project.description}
+          </p>
+
+          {/* Stats */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem 2rem", marginBottom: "2rem" }}>
+            <div>
+              <p style={{ fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: "0.2em", color: "rgba(255,255,255,0.4)", marginBottom: "0.35rem", fontWeight: 700 }}>Client</p>
+              <p style={{ fontWeight: 500, fontSize: "0.875rem" }}>{project.client || "Confidential"}</p>
+            </div>
+            <div>
+              <p style={{ fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: "0.2em", color: "rgba(255,255,255,0.4)", marginBottom: "0.35rem", fontWeight: 700 }}>Role</p>
+              <p style={{ fontWeight: 500, fontSize: "0.875rem" }}>{project.role}</p>
+            </div>
+          </div>
+
+          {/* Tech Stack */}
+          {project.tech_stack && project.tech_stack.length > 0 && (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", marginBottom: "2.5rem" }}>
+              {project.tech_stack.map((tech: string) => (
+                <span key={tech} style={{
+                  padding: "0.25rem 0.625rem",
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  borderRadius: "2px", fontSize: "0.65rem",
+                  letterSpacing: "0.15em", textTransform: "uppercase",
+                  color: "rgba(255,255,255,0.65)",
+                }}>
+                  {tech}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {/* Live Link */}
+          {project.live_url && (
+            <a
+              href={project.live_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "inline-flex", alignItems: "center", gap: "0.75rem",
+                background: "white", color: "black",
+                padding: "0.875rem 1.75rem",
+                fontSize: "0.7rem", letterSpacing: "0.2em",
+                fontWeight: 700, textTransform: "uppercase",
+                textDecoration: "none", width: "fit-content",
+                transition: "opacity 0.2s",
+              }}
+              onMouseEnter={e => (e.currentTarget.style.opacity = "0.85")}
+              onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
+            >
+              View Live Project <ArrowRight size={14} />
+            </a>
+          )}
+        </div>
+
+        {/* ── [2, span 2 rows] RIGHT: Marquee Gallery ──────────────────── */}
         {gallery.length > 0 && (
-          <div 
-            className="w-full lg:w-[50%] h-[40vh] min-h-[300px] lg:h-screen lg:sticky lg:top-0 relative overflow-hidden flex flex-col justify-center gap-4 lg:gap-8 opacity-90 pb-12 lg:pb-0"
-            style={{ WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)', maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)' }}
-          >
-            
-            {/* Row 1 - Moves Left */}
-            <div className="flex w-max animate-marquee">
-              {[...baseGallery, ...baseGallery].map((url, idx) => (
-                <div key={`r1-${idx}`} className="pr-6 md:pr-12 lg:pr-16">
+          <div style={{
+            gridColumn: "2",
+            gridRow: "1 / 3",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            gap: "clamp(0.75rem, 2vh, 1.5rem)",
+            overflow: "hidden",
+            WebkitMaskImage: "linear-gradient(to right, transparent, black 12%, black 88%, transparent)",
+            maskImage: "linear-gradient(to right, transparent, black 12%, black 88%, transparent)",
+          }}>
+            {/* Row 1 – moves left */}
+            <div ref={row1Ref} style={{ position: "relative", width: "100%", height: "clamp(160px, 18vw, 280px)" }}>
+              {[...baseGallery, ...baseGallery].map((url: string, idx: number) => (
+                <div key={`r1-${idx}`} style={{ paddingRight: "clamp(0.75rem, 1.5vw, 1.5rem)", display: "inline-block" }}>
                   <GalleryItem url={url} />
                 </div>
               ))}
             </div>
 
-            {/* Row 2 - Moves Right */}
-            <div className="flex w-max animate-marquee" style={{ animationDirection: 'reverse' }}>
-              {[...reversedGallery, ...reversedGallery].map((url, idx) => (
-                <div key={`r2-${idx}`} className="pr-6 md:pr-12 lg:pr-16">
+            {/* Row 2 – moves right */}
+            <div ref={row2Ref} style={{ position: "relative", width: "100%", height: "clamp(160px, 18vw, 280px)" }}>
+              {[...reversedGallery, ...reversedGallery].map((url: string, idx: number) => (
+                <div key={`r2-${idx}`} style={{ paddingRight: "clamp(0.75rem, 1.5vw, 1.5rem)", display: "inline-block" }}>
                   <GalleryItem url={url} />
                 </div>
               ))}
             </div>
-
           </div>
         )}
       </div>
+
+      {/* ── Mobile override ───────────────────────────────────────────────── */}
+      <style>{`
+        @media (max-width: 1023px) {
+          .project-layout {
+            grid-template-columns: 1fr !important;
+            grid-template-rows: auto auto auto !important;
+          }
+          .project-layout > *:nth-child(1) { grid-column: 1 !important; grid-row: 1 !important; }
+          .project-layout > *:nth-child(2) { grid-column: 1 !important; grid-row: 2 !important; }
+          .project-layout > *:nth-child(3) { grid-column: 1 !important; grid-row: 3 !important; height: 55vw !important; min-height: 280px; }
+        }
+      `}</style>
     </div>
   );
 }
 
 function GalleryItem({ url }: { url: string }) {
   return (
-    <div className="relative w-[50vw] lg:w-[28vw] flex-shrink-0 aspect-[16/10] rounded-sm overflow-hidden bg-[var(--ink)] border border-white/5 shadow-2xl">
-      <Image 
+    <div style={{
+      position: "relative",
+      width: "clamp(220px, 26vw, 400px)",
+      aspectRatio: "16/10",
+      flexShrink: 0,
+      borderRadius: "4px",
+      overflow: "hidden",
+      background: "var(--ink)",
+      border: "1px solid rgba(255,255,255,0.06)",
+      boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
+    }}>
+      <Image
         src={url}
-        alt="Gallery blurred background"
+        alt="Gallery background"
         fill
-        className="object-cover opacity-30 blur-2xl scale-110"
+        style={{ objectFit: "cover", opacity: 0.25 }}
+        className="blur-2xl scale-110"
       />
-      <Image 
+      <Image
         src={url}
-        alt="Gallery Item"
+        alt="Gallery item"
         fill
-        className="object-contain p-2 md:p-4 drop-shadow-xl"
-        sizes="(max-width: 1024px) 50vw, 28vw"
+        style={{ objectFit: "contain", padding: "0.5rem" }}
+        sizes="(max-width: 1024px) 50vw, 26vw"
       />
     </div>
   );
 }
+

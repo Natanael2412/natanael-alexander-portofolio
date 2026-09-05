@@ -17,16 +17,23 @@ export default async function Home() {
 
   if (error) {
     console.error("Supabase Error (Home):", error.message || error, JSON.stringify(error, Object.getOwnPropertyNames(error)));
-  } else {
-    console.log("Fetched projects count (Home):", data?.length);
   }
+
+  // Fetch counts for stats section
+  const { count: projectsCount } = await supabase
+    .from('projects')
+    .select('*', { count: 'exact', head: true });
+    
+  const { count: articlesCount } = await supabase
+    .from('articles')
+    .select('*', { count: 'exact', head: true });
 
   const projects = (data || []) as Partial<Project>[] as Project[];
 
   return (
     <>
       <HeroSection />
-      <AboutVertical />
+      <AboutVertical projectsCount={projectsCount || 0} articlesCount={articlesCount || 0} />
       <SelectedWork projects={projects} />
       
       {/* Credentials Marquee Section (Placeholder) */}

@@ -6,8 +6,9 @@ import Link from "next/link";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Observer } from "gsap/Observer";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, Observer);
 
 import { useRouter } from "next/navigation";
 import { Project } from "@/lib/supabase";
@@ -33,153 +34,166 @@ export default function InfiniteArchiveGrid({ projects = [] }: { projects: Proje
     ? projects 
     : projects.filter(p => String(p.year) === activeYear);
 
-  // Provide enough clones for a practically infinite experience (but efficient)
-  // 15 items is lightweight for React but wide enough for auto-scroll.
-  const minItemsRequired = 15; 
-  let displayProjects = [...filteredProjects];
-  if (displayProjects.length > 0) {
-    while (displayProjects.length < minItemsRequired) {
-      displayProjects = [...displayProjects, ...filteredProjects];
+  // Render exactly 2 identical sets to allow seamless GSAP virtual scroll wrapping
+  const minItemsRequired = 8; 
+  let BaseSet = [...filteredProjects];
+  if (BaseSet.length > 0) {
+    while (BaseSet.length < minItemsRequired) {
+      BaseSet = [...BaseSet, ...filteredProjects];
     }
   }
+  const displayProjects = [...BaseSet, ...BaseSet];
 
-  // --- HYBRID MARQUEE (AUTO-SCROLL) ---
-  useEffect(() => {
-    if (isMobile) return;
-    
-    let idleTimer: NodeJS.Timeout;
-    let isIdle = false;
-
-    const startAutoScroll = () => {
-      isIdle = true;
-      const lenis = (window as any).lenis;
-      if (lenis) {
-        // Native Lenis scroll: scroll to bottom over a long duration with linear easing
-        const distance = document.body.scrollHeight - lenis.scroll;
-        const speed = 500; // pixels per second
-        lenis.scrollTo(document.body.scrollHeight, { 
-          duration: distance / speed,
-          easing: (t: number) => t, // Linear ease for constant marquee speed
-        });
-      } else {
-        // Fallback for non-Lenis
-        const distance = document.body.scrollHeight - window.scrollY;
-        gsap.to(window, {
-          scrollTo: document.body.scrollHeight,
-          duration: distance / 100,
-          ease: "none"
-        });
-      }
-    };
-
-    const resetIdle = () => {
-      isIdle = false;
-      // We DO NOT manually cancel Lenis scroll here because Lenis natively aborts
-      // its scrollTo animation when the user interacts via wheel or touch!
-      // Forcing an immediate scrollTo here destroys the user's scroll momentum.
-      if (!(window as any).lenis) {
-        gsap.killTweensOf(window);
-      }
-      
-      clearTimeout(idleTimer);
-      // Start auto-scroll after 2 seconds of no interaction
-      idleTimer = setTimeout(startAutoScroll, 2000);
-    };
-
-    window.addEventListener('wheel', resetIdle, { passive: true });
-    window.addEventListener('touchstart', resetIdle, { passive: true });
-    window.addEventListener('touchmove', resetIdle, { passive: true });
-    window.addEventListener('keydown', resetIdle, { passive: true });
-
-    resetIdle();
-
-    return () => {
-      window.removeEventListener('wheel', resetIdle);
-      window.removeEventListener('touchstart', resetIdle);
-      window.removeEventListener('touchmove', resetIdle);
-      window.removeEventListener('keydown', resetIdle);
-      clearTimeout(idleTimer);
-    };
-  }, [isMobile]);
-
+  // --- TRUE INFINITE VIRTUAL SCROLL (LENIS + ABSOLUTE POSITIONING) ---
   useGSAP(() => {
     if (!containerRef.current || !trackRef.current) return;
     if (isMobile) return; // Skip on mobile
 
-    // Force scroll to top before ScrollTrigger calculates positions
-    window.scrollTo(0, 0);
-
     const cards = gsap.utils.toArray('.archive-card') as HTMLElement[];
     if (cards.length === 0) return;
 
-    const trackWidth = cards.length * 30 * (window.innerWidth / 100);
-    const scrollDistance = trackWidth;
+    // Logical array to track order for infinite loop
+    let logicalCards = [...cards];
     
-    gsap.to(trackRef.current, {
-      x: -scrollDistance,
-      ease: "none",
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: "top top",
-        end: () => `+=${scrollDistance * 1.5}`,
-        pin: true,
-        scrub: 1,
-        onUpdate: () => {
-          const screenWidth = window.innerWidth;
-          let activeIndex = -1;
-          let minDistance = Infinity;
-          
-          const minHeight = 45;
-          const maxHeight = 95;
-          
-          cards.forEach((card, index) => {
-            const rect = card.getBoundingClientRect();
-            
-            // The "PROJECT ARCHIVE" text takes up roughly 45% of the left screen.
-            // We want the card to be fully shrunk (0 progress) when it hits the right edge of that text.
-            const textRightEdge = screenWidth * 0.45;
-            let progress = (rect.left - textRightEdge) / (screenWidth - textRightEdge);
-            if (progress < 0) progress = 0;
-            if (progress > 1) progress = 1;
-            const easeProgress = gsap.parseEase("none")(progress);
-            
-            const currentHeight = minHeight + (maxHeight - minHeight) * easeProgress;
-            
-            const focalPoint = screenWidth * 0.6;
-            const dist = Math.abs(rect.left - focalPoint);
-            
-            if (dist < minDistance) {
-              minDistance = dist;
-              activeIndex = index;
-            }
-            
-            (card as any)._targetHeight = currentHeight;
-          });
-          
-          cards.forEach((card, index) => {
-            const isActive = index === activeIndex;
-            const height = (card as any)._targetHeight;
-            
-            gsap.set(card, {
-              height: `${height}vh`,
-              width: `${height * 1.777}vh`,
-              filter: `brightness(${isActive ? 1 : 0.6})`
-            });
-            
-            if (isActive) {
-              card.classList.add('is-active');
-            } else {
-              card.classList.remove('is-active');
-            }
-          });
-        }
+    let currentScroll = 0;
+    let autoScrollOffset = 0;
+    let isIdle = true;
+    let idleTimer: NodeJS.Timeout;
+
+    const resetIdle = () => {
+      isIdle = false;
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => { isIdle = true; }, 2000);
+    };
+
+    // Center the scrollbar initially to allow scrolling up and down
+    window.scrollTo(0, 25000);
+
+    const handleScroll = () => {
+      resetIdle();
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("wheel", handleScroll, { passive: true });
+    window.addEventListener("touchmove", handleScroll, { passive: true });
+
+    resetIdle();
+
+    const ticker = () => {
+      const lenis = (window as any).lenis;
+      
+      if (isIdle) {
+        // Auto-scroll (marquee) effect preserved
+        autoScrollOffset -= 1.5;
       }
-    });
-    
-    // Refresh ScrollTrigger to ensure pin spacer is calculated correctly after DOM update
-    requestAnimationFrame(() => {
-      ScrollTrigger.refresh();
-    });
+
+      const scrollY = lenis ? lenis.scroll : window.scrollY;
+
+      // Infinite Scrollbar Trick
+      // If user scrolls too close to the edges of our 50,000px dummy div, we instantly reset them to the center
+      // and adjust the autoScrollOffset so there's no visual jump in the UI!
+      if (scrollY < 5000) {
+        const diff = 25000 - scrollY;
+        if (lenis) lenis.scrollTo(25000, { immediate: true });
+        else window.scrollTo(0, 25000);
+        autoScrollOffset -= diff;
+      } else if (scrollY > 45000) {
+        const diff = scrollY - 25000;
+        if (lenis) lenis.scrollTo(25000, { immediate: true });
+        else window.scrollTo(0, 25000);
+        autoScrollOffset += diff;
+      }
+
+      // Calculate total virtual position
+      // Scrolling down (increasing scrollY) moves track left (negative currentScroll)
+      currentScroll = -scrollY + autoScrollOffset;
+
+      const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
+      
+      const minHeight = 45;
+      const maxHeight = 95;
+      const textRightEdge = screenWidth * 0.45;
+      const focalPoint = screenWidth * 0.6;
+      
+      const minWidthPx = (minHeight * 1.777) * (screenHeight / 100);
+
+      // --- WRAP LEFT (scrolling forward) ---
+      // If the first card is completely off-screen left (x < -minWidthPx)
+      while (currentScroll <= -minWidthPx) {
+        currentScroll += minWidthPx;
+        autoScrollOffset += minWidthPx; // adjust offset to match
+        logicalCards.push(logicalCards.shift()!); // Move first card to end
+      }
+      
+      // --- WRAP RIGHT (scrolling backward) ---
+      // If currentScroll > 0, we need to bring a card from the back to the front
+      while (currentScroll > 0) {
+        currentScroll -= minWidthPx;
+        autoScrollOffset -= minWidthPx;
+        logicalCards.unshift(logicalCards.pop()!); // Move last card to front
+      }
+      
+      let x = currentScroll;
+      let activeIndex = -1;
+      let minDistance = Infinity;
+
+      // First pass: Calculate positions and sizes
+      for (let i = 0; i < logicalCards.length; i++) {
+        const card = logicalCards[i];
+        
+        let progress = (x - textRightEdge) / (screenWidth - textRightEdge);
+        progress = Math.max(0, Math.min(1, progress));
+        
+        const heightVh = minHeight + (maxHeight - minHeight) * progress;
+        const widthPx = (heightVh * 1.777) * (screenHeight / 100);
+        
+        // Active index calculation based on center of card
+        const cardCenter = x + (widthPx / 2);
+        const dist = Math.abs(cardCenter - focalPoint);
+        if (dist < minDistance) {
+          minDistance = dist;
+          activeIndex = i;
+        }
+        
+        (card as any)._x = x;
+        (card as any)._widthPx = widthPx;
+        (card as any)._heightVh = heightVh;
+        
+        x += widthPx;
+      }
+
+      // Second pass: Apply styles via GSAP
+      for (let i = 0; i < logicalCards.length; i++) {
+        const card = logicalCards[i];
+        const isActive = i === activeIndex;
+        
+        const cardX = (card as any)._x;
+        const cardWidth = (card as any)._widthPx;
+        const cardHeight = (card as any)._heightVh;
+        
+        gsap.set(card, {
+          x: cardX,
+          width: `${cardWidth}px`,
+          height: `${cardHeight}vh`,
+          zIndex: isActive ? 10 : 1,
+          filter: `brightness(${isActive ? 1 : 0.6})`
+        });
+        
+        if (isActive) card.classList.add('is-active');
+        else card.classList.remove('is-active');
+      }
+    };
+
+    gsap.ticker.add(ticker);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("wheel", handleScroll);
+      window.removeEventListener("touchmove", handleScroll);
+      gsap.ticker.remove(ticker);
+      clearTimeout(idleTimer);
+    };
 
   }, { dependencies: [activeYear, isMobile], scope: containerRef });
 
@@ -270,7 +284,10 @@ export default function InfiniteArchiveGrid({ projects = [] }: { projects: Proje
   }
   return (
     <div key={activeYear}>
-      <section ref={containerRef} className="relative w-full h-screen bg-[#f5f5f5] overflow-hidden">
+      {/* Huge invisible scroll area to power native Lenis scroll */}
+      <div style={{ height: "50000px" }} />
+      
+      <section ref={containerRef} className="fixed top-0 left-0 w-full h-screen bg-[#f5f5f5] overflow-hidden">
         
         {/* Navbar & Filter */}
         <div className="absolute top-0 left-0 w-full p-8 md:p-12 z-50 flex justify-between items-start pointer-events-none mix-blend-difference text-white">
@@ -309,16 +326,15 @@ export default function InfiniteArchiveGrid({ projects = [] }: { projects: Proje
           </p>
         </div>
 
-        {/* Scroll-Driven Dynamic Track */}
-        {/* We align items to the bottom, gap-0 for no spacing */}
+        {/* Scroll-Driven Dynamic Track (Absolute Positioning) */}
         <div className="absolute top-0 left-0 w-full h-full flex items-center md:items-end md:pb-[10vh] pointer-events-none">
-          <div ref={trackRef} className="flex items-end gap-0 w-max h-full pointer-events-auto border-b border-black">
+          <div ref={trackRef} className="relative w-full h-full pointer-events-auto border-b border-black">
             {displayProjects.map((project, idx) => {
               return (
                 <Link 
                   href={`/portfolio/${project.slug}`}
                   key={`track-${project.slug}-${idx}`} 
-                  className={`archive-card block shrink-0 group relative overflow-hidden bg-black cursor-pointer will-change-[width,height]`}
+                  className={`archive-card block group absolute bottom-0 left-0 overflow-hidden bg-black cursor-pointer will-change-[width,height,transform]`}
                   style={{ width: "25vw", height: "40vh" }} // Initial small state
                 >
                   {project.hero_image_url ? (
