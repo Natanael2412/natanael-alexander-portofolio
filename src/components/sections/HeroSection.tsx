@@ -163,6 +163,16 @@ export default function HeroSection() {
       mm.add("(max-width: 1023px)", () => {
         // Entrance animation
         const tl = gsap.timeline({ delay: 0.2 });
+        
+        // Subtle image zoom out on load
+        if (imgRef.current) {
+          gsap.fromTo(
+            imgRef.current,
+            { scale: 1.15 },
+            { scale: 1, duration: 2.5, ease: "power2.out" }
+          );
+        }
+
         tl.fromTo(
           sectionRef.current,
           { opacity: 0 },
@@ -173,6 +183,18 @@ export default function HeroSection() {
           { opacity: 1, y: 0, duration: 0.6, ease: "expo.out" },
           "-=0.4"
         );
+
+        // Parallax image scroll
+        gsap.to(imgRef.current, {
+          yPercent: 15,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          }
+        });
 
         // Scroll animation: same overlay fade + text-to-white as desktop
         ScrollTrigger.create({
@@ -210,35 +232,39 @@ export default function HeroSection() {
     { scope: sectionRef }
   );
 
-  // ── Mobile panel fade-in with IntersectionObserver (Opsi B) ──
-  useEffect(() => {
-    if (window.innerWidth >= 1024) return; // desktop only uses GSAP
-    const panels = panelsRef.current.filter(Boolean) as HTMLDivElement[];
-    if (!panels.length) return;
+  // ── Mobile panel stacking (Layered Pinning) ──
+  useGSAP(() => {
+    const mm = gsap.matchMedia();
+    mm.add("(max-width: 1023px)", () => {
+      const panels = panelsRef.current.filter(Boolean) as HTMLDivElement[];
+      if (!panels.length) return;
 
-    // Set initial state
-    panels.forEach(panel => {
-      panel.style.opacity = '0';
-      panel.style.transform = 'translateY(40px)';
-      panel.style.transition = 'opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1)';
-    });
+      panels.forEach((panel, i) => {
+        // Pin the panel so the next one scrolls over it
+        ScrollTrigger.create({
+          trigger: panel,
+          start: () => panel.offsetHeight > window.innerHeight ? "bottom bottom" : "top top",
+          pin: true,
+          pinSpacing: false,
+          end: () => `+=${window.innerHeight}`,
+        });
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            (entry.target as HTMLElement).style.opacity = '1';
-            (entry.target as HTMLElement).style.transform = 'translateY(0)';
-            observer.unobserve(entry.target);
+        // Scale/fade the panel as it gets covered
+        gsap.to(panel, {
+          scale: 0.92,
+          opacity: 0.3,
+          ease: "none",
+          scrollTrigger: {
+            trigger: panel,
+            start: () => panel.offsetHeight > window.innerHeight ? "bottom bottom" : "top top",
+            end: () => `+=${window.innerHeight}`,
+            scrub: true,
           }
         });
-      },
-      { threshold: 0.15 }
-    );
-
-    panels.forEach(panel => observer.observe(panel));
-    return () => observer.disconnect();
-  }, []);
+      });
+    });
+    return () => mm.revert();
+  }, { scope: sectionRef });
 
   return (
     <section
@@ -331,20 +357,9 @@ export default function HeroSection() {
         </div>
 
         {/* Panel 2: THE FOUNDATION + Formal Photo */}
-        <div className="w-[100vw] min-h-screen lg:h-[100vh] flex flex-col lg:flex-row" ref={(el) => { panelsRef.current[1] = el; }}>
+        <div className="w-[100vw] min-h-screen lg:h-[100vh] flex flex-col-reverse lg:flex-row" ref={(el) => { panelsRef.current[1] = el; }}>
           
-          {/* Left: Text */}
-          <div className="w-full lg:w-1/2 flex-1 flex flex-col justify-center bg-[var(--chalk)] relative z-10" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(3rem, 8vh, 6rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}>
-            <div className="w-full">
-              <span className="about__label">02 / THE FOUNDATION</span>
-              <h2 className="about__title !text-[clamp(1.5rem,4vw,5rem)]" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', hyphens: 'auto' }}>DUAL PERSPECTIVE.</h2>
-              <p className="about__text">
-                &quot;Dorongan untuk memecahkan masalah secara komprehensif membawa saya meraih gelar ganda S.Kom (Sistem Informasi) dan S.Ak (Akuntansi). Latar belakang keilmuan ini mendikte cara berpikir saya: sebuah arsitektur teknologi tidak boleh hanya dinilai dari kecanggihan teknis, melainkan wajib divalidasi oleh logika finansial dan metrik bisnis yang terukur.&quot;
-              </p>
-            </div>
-          </div>
-
-          {/* Right: Photo */}
+          {/* Left: Photo (Visual) */}
           <div className="w-full lg:w-1/2 h-[50svh] lg:h-full relative bg-[var(--chalk)]">
             <Image 
               src="/images/formal.webp" 
@@ -355,6 +370,16 @@ export default function HeroSection() {
             />
           </div>
 
+          {/* Right: Text */}
+          <div className="w-full lg:w-1/2 flex-1 flex flex-col justify-center bg-[var(--chalk)] relative z-10" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(2rem, 10vh, 8rem)", paddingBottom: "clamp(2rem, 10vh, 8rem)" }}>
+            <div className="w-full">
+              <span className="about__label">02 / THE FOUNDATION</span>
+              <h2 className="about__title !text-[clamp(1.5rem,4vw,5rem)]" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', hyphens: 'auto' }}>DUAL PERSPECTIVE.</h2>
+              <p className="about__text">
+                &quot;Dorongan untuk memecahkan masalah secara komprehensif membawa saya meraih gelar ganda S.Kom (Sistem Informasi) dan S.Ak (Akuntansi). Latar belakang keilmuan ini mendikte cara berpikir saya: sebuah arsitektur teknologi tidak boleh hanya dinilai dari kecanggihan teknis, melainkan wajib divalidasi oleh logika finansial dan metrik bisnis yang terukur.&quot;
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </section>

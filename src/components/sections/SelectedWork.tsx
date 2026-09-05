@@ -110,6 +110,67 @@ export default function SelectedWork({ projects = [] }: { projects: Project[] })
         return () => ctx.revert();
       });
 
+      mm.add("(max-width: 1023px)", () => {
+        const mobileCards = gsap.utils.toArray(".mobile-work-card") as HTMLElement[];
+        const mobileWrapper = document.querySelector(".mobile-cards-wrapper");
+        
+        if (!mobileWrapper || mobileCards.length === 0) return;
+
+        const ctx = gsap.context(() => {
+          const updateMobileCards = () => {
+            const viewportCenter = window.innerWidth / 2;
+            
+            mobileCards.forEach(card => {
+              const rect = (card as HTMLElement).getBoundingClientRect();
+              const cardCenter = rect.left + rect.width / 2;
+              const distFromCenter = Math.abs(viewportCenter - cardCenter);
+              
+              const maxDist = window.innerWidth * 0.6;
+              let progress = 1 - (distFromCenter / maxDist);
+              if (progress < 0) progress = 0;
+              
+              const minScale = 0.85;
+              const currentScale = minScale + (1 - minScale) * progress;
+              
+              gsap.set(card, {
+                scale: currentScale,
+              });
+              
+              const overlay = card.querySelector(".mobile-overlay") as HTMLElement;
+              if (overlay) {
+                 // Active is less dark, inactive is darker
+                 overlay.style.backgroundColor = `rgba(0, 0, 0, ${0.85 - progress * 0.55})`;
+              }
+            });
+          };
+
+          // Initialize cards
+          updateMobileCards();
+
+          gsap.to(".mobile-cards-wrapper", {
+            x: () => {
+              const cardWidth = (mobileCards[0] as HTMLElement).offsetWidth;
+              const gap = parseFloat(getComputedStyle(mobileWrapper).gap || "16");
+              const step = cardWidth + gap;
+              return -(step * (mobileCards.length - 1));
+            },
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top top",
+              end: () => `+=${window.innerHeight * 1.5}`,
+              pin: true,
+              scrub: 1,
+              onUpdate: updateMobileCards
+            },
+          });
+          
+          ScrollTrigger.refresh();
+        }, sectionRef);
+
+        return () => ctx.revert();
+      });
+
       return () => mm.revert();
     },
     { scope: sectionRef }
@@ -118,7 +179,8 @@ export default function SelectedWork({ projects = [] }: { projects: Project[] })
   return (
     <section
       ref={sectionRef}
-      className="work-section w-full h-screen bg-[var(--paper)] flex relative overflow-hidden"
+      className="work-section w-full h-screen flex relative overflow-hidden"
+      style={{ backgroundColor: "#F5F3EF" }}
       id="work"
       aria-label="Selected work"
     >
@@ -161,8 +223,9 @@ export default function SelectedWork({ projects = [] }: { projects: Project[] })
         </Link>
       </div>
 
-      {/* RIGHT: Vertical Snapping Carousel (desktop) / Peek Carousel (mobile) */}
-      <div className="w-full lg:w-[55%] h-full absolute right-0 top-0 pointer-events-none lg:pr-[4vw]">
+      {/* RIGHT: Vertical Snapping Carousel (desktop) / Horizontal GSAP (mobile) */}
+      <div className="w-full lg:w-[55%] h-full absolute right-0 top-0 pointer-events-none lg:pr-[4vw] flex items-center lg:items-start overflow-hidden">
+        
         {/* Desktop: vertical carousel */}
         <div className="cards-wrapper hidden lg:flex w-full absolute top-[20vh] flex-col gap-[2vh] items-center pointer-events-auto">
           {projects.map((project) => (
@@ -190,28 +253,26 @@ export default function SelectedWork({ projects = [] }: { projects: Project[] })
                       src={project.hero_image_url}
                       alt={project.title}
                       fill
-                      sizes="(max-width: 768px) 100vw, 60vw"
+                      sizes="(max-width: 1023px) 60vw, 40vw"
                       className="work-card__image object-cover"
                     />
                   )
                 ) : (
                   <div className="absolute inset-0 bg-[#111] flex items-center justify-center">
-                    <span className="text-white/10 font-playfair font-black text-[15vw] lg:text-[8vw] uppercase tracking-tighter">
+                    <span className="text-white/10 font-playfair font-black text-[8vw] uppercase tracking-tighter">
                       {project.title.split(' ').map(n => n[0]).join('').substring(0, 2)}
                     </span>
                   </div>
                 )}
-                {/* Base dark overlay */}
                 <div className="absolute inset-0 bg-black/65 transition-colors duration-500 [.is-active_&]:bg-black/40" />
-                {/* Hover gradient for text readability */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 transition-opacity duration-500 [.is-active_&]:opacity-100" />
                 
-                <div className="absolute inset-x-6 bottom-6 lg:inset-x-12 lg:bottom-12 flex justify-between items-end opacity-0 translate-y-4 transition-all duration-500 [.is-active_&]:opacity-100 [.is-active_&]:translate-y-0 pointer-events-none">
+                <div className="absolute inset-x-12 bottom-12 flex justify-between items-end opacity-0 translate-y-4 transition-all duration-500 [.is-active_&]:opacity-100 [.is-active_&]:translate-y-0 pointer-events-none">
                   <div>
-                    <h3 className="font-playfair text-2xl lg:text-5xl font-black text-white leading-none mb-1 lg:mb-2 tracking-tighter uppercase">{project.title}</h3>
-                    <p className="font-montserrat text-xs lg:text-sm font-bold text-white/80 tracking-[0.2em] uppercase">{project.role}</p>
+                    <h3 className="font-playfair text-5xl font-black text-white leading-none mb-2 tracking-tighter uppercase">{project.title}</h3>
+                    <p className="font-montserrat text-sm font-bold text-white/80 tracking-[0.2em] uppercase">{project.role}</p>
                   </div>
-                  <div className="text-white font-playfair font-black text-lg lg:text-2xl opacity-60">
+                  <div className="text-white font-playfair font-black text-2xl opacity-60">
                     {project.year}
                   </div>
                 </div>
@@ -220,28 +281,17 @@ export default function SelectedWork({ projects = [] }: { projects: Project[] })
           ))}
         </div>
 
-        {/* Mobile: 3-card peek carousel — center card prominent, sides clipped */}
-        <div
-          className="lg:hidden absolute inset-0 flex items-center overflow-hidden pointer-events-auto"
-          style={{ paddingTop: '140px' }}
-        >
-          <div
-            className="flex gap-3 overflow-x-auto snap-x snap-mandatory w-full h-full items-center"
-            style={{
-              scrollbarWidth: 'none',
-              paddingLeft: 'calc(50% - 42vw)', // center first card
-              paddingRight: 'calc(50% - 42vw)',
-            }}
-          >
-            {projects.map((project) => (
-              <Link
-                href={`/portfolio/${project.slug}`}
-                key={`mobile-${project.slug}`}
-                className="snap-center shrink-0 relative rounded-sm overflow-hidden shadow-xl"
-                style={{ width: '84vw', height: '56vw' }}
-                id={`work-card-mobile-${project.slug}`}
-                aria-label={`Project: ${project.title}`}
-              >
+        {/* Mobile: horizontal carousel */}
+        <div className="mobile-cards-wrapper lg:hidden w-max absolute top-[25vh] flex flex-row gap-[16px] px-[10vw] pointer-events-auto items-center">
+          {projects.map((project) => (
+            <Link
+              href={`/portfolio/${project.slug}`}
+              key={`mobile-${project.slug}`}
+              className="mobile-work-card relative w-[65vw] h-[50vh] shrink-0 z-10 shadow-2xl will-change-transform"
+              tabIndex={0}
+              aria-label={`Project: ${project.title}`}
+            >
+              <div className="w-full h-full relative overflow-hidden bg-black rounded-sm">
                 {project.hero_image_url ? (
                   project.hero_image_url.endsWith(".mp4") || project.hero_image_url.endsWith(".webm") ? (
                     <video
@@ -250,40 +300,34 @@ export default function SelectedWork({ projects = [] }: { projects: Project[] })
                       loop
                       muted
                       playsInline
-                      className="w-full h-full object-cover absolute inset-0"
+                      className="object-cover w-full h-full absolute inset-0"
                     />
                   ) : (
                     <Image
                       src={project.hero_image_url}
                       alt={project.title}
                       fill
-                      sizes="90vw"
+                      sizes="65vw"
                       className="object-cover"
                     />
                   )
                 ) : (
                   <div className="absolute inset-0 bg-[#111] flex items-center justify-center">
-                    <span className="text-white/10 font-playfair font-black text-[20vw] uppercase tracking-tighter">
+                    <span className="text-white/10 font-playfair font-black text-[15vw] uppercase tracking-tighter">
                       {project.title.split(' ').map(n => n[0]).join('').substring(0, 2)}
                     </span>
                   </div>
                 )}
-                {/* Always-visible base dark overlay on mobile */}
-                <div className="absolute inset-0 bg-black/65" />
-                {/* Gradient for text readability */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                <div className="absolute inset-x-4 bottom-4 flex justify-between items-end">
-                  <div>
-                    <h3 className="font-playfair text-xl font-black text-white leading-none mb-1 tracking-tighter uppercase">{project.title}</h3>
-                    <p className="font-montserrat text-[0.6rem] font-bold text-white/70 tracking-[0.2em] uppercase">{project.role}</p>
-                  </div>
-                  <div className="text-white font-playfair font-black text-base opacity-60">
-                    {project.year}
-                  </div>
+                {/* Mobile overlay */}
+                <div className="mobile-overlay absolute inset-0 transition-colors duration-200" style={{ backgroundColor: 'rgba(0,0,0,0.85)' }} />
+                
+                <div className="absolute inset-x-4 bottom-4 flex flex-col pointer-events-none">
+                  <h3 className="font-playfair text-2xl font-black text-white leading-none mb-1 tracking-tighter uppercase">{project.title}</h3>
+                  <p className="font-montserrat text-[10px] font-bold text-white/80 tracking-[0.2em] uppercase">{project.role}</p>
                 </div>
-              </Link>
-            ))}
-          </div>
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
     </section>

@@ -105,7 +105,7 @@ export default function ProjectClient({ project }: { project: Project }) {
               src={project.hero_image_url}
               alt={project.title}
               fill
-              className="object-cover"
+              style={{ objectFit: "cover" }}
               priority
             />
           )
@@ -272,7 +272,7 @@ export default function ProjectClient({ project }: { project: Project }) {
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
-            gap: "clamp(0.75rem, 2vh, 1.5rem)",
+            gap: 0,
             overflow: "hidden",
             WebkitMaskImage: "linear-gradient(to right, transparent, black 12%, black 88%, transparent)",
             maskImage: "linear-gradient(to right, transparent, black 12%, black 88%, transparent)",
@@ -280,7 +280,7 @@ export default function ProjectClient({ project }: { project: Project }) {
             {/* Row 1 – moves left */}
             <div ref={row1Ref} style={{ position: "relative", width: "100%", height: "clamp(160px, 18vw, 280px)" }}>
               {[...baseGallery, ...baseGallery].map((url: string, idx: number) => (
-                <div key={`r1-${idx}`} style={{ paddingRight: "clamp(0.75rem, 1.5vw, 1.5rem)", display: "inline-block" }}>
+                <div key={`r1-${idx}`} style={{ display: "inline-block" }}>
                   <GalleryItem url={url} />
                 </div>
               ))}
@@ -289,7 +289,7 @@ export default function ProjectClient({ project }: { project: Project }) {
             {/* Row 2 – moves right */}
             <div ref={row2Ref} style={{ position: "relative", width: "100%", height: "clamp(160px, 18vw, 280px)" }}>
               {[...reversedGallery, ...reversedGallery].map((url: string, idx: number) => (
-                <div key={`r2-${idx}`} style={{ paddingRight: "clamp(0.75rem, 1.5vw, 1.5rem)", display: "inline-block" }}>
+                <div key={`r2-${idx}`} style={{ display: "inline-block" }}>
                   <GalleryItem url={url} />
                 </div>
               ))}
@@ -321,18 +321,14 @@ function GalleryItem({ url }: { url: string }) {
       width: "clamp(220px, 26vw, 400px)",
       aspectRatio: "16/10",
       flexShrink: 0,
-      borderRadius: "4px",
       overflow: "hidden",
       background: "var(--ink)",
-      border: "1px solid rgba(255,255,255,0.06)",
-      boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
     }}>
       <Image
         src={url}
         alt="Gallery background"
         fill
-        style={{ objectFit: "cover", opacity: 0.25 }}
-        className="blur-2xl scale-110"
+        style={{ objectFit: "cover", opacity: 0.25, filter: "blur(40px)", transform: "scale(1.1)" }}
       />
       <Image
         src={url}
@@ -344,4 +340,3 @@ function GalleryItem({ url }: { url: string }) {
     </div>
   );
 }
-
