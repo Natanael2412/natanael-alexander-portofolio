@@ -51,33 +51,17 @@ export default function AboutVertical({
       });
     });
 
-    // ── Mobile panel stacking (Layered Pinning) ──
+    // Mobile Stacking/Collapsing Cards for Panels 3, 4, 5, 6
     const mm = gsap.matchMedia();
     mm.add("(max-width: 1023px)", () => {
-      const panels = panelsRef.current.filter(Boolean) as HTMLDivElement[];
-      if (!panels.length) return;
-
-      panels.forEach((panel) => {
-        // Pin the panel so the next one scrolls over it
+      const panels = panelsRef.current.filter(Boolean) as HTMLElement[];
+      panels.forEach((panel, i) => {
+        gsap.set(panel, { zIndex: i + 10 }); // Ensure it's above HeroSection panels
         ScrollTrigger.create({
           trigger: panel,
-          start: () => panel.offsetHeight > window.innerHeight ? "bottom bottom" : "top top",
+          start: "top top",
           pin: true,
           pinSpacing: false,
-          end: () => `+=${window.innerHeight}`,
-        });
-
-        // Scale down and fade the panel as the NEXT panel (or the section after) covers it
-        gsap.to(panel, {
-          scale: 0.92,
-          opacity: 0.3,
-          ease: "none",
-          scrollTrigger: {
-            trigger: panel,
-            start: () => panel.offsetHeight > window.innerHeight ? "bottom bottom" : "top top",
-            end: () => `+=${window.innerHeight}`,
-            scrub: true,
-          }
         });
       });
     });
@@ -89,7 +73,7 @@ export default function AboutVertical({
     <div ref={containerRef} className="bg-white text-black relative z-20 w-full overflow-hidden">
       
       {/* Panel 3: THE PHILOSOPHY */}
-      <div className="w-full min-h-screen lg:h-[100vh] flex flex-col-reverse lg:flex-row border-b border-gray-100" ref={(el) => { panelsRef.current[0] = el; }}>
+      <div className="w-full min-h-screen lg:h-[100vh] flex flex-col lg:flex-row border-b border-gray-100" ref={(el) => { panelsRef.current[0] = el; }}>
         
         {/* Left: Visual */}
         <div className="w-full lg:w-1/2 h-[50svh] lg:h-full relative bg-white flex items-center justify-center overflow-hidden">
@@ -113,7 +97,7 @@ export default function AboutVertical({
       </div>
 
       {/* Panel 4: PRODUCTION LEADERSHIP + Team Photo */}
-      <div className="w-full min-h-screen lg:h-[100vh] flex flex-col lg:flex-row border-b border-gray-100" ref={(el) => { panelsRef.current[1] = el; }}>
+      <div className="w-full min-h-screen lg:h-[100vh] flex flex-col-reverse lg:flex-row border-b border-gray-100" ref={(el) => { panelsRef.current[1] = el; }}>
         
         {/* Left: Text */}
         <div className="w-full lg:w-1/2 flex flex-col justify-center bg-[var(--chalk)] relative z-10" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(3rem, 8vh, 6rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}>
@@ -141,7 +125,7 @@ export default function AboutVertical({
       </div>
 
       {/* Panel 5: THE EXPERIENCE */}
-      <div className="w-full min-h-screen lg:h-[100vh] flex flex-col-reverse lg:flex-row border-b border-gray-100" ref={(el) => { panelsRef.current[2] = el; }}>
+      <div className="w-full min-h-screen lg:h-[100vh] flex flex-col lg:flex-row border-b border-gray-100" ref={(el) => { panelsRef.current[2] = el; }}>
         
         {/* Left: Photo */}
         <div className="w-full lg:w-1/2 h-[50svh] lg:h-full relative bg-gray-100">
@@ -208,7 +192,7 @@ export default function AboutVertical({
       </div>
 
       {/* Panel 6: THE NEXT */}
-      <div className="w-full min-h-[50vh] lg:h-[100vh] flex flex-row border-b border-gray-100">
+      <div className="w-full min-h-screen lg:h-[100vh] flex flex-row border-b border-gray-100" ref={(el) => { panelsRef.current[3] = el; }}>
         <div className="w-full flex flex-col justify-center items-center bg-[var(--chalk)] relative z-10 text-center" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(1.5rem, 5vh, 8rem)", paddingBottom: "clamp(1.5rem, 5vh, 8rem)" }}>
           <div className="w-full max-w-2xl mx-auto">
             <span className="about__label mx-auto">06 / THE NEXT</span>

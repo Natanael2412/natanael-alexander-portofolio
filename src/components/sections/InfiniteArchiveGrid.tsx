@@ -110,12 +110,11 @@ export default function InfiniteArchiveGrid({ projects = [] }: { projects: Proje
 
       const screenWidth = window.innerWidth;
       const screenHeight = window.innerHeight;
-      const trackWidth = screenWidth * 0.55;
       
       const minHeight = 45;
       const maxHeight = 95;
-      const textRightEdge = 0; // Relative to the 55% container
-      const focalPoint = trackWidth * 0.5; // Center of the right container
+      const textRightEdge = screenWidth * 0.45;
+      const focalPoint = screenWidth * 0.6;
       
       const minWidthPx = (minHeight * 1.777) * (screenHeight / 100);
 
@@ -143,7 +142,7 @@ export default function InfiniteArchiveGrid({ projects = [] }: { projects: Proje
       for (let i = 0; i < logicalCards.length; i++) {
         const card = logicalCards[i];
         
-        let progress = (x - textRightEdge) / (trackWidth - textRightEdge);
+        let progress = (x - textRightEdge) / (screenWidth - textRightEdge);
         progress = Math.max(0, Math.min(1, progress));
         
         const heightVh = minHeight + (maxHeight - minHeight) * progress;
@@ -198,99 +197,51 @@ export default function InfiniteArchiveGrid({ projects = [] }: { projects: Proje
 
   }, { dependencies: [activeYear, isMobile], scope: containerRef });
 
-  // --- MOBILE VIRTUAL SCROLL (DIAGONAL STACKING) ---
-  const mobileContainerRef = useRef<HTMLDivElement>(null);
-  useGSAP(() => {
-    if (!isMobile || !mobileContainerRef.current) return;
-
-    const cards = gsap.utils.toArray('.mobile-archive-card') as HTMLElement[];
-    if (cards.length === 0) return;
-
-    cards.forEach((card, i) => {
-      // Stacking effect
-      ScrollTrigger.create({
-        trigger: card,
-        start: "top 25%", // Pin when it reaches 25% from top
-        endTrigger: ".mobile-end-trigger", // Unpin when the whole section ends
-        end: "bottom bottom",
-        pin: true,
-        pinSpacing: false,
-      });
-
-      // Diagonal Entrance
-      gsap.from(card, {
-        x: window.innerWidth * 0.5, // Slide from right
-        y: window.innerHeight * 0.2, // and bottom
-        opacity: 0,
-        rotation: 5,
-        scrollTrigger: {
-          trigger: card,
-          start: "top 90%",
-          end: "top 25%", // Finishes animation right when it pins
-          scrub: 1,
-        }
-      });
-      
-      // When NEXT card comes in, scale this one down slightly
-      if (i < cards.length - 1) {
-        gsap.to(card, {
-          scale: 0.9,
-          filter: 'brightness(0.5)',
-          scrollTrigger: {
-            trigger: cards[i + 1],
-            start: "top 80%",
-            end: "top 25%",
-            scrub: true,
-          }
-        });
-      }
-    });
-  }, { dependencies: [activeYear, isMobile], scope: mobileContainerRef });
-
-  // Render both Mobile and Desktop and use CSS to toggle visibility to prevent hydration mismatch!
-  return (
-    <>
-      {/* ============================================================== */}
-      {/* MOBILE LAYOUT */}
-      {/* ============================================================== */}
-      <section ref={mobileContainerRef} className="relative w-full min-h-screen bg-[#f5f5f5] pb-32 overflow-hidden lg:hidden flex flex-col">
-        {/* Header - Now Top Left */}
-        <div className="w-full p-6 pt-16 flex flex-col items-start sticky top-0 z-50 bg-[#f5f5f5]/90 backdrop-blur-md">
-          <button onClick={() => router.push('/')} className="font-montserrat text-xs tracking-widest uppercase text-black hover:opacity-50 transition-opacity mb-6">
-            ← Back
+  // Mobile: 2-column grid layout
+  if (isMobile) {
+    return (
+      <section className="relative w-full min-h-screen bg-[#f5f5f5]">
+        {/* Header */}
+        <div className="w-full p-6 pt-16 flex justify-between items-start">
+          <button onClick={() => router.push('/')} className="font-montserrat text-xs tracking-widest uppercase text-black hover:opacity-50 transition-opacity">
+            ÔåÉ Back
           </button>
-          
-          <h1 className="font-playfair text-[12vw] font-black leading-[0.85] uppercase tracking-tighter text-black">
-            PROJECT<br />ARCHIVE
-          </h1>
-          <p className="mt-4 font-montserrat text-[10px] font-bold tracking-[0.2em] uppercase text-black/60 max-w-[80%]">
-            A collection of digital experiences, branding, and visual productions.
-          </p>
-
-          <div className="mt-8 flex gap-3 flex-wrap">
-            {YEARS.map(year => (
-              <button
-                key={year}
-                onClick={() => {
-                  window.scrollTo(0, 0);
-                  setActiveYear(year);
-                }}
-                className={`font-montserrat text-[10px] font-bold tracking-widest uppercase transition-all duration-300 px-3 py-1 border border-black/20 rounded-full ${activeYear === year ? 'bg-black text-white' : 'text-black opacity-60'}`}
-              >
-                {year}
-              </button>
-            ))}
+          <div className="flex flex-col items-end gap-2">
+            <span className="font-montserrat text-xs tracking-[0.2em] uppercase text-black/50 mb-1">Filter</span>
+            <div className="flex gap-3 flex-wrap justify-end">
+              {YEARS.map(year => (
+                <button
+                  key={year}
+                  onClick={() => {
+                    window.scrollTo(0, 0);
+                    setActiveYear(year);
+                  }}
+                  className={`font-montserrat text-xs font-bold tracking-widest uppercase transition-all duration-300 ${activeYear === year ? 'opacity-100 underline underline-offset-4' : 'opacity-30'}`}
+                >
+                  {year}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Diagonal Stack Grid */}
-        <div className="px-6 pt-12 pb-[50vh] flex flex-col gap-[30vh]">
+        {/* Page Title */}
+        <div className="px-6 pb-8">
+          <h1 className="font-playfair text-[18vw] font-black leading-[0.85] uppercase tracking-tighter text-black">
+            PROJECT<br />ARCHIVE
+          </h1>
+          <p className="mt-4 font-montserrat text-xs font-bold tracking-[0.2em] uppercase text-black/60">
+            A collection of digital experiences, branding, and visual productions.
+          </p>
+        </div>
+
+        {/* 2-column grid */}
+        <div className="px-4 pb-16 grid grid-cols-2 gap-3">
           {filteredProjects.map((project, idx) => (
             <Link
               href={`/portfolio/${project.slug}`}
               key={`mobile-${project.slug}-${idx}`}
-              className="mobile-archive-card relative w-full overflow-hidden bg-black aspect-[3/4] shadow-2xl rounded-sm will-change-transform"
-              style={{ transformOrigin: "bottom left" }}
+              className="relative block overflow-hidden bg-black aspect-[4/5]"
             >
               {project.hero_image_url ? (
                 project.hero_image_url.endsWith(".mp4") || project.hero_image_url.endsWith(".webm") ? (
@@ -308,7 +259,7 @@ export default function InfiniteArchiveGrid({ projects = [] }: { projects: Proje
                     alt={project.title}
                     fill
                     className="object-cover object-center"
-                    sizes="(max-width: 1024px) 100vw"
+                    sizes="(max-width: 1024px) 50vw, 30vw"
                   />
                 )
               ) : (
@@ -318,33 +269,33 @@ export default function InfiniteArchiveGrid({ projects = [] }: { projects: Proje
                   </span>
                 </div>
               )}
-              
+              {/* Always-visible base dark overlay */}
+              <div className="absolute inset-0 bg-black/65" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-              
-              <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                <h3 className="font-playfair text-3xl text-white font-black uppercase tracking-tighter">{project.title}</h3>
-                <p className="font-montserrat text-[10px] font-bold text-white/80 tracking-[0.2em] uppercase mt-1">{project.role}</p>
-                <div className="text-white/60 font-playfair text-lg font-bold mt-2">{project.year}</div>
+              <div className="absolute inset-0 p-4 flex flex-col justify-end">
+                <h3 className="font-playfair text-base text-white font-black uppercase tracking-tighter leading-tight">{project.title}</h3>
+                <p className="font-montserrat text-[10px] font-bold text-white/70 tracking-[0.15em] uppercase mt-1">{project.role}</p>
               </div>
             </Link>
           ))}
-          <div className="mobile-end-trigger w-full h-10" />
         </div>
       </section>
-
-      {/* ============================================================== */}
-      {/* DESKTOP LAYOUT */}
-      {/* ============================================================== */}
-      <div key={activeYear} className="hidden lg:block">
-        {/* Huge invisible scroll area to power native Lenis scroll */}
-        <div style={{ height: "50000px" }} />
-        
-        <section ref={containerRef} className="fixed top-0 left-0 w-full h-screen bg-[#f5f5f5] overflow-hidden">
+    );
+  }
+  return (
+    <div key={activeYear}>
+      {/* Huge invisible scroll area to power native Lenis scroll */}
+      <div style={{ height: "50000px" }} />
+      
+      <section ref={containerRef} className="fixed top-0 left-0 w-full h-screen bg-[#f5f5f5] overflow-hidden">
         
         {/* Navbar & Filter */}
-        <div className="absolute top-0 left-0 w-full p-8 md:p-12 z-50 flex justify-between items-start pointer-events-none mix-blend-difference text-white">
-          <button onClick={() => router.push('/')} className="font-montserrat text-sm tracking-widest uppercase hover:opacity-50 transition-opacity pointer-events-auto">
-            ← Back
+        <div 
+          className="absolute top-0 left-0 w-full z-50 flex justify-between items-start pointer-events-none mix-blend-difference text-white"
+          style={{ paddingLeft: "clamp(1.5rem, 5vw, 6rem)", paddingRight: "clamp(1.5rem, 5vw, 6rem)", paddingTop: "clamp(1.25rem, 3vh, 2.5rem)" }}
+        >
+          <button onClick={() => router.push('/')} className="font-montserrat text-xs tracking-[0.3em] font-semibold uppercase hover:opacity-50 transition-opacity pointer-events-auto flex items-center gap-2">
+            <span className="text-base leading-none">←</span>BACK
           </button>
 
           {/* Year Filter */}
@@ -368,18 +319,32 @@ export default function InfiniteArchiveGrid({ projects = [] }: { projects: Proje
           </div>
         </div>
 
-        {/* Huge Left Typography (Fixed on Left) */}
-        <div className="absolute left-8 md:left-12 top-24 md:top-32 w-[40%] z-40 text-black">
-          <h1 className="font-playfair text-[12vw] md:text-[7vw] font-black leading-[0.8] uppercase tracking-tighter">
+        {/* Huge Left Typography (Crafting Culture Style) */}
+        <div 
+          className="absolute z-40 pointer-events-none mix-blend-difference text-white flex flex-col"
+          style={{ 
+            left: 0, 
+            top: "25vh",
+            transform: "translateY(-50%)",
+
+            paddingLeft: "clamp(1.5rem, 5vw, 6rem)", 
+            paddingRight: "clamp(1.5rem, 5vw, 6rem)",
+            width: "42%" 
+          }}
+        >
+          <h1 
+            className="font-playfair font-black leading-[0.85] uppercase tracking-tighter"
+            style={{ fontSize: "clamp(3.5rem, 8vw, 12rem)" }}
+          >
             PROJECT<br />ARCHIVE
           </h1>
-          <p className="mt-8 max-w-sm font-montserrat text-xs md:text-sm font-bold tracking-[0.2em] uppercase leading-relaxed opacity-80">
+          <p className="mt-6 md:mt-8 max-w-sm font-montserrat text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase leading-relaxed opacity-80">
             A collection of digital experiences, branding, and visual productions.
           </p>
         </div>
 
-        {/* Scroll-Driven Dynamic Track (Right 55% of Screen) */}
-        <div className="absolute top-0 right-0 w-[55%] h-full flex items-center md:items-end md:pb-[10vh] pointer-events-none overflow-hidden">
+        {/* Scroll-Driven Dynamic Track (Absolute Positioning) */}
+        <div className="absolute top-0 left-0 w-full h-full flex items-center md:items-end md:pb-[10vh] pointer-events-none">
           <div ref={trackRef} className="relative w-full h-full pointer-events-auto border-b border-black">
             {displayProjects.map((project, idx) => {
               return (
@@ -431,7 +396,6 @@ export default function InfiniteArchiveGrid({ projects = [] }: { projects: Proje
           </div>
         </div>
       </section>
-      </div>
-    </>
+    </div>
   );
 }

@@ -225,6 +225,18 @@ export default function HeroSection() {
             if (indexRef.current) indexRef.current.style.color = labelColor;
           },
         });
+
+        // Mobile Stacking/Collapsing Cards for Panel 1 & 2
+        const panels = panelsRef.current.filter(Boolean) as HTMLElement[];
+        panels.forEach((panel, i) => {
+          gsap.set(panel, { zIndex: i + 1 }); // Ensure correct stacking order
+          ScrollTrigger.create({
+            trigger: panel,
+            start: "top top",
+            pin: true,
+            pinSpacing: false,
+          });
+        });
       });
 
       return () => mm.revert();
@@ -232,39 +244,7 @@ export default function HeroSection() {
     { scope: sectionRef }
   );
 
-  // ── Mobile panel stacking (Layered Pinning) ──
-  useGSAP(() => {
-    const mm = gsap.matchMedia();
-    mm.add("(max-width: 1023px)", () => {
-      const panels = panelsRef.current.filter(Boolean) as HTMLDivElement[];
-      if (!panels.length) return;
 
-      panels.forEach((panel, i) => {
-        // Pin the panel so the next one scrolls over it
-        ScrollTrigger.create({
-          trigger: panel,
-          start: () => panel.offsetHeight > window.innerHeight ? "bottom bottom" : "top top",
-          pin: true,
-          pinSpacing: false,
-          end: () => `+=${window.innerHeight}`,
-        });
-
-        // Scale/fade the panel as it gets covered
-        gsap.to(panel, {
-          scale: 0.92,
-          opacity: 0.3,
-          ease: "none",
-          scrollTrigger: {
-            trigger: panel,
-            start: () => panel.offsetHeight > window.innerHeight ? "bottom bottom" : "top top",
-            end: () => `+=${window.innerHeight}`,
-            scrub: true,
-          }
-        });
-      });
-    });
-    return () => mm.revert();
-  }, { scope: sectionRef });
 
   return (
     <section
@@ -357,7 +337,7 @@ export default function HeroSection() {
         </div>
 
         {/* Panel 2: THE FOUNDATION + Formal Photo */}
-        <div className="w-[100vw] min-h-screen lg:h-[100vh] flex flex-col-reverse lg:flex-row" ref={(el) => { panelsRef.current[1] = el; }}>
+        <div className="w-[100vw] min-h-screen lg:h-[100vh] flex flex-col lg:flex-row-reverse" ref={(el) => { panelsRef.current[1] = el; }}>
           
           {/* Left: Photo (Visual) */}
           <div className="w-full lg:w-1/2 h-[50svh] lg:h-full relative bg-[var(--chalk)]">
