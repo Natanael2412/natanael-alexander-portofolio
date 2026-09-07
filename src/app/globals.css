@@ -180,7 +180,7 @@ h1, h2, h3, h4, h5 {
 
 .hero__img {
   width: 100%;
-  height: max(100vh, calc(100vw * 4 / 3)); /* Natural 3:4 portrait height */
+  height: max(120vh, calc(100vw * 4 / 3)); /* Natural 3:4 portrait height, boosted to 120vh for seamless parallax */
   object-fit: cover;
   object-position: top center;
   display: block;
@@ -843,17 +843,18 @@ body:has(button:hover) .cursor-ring {
     height: 100svh;
   }
 
-  /* About wrapper: switch from absolute/pinned to normal vertical flow */
+  /* About wrapper: absolute positioned off-screen to the right to allow GSAP horizontal sliding */
   .about-wrapper {
-    position: relative;
-    left: 0;
-    width: 100%;
-    height: auto !important;
+    position: absolute;
+    left: 100vw;
+    top: 0;
+    width: 200vw;
+    height: 100svh !important;
     min-height: unset !important;
-    flex-direction: column;
+    flex-direction: row;
     z-index: 10; /* Must be above the sticky photo (z-index: 1) */
     background-color: var(--chalk); /* Solid background to cover photo below */
-    transform: none !important; /* Reset any GSAP x transforms */
+    transform: none; /* GSAP will animate this */
   }
 
   /* Override grid placement so it appears below the photo */
@@ -861,10 +862,10 @@ body:has(button:hover) .cursor-ring {
     grid-area: unset;
   }
 
-  /* Panels inside about-wrapper must be auto height on mobile */
+  /* Panels inside about-wrapper must be horizontal and take full screen on mobile */
   .about-wrapper > div {
-    width: 100% !important;
-    height: auto !important;
+    width: 100vw !important;
+    height: 100svh !important;
     min-height: 100svh;
   }
 }

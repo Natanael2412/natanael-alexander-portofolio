@@ -159,11 +159,14 @@ export default function HeroSection() {
         return () => ctx.revert();
       });
 
-      // ── Mobile: entrance fade + same scroll-driven overlay & text color as desktop ──
+      // ── Mobile: entrance fade + horizontal slide ──
       mm.add("(max-width: 1023px)", () => {
         // Entrance animation
         const tl = gsap.timeline({ delay: 0.2 });
         
+        // Ensure overlay is transparent on mobile so the image is fully visible on load!
+        gsap.set(overlayRef.current, { backgroundColor: "rgba(255, 255, 255, 0)" });
+
         // Subtle image zoom out on load
         if (imgRef.current) {
           gsap.fromTo(
@@ -184,59 +187,39 @@ export default function HeroSection() {
           "-=0.4"
         );
 
-        // Parallax image scroll
-        gsap.to(imgRef.current, {
-          yPercent: 15,
-          ease: "none",
+        // Create a unified scroll timeline for mobile
+        const mobileScrollTl = gsap.timeline({
           scrollTrigger: {
+            id: "mobile-scroll",
             trigger: sectionRef.current,
             start: "top top",
-            end: "bottom top",
-            scrub: true,
+            // Pin for 2 screen heights (Panel 1 slide, Panel 2 slide)
+            end: () => `+=${window.innerHeight * 2}`,
+            pin: true,
+            scrub: 1,
           }
         });
 
-        // Scroll animation: same overlay fade + text-to-white as desktop
-        ScrollTrigger.create({
-          trigger: sectionRef.current,
-          start: "top top",
-          // Fade completes after scrolling exactly one viewport height
-          // (when the sticky photo has been "fully revealed")
-          end: () => `+=${window.innerHeight}`,
-          scrub: true,
-          onUpdate: (self) => {
-            const p = self.progress;
+        // 1. Parallax slightly upward during the ENTIRE timeline to prevent gaps
+        mobileScrollTl.to(imgRef.current, {
+          yPercent: -15,
+          ease: "none",
+          duration: window.innerHeight * 2
+        }, 0);
 
-            // White overlay fades to transparent
-            const bgAlpha = 1 - p;
-            if (overlayRef.current) {
-              overlayRef.current.style.backgroundColor = `rgba(255, 255, 255, ${bgAlpha})`;
-            }
+        // Fade out the text overlay so it disappears before the cards fully cover it
+        mobileScrollTl.to(overlayRef.current, {
+          opacity: 0,
+          ease: "power2.in",
+          duration: window.innerHeight * 0.5
+        }, 0);
 
-            // Name text: black → white
-            const textVal = Math.round(p * 255);
-            const textColor = `rgb(${textVal}, ${textVal}, ${textVal})`;
-            if (nameLeftRef.current) nameLeftRef.current.style.color = textColor;
-            if (nameRightRef.current) nameRightRef.current.style.color = textColor;
-
-            // Index label: dark-grey → white
-            const labelVal = Math.round(60 + (p * 195));
-            const labelColor = `rgb(${labelVal}, ${labelVal}, ${labelVal})`;
-            if (indexRef.current) indexRef.current.style.color = labelColor;
-          },
-        });
-
-        // Mobile Stacking/Collapsing Cards for Panel 1 & 2
-        const panels = panelsRef.current.filter(Boolean) as HTMLElement[];
-        panels.forEach((panel, i) => {
-          gsap.set(panel, { zIndex: i + 1 }); // Ensure correct stacking order
-          ScrollTrigger.create({
-            trigger: panel,
-            start: "top top",
-            pin: true,
-            pinSpacing: false,
-          });
-        });
+        // 3. Slide aboutWrapper from the right (moving -200vw total to show 2 panels)
+        mobileScrollTl.fromTo(aboutWrapperRef.current,
+          { x: 0 }, // It starts at left: 100vw via CSS
+          { x: () => -window.innerWidth * 2, ease: "none", duration: window.innerHeight * 2 },
+          0
+        );
       });
 
       return () => mm.revert();

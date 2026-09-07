@@ -51,22 +51,7 @@ export default function AboutVertical({
       });
     });
 
-    // Mobile Stacking/Collapsing Cards for Panels 3, 4, 5, 6
-    const mm = gsap.matchMedia();
-    mm.add("(max-width: 1023px)", () => {
-      const panels = panelsRef.current.filter(Boolean) as HTMLElement[];
-      panels.forEach((panel, i) => {
-        gsap.set(panel, { zIndex: i + 10 }); // Ensure it's above HeroSection panels
-        ScrollTrigger.create({
-          trigger: panel,
-          start: "top top",
-          pin: true,
-          pinSpacing: false,
-        });
-      });
-    });
 
-    return () => mm.revert();
   }, { scope: containerRef });
 
   return (
@@ -192,8 +177,8 @@ export default function AboutVertical({
       </div>
 
       {/* Panel 6: THE NEXT */}
-      <div className="w-full min-h-screen lg:h-[100vh] flex flex-row border-b border-gray-100" ref={(el) => { panelsRef.current[3] = el; }}>
-        <div className="w-full flex flex-col justify-center items-center bg-[var(--chalk)] relative z-10 text-center" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(1.5rem, 5vh, 8rem)", paddingBottom: "clamp(1.5rem, 5vh, 8rem)" }}>
+      <div className="w-full min-h-[50svh] lg:h-[100vh] flex flex-row border-b border-gray-100" ref={(el) => { panelsRef.current[3] = el; }}>
+        <div className="w-full flex flex-col justify-center items-center bg-[var(--chalk)] relative z-10 text-center" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(4rem, 10vh, 8rem)", paddingBottom: "clamp(4rem, 10vh, 8rem)" }}>
           <div className="w-full max-w-2xl mx-auto">
             <span className="about__label mx-auto">06 / THE NEXT</span>
             <h2 className="about__title !text-[clamp(1.5rem,4vw,5rem)]" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', hyphens: 'auto' }}>WHAT NEXT?</h2>

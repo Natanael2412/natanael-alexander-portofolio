@@ -179,7 +179,7 @@ export default function SelectedWork({ projects = [] }: { projects: Project[] })
   return (
     <section
       ref={sectionRef}
-      className="work-section w-full h-screen flex relative overflow-hidden"
+      className="work-section w-full h-[100svh] flex relative overflow-hidden"
       style={{ backgroundColor: "#F5F3EF" }}
       id="work"
       aria-label="Selected work"
