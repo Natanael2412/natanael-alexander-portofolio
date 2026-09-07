@@ -3,38 +3,30 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Project } from "@/lib/supabase";
+import { ArrowRight } from "lucide-react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Observer } from "gsap/Observer";
 
-gsap.registerPlugin(ScrollTrigger, Observer);
+gsap.registerPlugin(ScrollTrigger);
 
-import { useRouter } from "next/navigation";
-import { Project } from "@/lib/supabase";
+const PAD_LEFT = "clamp(1.5rem, 5vw, 6rem)";
 
 export default function InfiniteArchiveGrid({ projects = [] }: { projects: Project[] }) {
   const router = useRouter();
   const YEARS = ["ALL", ...Array.from(new Set(projects.map(p => String(p.year))))].sort((a, b) => b.localeCompare(a));
   
   const [activeYear, setActiveYear] = useState("ALL");
-  const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 1023px)");
-    setIsMobile(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
 
   const filteredProjects = activeYear === "ALL" 
     ? projects 
     : projects.filter(p => String(p.year) === activeYear);
 
-  // Render exactly 2 identical sets to allow seamless GSAP virtual scroll wrapping
+  // Render exactly 2 identical sets to allow seamless GSAP virtual scroll wrapping for desktop
   const minItemsRequired = 8; 
   let BaseSet = [...filteredProjects];
   if (BaseSet.length > 0) {
@@ -44,12 +36,12 @@ export default function InfiniteArchiveGrid({ projects = [] }: { projects: Proje
   }
   const displayProjects = [...BaseSet, ...BaseSet];
 
-  // --- TRUE INFINITE VIRTUAL SCROLL (LENIS + ABSOLUTE POSITIONING) ---
+  // GSAP Virtual Infinite Scroll ONLY on Desktop
   useGSAP(() => {
-    if (!containerRef.current || !trackRef.current) return;
-    if (isMobile) return; // Skip on mobile
+    const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
+    if (!isDesktop || !containerRef.current || !trackRef.current) return;
 
-    const cards = gsap.utils.toArray('.archive-card') as HTMLElement[];
+    const cards = gsap.utils.toArray('.desktop-card') as HTMLElement[];
     if (cards.length === 0) return;
 
     // Logical array to track order for infinite loop
@@ -195,183 +187,74 @@ export default function InfiniteArchiveGrid({ projects = [] }: { projects: Proje
       clearTimeout(idleTimer);
     };
 
-  }, { dependencies: [activeYear, isMobile], scope: containerRef });
+  }, { dependencies: [activeYear], scope: containerRef });
 
-  // Mobile: 2-column grid layout
-  if (isMobile) {
-    return (
-      <section className="relative w-full min-h-screen bg-[#f5f5f5]">
-        {/* Header */}
-        <div className="w-full p-6 pt-16 flex justify-between items-start">
-          <button onClick={() => router.push('/')} className="font-montserrat text-xs tracking-widest uppercase text-black hover:opacity-50 transition-opacity">
-            ÔåÉ Back
-          </button>
-          <div className="flex flex-col items-end gap-2">
-            <span className="font-montserrat text-xs tracking-[0.2em] uppercase text-black/50 mb-1">Filter</span>
-            <div className="flex gap-3 flex-wrap justify-end">
-              {YEARS.map(year => (
-                <button
-                  key={year}
-                  onClick={() => {
-                    window.scrollTo(0, 0);
-                    setActiveYear(year);
-                  }}
-                  className={`font-montserrat text-xs font-bold tracking-widest uppercase transition-all duration-300 ${activeYear === year ? 'opacity-100 underline underline-offset-4' : 'opacity-30'}`}
-                >
-                  {year}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Page Title */}
-        <div className="px-6 pb-8">
-          <h1 className="font-playfair text-[18vw] font-black leading-[0.85] uppercase tracking-tighter text-black">
-            PROJECT<br />ARCHIVE
-          </h1>
-          <p className="mt-4 font-montserrat text-xs font-bold tracking-[0.2em] uppercase text-black/60">
-            A collection of digital experiences, branding, and visual productions.
-          </p>
-        </div>
-
-        {/* 2-column grid */}
-        <div className="px-4 pb-16 grid grid-cols-2 gap-3">
-          {filteredProjects.map((project, idx) => (
-            <Link
-              href={`/portfolio/${project.slug}`}
-              key={`mobile-${project.slug}-${idx}`}
-              className="relative block overflow-hidden bg-black aspect-[4/5]"
-            >
-              {project.hero_image_url ? (
-                project.hero_image_url.endsWith(".mp4") || project.hero_image_url.endsWith(".webm") ? (
-                  <video
-                    src={project.hero_image_url}
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="object-cover object-center w-full h-full absolute inset-0"
-                  />
-                ) : (
-                  <Image
-                    src={project.hero_image_url}
-                    alt={project.title}
-                    fill
-                    className="object-cover object-center"
-                    sizes="(max-width: 1024px) 50vw, 30vw"
-                  />
-                )
-              ) : (
-                <div className="absolute inset-0 bg-[#111] flex items-center justify-center">
-                  <span className="text-white/10 font-playfair font-black text-6xl uppercase tracking-tighter">
-                    {project.title.split(' ').map(n => n[0]).join('').substring(0, 2)}
-                  </span>
-                </div>
-              )}
-              {/* Always-visible base dark overlay */}
-              <div className="absolute inset-0 bg-black/65" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
-              <div className="absolute inset-0 p-4 flex flex-col justify-end">
-                <h3 className="font-playfair text-base text-white font-black uppercase tracking-tighter leading-tight">{project.title}</h3>
-                <p className="font-montserrat text-[10px] font-bold text-white/70 tracking-[0.15em] uppercase mt-1">{project.role}</p>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-    );
-  }
   return (
-    <div key={activeYear}>
-      {/* Huge invisible scroll area to power native Lenis scroll */}
-      <div style={{ height: "50000px" }} />
+    <div key={activeYear} className="bg-[#111] min-h-screen text-white font-montserrat">
       
-      <section ref={containerRef} className="fixed top-0 left-0 w-full h-screen bg-[#f5f5f5] overflow-hidden">
-        
-        {/* Navbar & Filter */}
-        <div 
-          className="absolute top-0 left-0 w-full z-50 flex justify-between items-start pointer-events-none mix-blend-difference text-white"
-          style={{ paddingLeft: "clamp(1.5rem, 5vw, 6rem)", paddingRight: "clamp(1.5rem, 5vw, 6rem)", paddingTop: "clamp(1.25rem, 3vh, 2.5rem)" }}
-        >
-          <button onClick={() => router.push('/')} className="font-montserrat text-xs tracking-[0.3em] font-semibold uppercase hover:opacity-50 transition-opacity pointer-events-auto flex items-center gap-2">
-            <span className="text-base leading-none">←</span>BACK
-          </button>
+      {/* ── Fixed Header ────────────────────────────────────────────── */}
+      <div 
+        style={{ 
+          position: "fixed", top: 0, left: 0, right: 0, 
+          paddingLeft: PAD_LEFT, paddingRight: PAD_LEFT, paddingTop: "clamp(1.25rem, 3vh, 2.5rem)", 
+          zIndex: 50, display: "flex", justifyContent: "space-between", alignItems: "flex-start",
+          pointerEvents: "none"
+        }}
+      >
+        <button onClick={() => router.push("/")} style={{ background: "none", border: "none", color: "white", cursor: "pointer", fontFamily: "inherit", fontSize: "0.75rem", letterSpacing: "0.3em", textTransform: "uppercase", display: "flex", alignItems: "center", gap: "0.5rem", pointerEvents: "auto" }}>
+          <ArrowRight size={16} className="rotate-180" /> BACK
+        </button>
 
-          {/* Year Filter */}
-          <div className="flex flex-col items-end gap-2 pointer-events-auto">
-            <span className="opacity-50 font-montserrat text-xs tracking-[0.2em] uppercase mb-2">Filter by Year</span>
-            <div className="flex gap-4">
-              {YEARS.map(year => (
-                <button
-                  key={year}
-                  onClick={() => {
-                    window.scrollTo(0, 0);
-                    setActiveYear(year);
-                  }}
-                  className={`font-montserrat text-sm font-bold tracking-widest uppercase transition-all duration-300 relative group ${activeYear === year ? 'opacity-100' : 'opacity-30 hover:opacity-60'}`}
-                >
-                  {year}
-                  <span className={`absolute -bottom-1 left-0 h-[2px] bg-white transition-all duration-300 ${activeYear === year ? 'w-full' : 'w-0 group-hover:w-1/2'}`}></span>
-                </button>
-              ))}
-            </div>
+        <div className="flex flex-col items-end gap-2 pointer-events-auto mix-blend-difference">
+          <span className="opacity-50 text-[10px] tracking-[0.2em] uppercase mb-1">Filter</span>
+          <div className="flex gap-3 flex-wrap justify-end max-w-[60vw] lg:max-w-none">
+            {YEARS.map(year => (
+              <button
+                key={year}
+                onClick={() => {
+                  window.scrollTo(0, 0);
+                  setActiveYear(year);
+                }}
+                className={`text-[10px] lg:text-xs font-bold tracking-widest uppercase transition-all duration-300 relative group ${activeYear === year ? 'opacity-100' : 'opacity-40 hover:opacity-100'}`}
+              >
+                {year}
+                <span className={`absolute -bottom-1 left-0 h-[1px] bg-white transition-all duration-300 ${activeYear === year ? 'w-full' : 'w-0 group-hover:w-1/2'}`}></span>
+              </button>
+            ))}
           </div>
         </div>
+      </div>
 
-        {/* Huge Left Typography (Crafting Culture Style) */}
-        <div 
-          className="absolute z-40 pointer-events-none mix-blend-difference text-white flex flex-col"
-          style={{ 
-            left: 0, 
-            top: "25vh",
-            transform: "translateY(-50%)",
+      {/* ── Fixed Left Typography (Sama seperti ProjectClient.tsx) ──── */}
+      <div style={{ position: "fixed", left: PAD_LEFT, top: "50%", transform: "translateY(-50%)", width: "100%", maxWidth: "500px", zIndex: 40, pointerEvents: "none" }} className="mix-blend-difference">
+        <h1 style={{ fontFamily: "var(--font-playfair, serif)", fontSize: "clamp(4rem, 12vw, 10rem)", fontWeight: 900, textTransform: "uppercase", lineHeight: 0.85, margin: "0 0 1rem 0" }}>
+          PROJECT<br />ARCHIVE
+        </h1>
+        <p style={{ fontSize: "clamp(0.6rem, 1.5vw, 0.75rem)", letterSpacing: "0.2em", opacity: 0.7, textTransform: "uppercase", marginBottom: "3rem", maxWidth: "300px", fontWeight: "bold" }}>
+          A collection of digital experiences, branding, and visual productions.
+        </p>
+      </div>
 
-            paddingLeft: "clamp(1.5rem, 5vw, 6rem)", 
-            paddingRight: "clamp(1.5rem, 5vw, 6rem)",
-            width: "42%" 
-          }}
-        >
-          <h1 
-            className="font-playfair font-black leading-[0.85] uppercase tracking-tighter"
-            style={{ fontSize: "clamp(3.5rem, 8vw, 12rem)" }}
-          >
-            PROJECT<br />ARCHIVE
-          </h1>
-          <p className="mt-6 md:mt-8 max-w-sm font-montserrat text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase leading-relaxed opacity-80">
-            A collection of digital experiences, branding, and visual productions.
-          </p>
-        </div>
-
-        {/* Scroll-Driven Dynamic Track (Absolute Positioning) */}
-        <div className="absolute top-0 left-0 w-full h-full flex items-center md:items-end md:pb-[10vh] pointer-events-none">
-          <div ref={trackRef} className="relative w-full h-full pointer-events-auto border-b border-black">
-            {displayProjects.map((project, idx) => {
-              return (
+      {/* ── DESKTOP LAYOUT (Infinite Virtual Scroll) ────────────────── */}
+      <div className="hidden lg:block">
+        {/* Huge invisible scroll area to power native Lenis scroll */}
+        <div style={{ height: "50000px" }} />
+        
+        <section ref={containerRef} className="fixed top-0 left-0 w-full h-screen overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-full flex items-end pb-[10vh] pointer-events-none">
+            <div ref={trackRef} className="relative w-full h-full pointer-events-auto border-b border-black">
+              {displayProjects.map((project, idx) => (
                 <Link 
                   href={`/portfolio/${project.slug}`}
-                  key={`track-${project.slug}-${idx}`} 
-                  className={`archive-card block group absolute bottom-0 left-0 overflow-hidden bg-black cursor-pointer will-change-[width,height,transform]`}
+                  key={`desktop-${project.slug}-${idx}`} 
+                  className="desktop-card block group absolute bottom-0 left-0 overflow-hidden bg-black cursor-pointer will-change-[width,height,transform]"
                   style={{ width: "25vw", height: "40vh" }} // Initial small state
                 >
                   {project.hero_image_url ? (
                     project.hero_image_url.endsWith(".mp4") || project.hero_image_url.endsWith(".webm") ? (
-                      <video
-                        src={project.hero_image_url}
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        className="object-cover object-center w-full h-full absolute inset-0"
-                      />
+                      <video src={project.hero_image_url} autoPlay loop muted playsInline className="object-cover object-center w-full h-full absolute inset-0" />
                     ) : (
-                      <Image
-                        src={project.hero_image_url}
-                        alt={project.title}
-                        fill
-                        className="object-cover object-center"
-                        sizes="(max-width: 1024px) 50vw, 30vw"
-                      />
+                      <Image src={project.hero_image_url} alt={project.title} fill className="object-cover object-center" sizes="(max-width: 1024px) 50vw, 30vw" />
                     )
                   ) : (
                     <div className="absolute inset-0 bg-[#111] flex items-center justify-center">
@@ -391,11 +274,47 @@ export default function InfiniteArchiveGrid({ projects = [] }: { projects: Proje
                     <p className="font-montserrat text-xs md:text-sm font-bold text-white/80 tracking-[0.2em] uppercase mt-2">{project.role}</p>
                   </div>
                 </Link>
-              );
-            })}
+              ))}
+            </div>
           </div>
+        </section>
+      </div>
+
+      {/* ── MOBILE / TABLET LAYOUT (Vertical Scroll) ────────────────── */}
+      <section className="block lg:hidden relative w-full pt-[80vh] pb-24 z-10 pointer-events-auto bg-[#111]">
+        <div className="px-4 grid grid-cols-2 gap-3">
+          {filteredProjects.map((project, idx) => (
+            <Link
+              href={`/portfolio/${project.slug}`}
+              key={`mobile-${project.slug}-${idx}`}
+              className="relative block overflow-hidden bg-[#222] aspect-[4/5] group"
+            >
+              {project.hero_image_url ? (
+                project.hero_image_url.endsWith(".mp4") || project.hero_image_url.endsWith(".webm") ? (
+                  <video src={project.hero_image_url} autoPlay loop muted playsInline className="object-cover object-center w-full h-full absolute inset-0" />
+                ) : (
+                  <Image src={project.hero_image_url} alt={project.title} fill className="object-cover object-center" sizes="50vw" />
+                )
+              ) : (
+                <div className="absolute inset-0 bg-[#1a1a1a] flex items-center justify-center">
+                  <span className="text-white/10 font-playfair font-black text-6xl uppercase tracking-tighter">
+                    {project.title.split(' ').map(n => n[0]).join('').substring(0, 2)}
+                  </span>
+                </div>
+              )}
+              
+              <div className="absolute inset-0 bg-black/50 transition-colors duration-300 group-hover:bg-black/20" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80" />
+              
+              <div className="absolute inset-0 p-4 flex flex-col justify-end">
+                <h3 className="font-playfair text-sm sm:text-base text-white font-black uppercase tracking-tighter leading-tight line-clamp-3">{project.title}</h3>
+                <p className="font-montserrat text-[9px] sm:text-[10px] font-bold text-white/70 tracking-[0.1em] uppercase mt-1 line-clamp-1">{project.role}</p>
+              </div>
+            </Link>
+          ))}
         </div>
       </section>
+
     </div>
   );
 }

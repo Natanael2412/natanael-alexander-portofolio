@@ -45,7 +45,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${playfair.variable} ${montserrat.variable}`}>
-      <body>
+        <body className="overflow-x-hidden w-full">
         <LenisProvider>
           <div className="noise-overlay" aria-hidden="true" />
           <CustomCursor />

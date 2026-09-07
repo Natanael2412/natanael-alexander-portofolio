@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -28,9 +28,11 @@ export default function HeroSection() {
     () => {
       if (!sectionRef.current || !overlayRef.current || !aboutWrapperRef.current) return;
 
-      // ── Desktop only: horizontal pinned scroll experience ──
       const mm = gsap.matchMedia();
 
+      // =========================================================
+      // DESKTOP LOGIC (100% KODE ASLI ANDA, TIDAK DISENTUH)
+      // =========================================================
       mm.add("(min-width: 1024px)", () => {
         const ctx = gsap.context(() => {
           // Entrance animation
@@ -159,75 +161,69 @@ export default function HeroSection() {
         return () => ctx.revert();
       });
 
-      // ── Mobile: entrance fade + horizontal slide ──
+      // =========================================================
+      // MOBILE LOGIC: BOX PUTIH -> FADE KE TEKS PUTIH -> SCROLL HIJACK
+      // =========================================================
       mm.add("(max-width: 1023px)", () => {
-        // Entrance animation
-        const tl = gsap.timeline({ delay: 0.2 });
+        // 1. Kunci Layout Mobile
+        gsap.set(sectionRef.current, { height: "100svh", position: "relative", overflow: "hidden" });
+        gsap.set(photoContainerRef.current, { position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 1 });
         
-        // Ensure overlay is transparent on mobile so the image is fully visible on load!
-        gsap.set(overlayRef.current, { backgroundColor: "rgba(255, 255, 255, 0)" });
+        // Atur Overlay & Teks Awal (Transparan, Teks Putih)
+        gsap.set(overlayRef.current, { 
+          position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 9999,
+          display: "flex", flexDirection: "column", justifyContent: "center",
+          backgroundColor: "rgba(255, 255, 255, 0)",
+          mixBlendMode: "normal" // Disable screen mode on mobile so text is visible!
+        });
+        gsap.set([nameLeftRef.current, nameRightRef.current], { color: "rgb(255, 255, 255)", opacity: 1 });
+        gsap.set([indexRef.current, taglineRef.current], { color: "rgba(255, 255, 255, 0.7)", opacity: 1 });
 
-        // Subtle image zoom out on load
-        if (imgRef.current) {
-          gsap.fromTo(
-            imgRef.current,
-            { scale: 1.15 },
-            { scale: 1, duration: 2.5, ease: "power2.out" }
-          );
-        }
+        // Sembunyikan Panel di Sebelah Kanan Layar (Z-Index di bawah Overlay Hero agar teks Hero tampil di atas)
+        gsap.set(aboutWrapperRef.current, {
+          position: "absolute", top: 0, left: "100vw", width: "200vw", height: "100svh",
+          display: "flex", flexDirection: "row", zIndex: 10000
+        });
+        gsap.set(panelsRef.current, { width: "100vw", height: "100svh", flexShrink: 0 });
 
-        tl.fromTo(
-          sectionRef.current,
-          { opacity: 0 },
-          { opacity: 1, duration: 0.8, ease: "expo.out" }
-        ).fromTo(
-          indexRef.current,
-          { opacity: 0, y: -8 },
-          { opacity: 1, y: 0, duration: 0.6, ease: "expo.out" },
-          "-=0.4"
-        );
+        // 2. Entrance Animation
+        const tl = gsap.timeline({ delay: 0.2 });
+        if (imgRef.current) tl.fromTo(imgRef.current, { scale: 1.15 }, { scale: 1, duration: 2.5, ease: "power2.out" }, 0);
+        tl.fromTo(sectionRef.current, { opacity: 0 }, { opacity: 1, duration: 0.8, ease: "expo.out" }, 0)
+          .fromTo(indexRef.current, { opacity: 0, y: -8 }, { opacity: 1, y: 0, duration: 0.6, ease: "expo.out" }, 0.4)
+          .fromTo(nameLeftRef.current, { opacity: 0, xPercent: -50 }, { opacity: 1, xPercent: 0, duration: 1, ease: "power3.out" }, 0.6)
+          .fromTo(nameRightRef.current, { opacity: 0, xPercent: 50 }, { opacity: 1, xPercent: 0, duration: 1, ease: "power3.out" }, 0.6)
+          .fromTo(taglineRef.current, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, 1.0);
 
-        // Create a unified scroll timeline for mobile
+        // 3. Scroll Hijack Timeline (Mobile)
         const mobileScrollTl = gsap.timeline({
           scrollTrigger: {
             id: "mobile-scroll",
             trigger: sectionRef.current,
             start: "top top",
-            // Pin for 2 screen heights (Panel 1 slide, Panel 2 slide)
-            end: () => `+=${window.innerHeight * 2}`,
+            end: () => `+=${window.innerWidth * 2.5}`,
             pin: true,
-            scrub: 1,
+            scrub: true,
+            invalidateOnRefresh: true,
           }
         });
 
-        // 1. Parallax slightly upward during the ENTIRE timeline to prevent gaps
-        mobileScrollTl.to(imgRef.current, {
-          yPercent: -15,
+        // FASE 1: Teks memudar saat di-scroll
+        mobileScrollTl.to([nameLeftRef.current, nameRightRef.current, indexRef.current, taglineRef.current], { opacity: 0, ease: "power2.inOut", duration: 0.5 }, 0);
+        mobileScrollTl.to(imgRef.current, { scale: 0.9, xPercent: -15, ease: "none", duration: 3 }, 0);
+
+        // FASE 2: Geser Panel 01 & 02 masuk dari kanan ke kiri menutupi Hero
+        mobileScrollTl.to(aboutWrapperRef.current, {
+          x: () => -(window.innerWidth * 2),
           ease: "none",
-          duration: window.innerHeight * 2
-        }, 0);
-
-        // Fade out the text overlay so it disappears before the cards fully cover it
-        mobileScrollTl.to(overlayRef.current, {
-          opacity: 0,
-          ease: "power2.in",
-          duration: window.innerHeight * 0.5
-        }, 0);
-
-        // 3. Slide aboutWrapper from the right (moving -200vw total to show 2 panels)
-        mobileScrollTl.fromTo(aboutWrapperRef.current,
-          { x: 0 }, // It starts at left: 100vw via CSS
-          { x: () => -window.innerWidth * 2, ease: "none", duration: window.innerHeight * 2 },
-          0
-        );
+          duration: 2
+        }, 1);
       });
 
       return () => mm.revert();
     },
     { scope: sectionRef }
   );
-
-
 
   return (
     <section
@@ -236,14 +232,14 @@ export default function HeroSection() {
       id="home"
       aria-label="Hero section"
     >
-      {/* Layer 1: Overlay stuck to viewport via CSS position: sticky */}
-      <div className="hero__overlay-wrapper" ref={overlayRef} style={{ backgroundColor: "rgba(255, 255, 255, 1)" }}>
+      {/* Layer 1: Overlay & Teks Hero (Z-Index tinggi agar tampil di atas LCP & di bawah panel saat panel masuk) */}
+      <div className="hero__overlay-wrapper relative z-20" ref={overlayRef} style={{ backgroundColor: "rgba(255, 255, 255, 1)" }}>
         {/* Index label */}
-        <span ref={indexRef} className="hero__index" style={{ color: "rgb(60, 60, 60)" }}>
+        <span ref={indexRef} className="hero__index relative z-50" style={{ color: "rgb(60, 60, 60)" }}>
           Portfolio &nbsp;&bull;&nbsp; {new Date().getFullYear()}
         </span>
 
-        <h1 className="hero__name" aria-label="NATANAEL ALEXANDER">
+        <h1 className="hero__name relative z-50" aria-label="NATANAEL ALEXANDER">
           <span ref={nameLeftRef} className="hero__name-left" style={{ color: "rgb(0, 0, 0)" }}>
             NATANAEL
           </span>
@@ -253,46 +249,48 @@ export default function HeroSection() {
         </h1>
 
         {/* Desktop: tagline + scroll hint | Mobile: desktop-only notice */}
-        <p ref={taglineRef} className="hero__tagline" style={{ color: "rgb(60, 60, 60)" }}>
+        <p ref={taglineRef} className="hero__tagline relative z-50" style={{ color: "rgb(60, 60, 60)" }}>
           Creative Digital Architect
         </p>
 
-        {/* Mobile-only: "Best on Desktop" notice — hidden on lg+ */}
+        {/* Mobile-only: "Best on Desktop" notice */}
         <p
-          className="lg:hidden absolute bottom-6 left-0 right-0 text-center font-montserrat tracking-widest uppercase text-[0.6rem] sm:text-[0.65rem] px-4"
-          style={{ color: "rgba(60,60,60,0.7)" }}
+          className="lg:hidden absolute bottom-6 left-0 right-0 text-center font-montserrat tracking-widest uppercase text-[0.6rem] sm:text-[0.65rem] px-4 relative z-50 text-white drop-shadow-md"
         >
           ✦ Open on Laptop / Desktop for best experience
         </p>
 
-        <div ref={scrollHintRef} className="hero__scroll-hint" style={{ color: "rgb(60, 60, 60)" }}>
+        <div ref={scrollHintRef} className="hero__scroll-hint relative z-50" style={{ color: "rgb(60, 60, 60)" }}>
           <span className="hero__scroll-line" aria-hidden="true" style={{ backgroundColor: "rgb(60, 60, 60)" }} />
           Scroll to reveal
         </div>
       </div>
 
-        {/* Layer 1: The photo itself */}
-        <div className="hero__bg-photo" ref={photoContainerRef}>
-          <Image
-            ref={imgRef}
-            src="/images/Hero.webp"
-            alt="Natanael Alexander Hero"
-            width={1920}
-            height={2560}
-            priority
-            quality={95}
-            className="hero__img"
-          />
-          <div className="hero__photo-vignette" aria-hidden="true" />
-        </div>
+      {/* Layer 2: The photo itself (LCP Background) */}
+      <div className="hero__bg-photo absolute inset-0 z-0" ref={photoContainerRef}>
+        <Image
+          ref={imgRef}
+          src="/images/Hero.webp"
+          alt="Natanael Alexander Hero"
+          width={1920}
+          height={2560}
+          priority
+          quality={95}
+          className="hero__img object-cover object-center w-full h-full"
+        />
+        <div className="hero__photo-vignette" aria-hidden="true" />
+      </div>
 
-      {/* Layer 2: About Section Panels (Horizontal on desktop, Vertical stack on mobile) */}
-      <div className="about-wrapper" ref={aboutWrapperRef} id="about">
-        {/* Panel 1: THE MINDSET + Casual Photo */}
-        <div className="w-[100vw] min-h-screen lg:h-[100vh] flex flex-col lg:flex-row" ref={(el) => { panelsRef.current[0] = el; }}>
+      {/* Layer 3: About Section Panels (Checkerboard 50/50 Tanpa Whitespace) */}
+      <div 
+        className="about-wrapper max-lg:absolute max-lg:top-0 max-lg:left-[100vw] max-lg:flex max-lg:flex-row max-lg:w-[200vw] max-lg:h-[100svh] z-30" 
+        ref={aboutWrapperRef} 
+        id="about"
+      >
+        {/* PANEL 1: 01 / THE MINDSET (Teks Atas 50%, Gambar Bawah 50%) */}
+        <div className="w-[100vw] h-[100svh] lg:min-h-screen lg:h-[100vh] flex flex-col lg:flex-row max-lg:flex-shrink-0 bg-[#0a0a0a]" ref={(el) => { panelsRef.current[0] = el; }}>
           
-          {/* Left: Text */}
-          <div className="w-full lg:w-1/2 flex-1 flex flex-col justify-center bg-[var(--chalk)] relative z-10" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(3rem, 8vh, 6rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}>
+          <div className="w-full h-[50svh] lg:h-full lg:w-1/2 flex-1 flex flex-col justify-center bg-[var(--chalk)] relative z-10 px-6 py-6 lg:p-24 overflow-y-auto" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(3rem, 8vh, 6rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}>
             <div className="w-full">
               <span className="about__label">01 / THE MINDSET</span>
               <h2 className="about__title !text-[clamp(1.5rem,4vw,5rem)]" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', hyphens: 'auto' }}>THE CATALYST.</h2>
@@ -306,35 +304,32 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* Right: Photo */}
-          <div className="w-full lg:w-1/2 h-[50svh] lg:h-full relative bg-[var(--chalk)]">
+          <div className="w-full h-[50svh] lg:h-full lg:w-1/2 relative bg-[var(--chalk)]">
             <Image 
               src="/images/casual.webp" 
               alt="Natanael Alexander Casual" 
               fill 
-              className="object-cover object-center" 
+              className="object-cover object-[50%_25%] lg:object-center" 
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
           </div>
 
         </div>
 
-        {/* Panel 2: THE FOUNDATION + Formal Photo */}
-        <div className="w-[100vw] min-h-screen lg:h-[100vh] flex flex-col lg:flex-row-reverse" ref={(el) => { panelsRef.current[1] = el; }}>
+        {/* PANEL 2: 02 / THE FOUNDATION (Gambar Atas 50%, Teks Bawah 50%) */}
+        <div className="w-[100vw] h-[100svh] lg:min-h-screen lg:h-[100vh] flex flex-col lg:flex-row-reverse max-lg:flex-shrink-0 bg-[#0a0a0a]" ref={(el) => { panelsRef.current[1] = el; }}>
           
-          {/* Left: Photo (Visual) */}
-          <div className="w-full lg:w-1/2 h-[50svh] lg:h-full relative bg-[var(--chalk)]">
+          <div className="w-full h-[50svh] lg:h-full lg:w-1/2 relative bg-[var(--chalk)]">
             <Image 
               src="/images/formal.webp" 
               alt="Natanael Alexander Formal" 
               fill 
-              className="object-cover object-center" 
+              className="object-cover object-[50%_25%] lg:object-center" 
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
           </div>
 
-          {/* Right: Text */}
-          <div className="w-full lg:w-1/2 flex-1 flex flex-col justify-center bg-[var(--chalk)] relative z-10" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(2rem, 10vh, 8rem)", paddingBottom: "clamp(2rem, 10vh, 8rem)" }}>
+          <div className="w-full h-[50svh] lg:h-full lg:w-1/2 lg:flex-1 flex flex-col justify-center bg-[var(--chalk)] relative z-10 px-6 py-6 lg:p-24 overflow-y-auto" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(2rem, 10vh, 8rem)", paddingBottom: "clamp(2rem, 10vh, 8rem)" }}>
             <div className="w-full">
               <span className="about__label">02 / THE FOUNDATION</span>
               <h2 className="about__title !text-[clamp(1.5rem,4vw,5rem)]" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', hyphens: 'auto' }}>DUAL PERSPECTIVE.</h2>
@@ -343,6 +338,7 @@ export default function HeroSection() {
               </p>
             </div>
           </div>
+
         </div>
       </div>
     </section>
