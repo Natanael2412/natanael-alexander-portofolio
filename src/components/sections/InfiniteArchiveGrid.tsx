@@ -171,8 +171,8 @@ export default function InfiniteArchiveGrid({ projects = [] }: { projects: Proje
         }
       `}</style>
 
-      {/* Huge invisible scroll area to power native Lenis scroll (for both Desktop and Mobile infinite logic) */}
-      <div style={{ height: "50000px", position: "absolute", width: "1px", pointerEvents: "none" }} />
+      {/* Huge invisible scroll area to power native Lenis scroll (for Desktop infinite logic) */}
+      <div className="hidden lg:block" style={{ height: "50000px", position: "absolute", width: "1px", pointerEvents: "none" }} />
 
       {/* ── Fixed Header ────────────────────────────────────────────── */}
       <div 
