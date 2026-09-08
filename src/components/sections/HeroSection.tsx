@@ -167,12 +167,12 @@ export default function HeroSection() {
       // =========================================================
       mm.add("(max-width: 1023px)", () => {
         // 1. Setup Layout Dasar Mutlak
-        gsap.set(sectionRef.current, { height: "100svh", position: "relative", overflow: "hidden" });
-        gsap.set(photoContainerRef.current, { position: "absolute", top: 0, left: 0, width: "100%", height: "100svh", zIndex: 1 });
+        gsap.set(sectionRef.current, { height: "100vh", position: "relative", overflow: "hidden" });
+        gsap.set(photoContainerRef.current, { position: "absolute", top: 0, left: 0, width: "100%", height: "100vh", zIndex: 1 });
         
         // Buat overlay transparan dan teks menjadi putih (statis di atas gambar)
         gsap.set(overlayRef.current, { 
-          position: "absolute", top: 0, left: 0, width: "100%", height: "100svh", zIndex: 20,
+          position: "absolute", top: 0, left: 0, width: "100%", height: "100vh", zIndex: 20,
           display: "flex", flexDirection: "column", justifyContent: "center",
           backgroundColor: "transparent"
         });
@@ -186,14 +186,14 @@ export default function HeroSection() {
 
         // Setup Panel 01 dan 02 (Sembunyikan di luar kanan layar)
         gsap.set(aboutWrapperRef.current, {
-          position: "absolute", top: 0, left: "100vw", width: "200vw", height: "100svh",
+          position: "absolute", top: 0, left: "100vw", width: "200vw", height: "100vh",
           display: "flex", flexDirection: "row", zIndex: 30
         });
 
         // Kunci Tinggi Checkerboard 50/50
         if (panelsRef.current[0] && panelsRef.current[1]) {
           const children = [...panelsRef.current[0].children, ...panelsRef.current[1].children];
-          gsap.set(children, { height: "50svh", width: "100%", flex: "none" });
+          gsap.set(children, { height: "50vh", width: "100%", flex: "none" });
         }
 
         // ==========================================
@@ -239,7 +239,7 @@ export default function HeroSection() {
         100% ASLI BAWAAN ANDA. TIDAK ADA YANG DIHAPUS.
         Menjadi Preloader Instan.
       */}
-      <div className="hero__overlay-wrapper" ref={overlayRef} style={{ backgroundColor: "rgba(255, 255, 255, 1)" }}>
+      <div className="hero__overlay-wrapper hidden lg:block" ref={overlayRef} style={{ backgroundColor: "rgba(255, 255, 255, 1)" }}>
         <span ref={indexRef} className="hero__index" style={{ color: "rgb(60, 60, 60)" }}>
           Portfolio &nbsp;&bull;&nbsp; {new Date().getFullYear()}
         </span>
@@ -305,7 +305,7 @@ export default function HeroSection() {
             </div>
           </div>
 
-          <div className="w-full lg:w-1/2 h-[50svh] lg:h-full relative bg-[var(--chalk)]">
+          <div className="w-full lg:w-1/2 h-[50vh] lg:h-full relative bg-[var(--chalk)]">
             <Image 
               src="/images/casual.webp" 
               alt="Natanael Alexander Casual" 
@@ -320,7 +320,7 @@ export default function HeroSection() {
         {/* Panel 2: THE FOUNDATION */}
         <div className="w-[100vw] min-h-screen lg:h-[100vh] flex flex-col lg:flex-row-reverse" ref={(el) => { panelsRef.current[1] = el; }}>
           
-          <div className="w-full lg:w-1/2 h-[50svh] lg:h-full relative bg-[var(--chalk)]">
+          <div className="w-full lg:w-1/2 h-[50vh] lg:h-full relative bg-[var(--chalk)]">
             <Image 
               src="/images/formal.webp" 
               alt="Natanael Alexander Formal" 
