@@ -22,7 +22,7 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://natanaelalexander.com"), // Change this to your actual production domain
+  metadataBase: new URL("https://natanael.anugerahventures.com/"), // Change this to your actual production domain
   title: "Natanael Alexander — Creative Digital Architect",
   description:
     "Portfolio of Natanael Alexander — Creative Digital Architect.",

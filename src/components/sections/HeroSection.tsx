@@ -166,34 +166,32 @@ export default function HeroSection() {
       // =========================================================
       mm.add("(max-width: 1023px)", () => {
         // 1. Kunci Layout Mobile
-        gsap.set(sectionRef.current, { height: "100svh", position: "relative", overflow: "hidden" });
-        gsap.set(photoContainerRef.current, { position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 1 });
+        gsap.set(sectionRef.current, { height: "100vh", position: "relative", overflow: "hidden" });
+        gsap.set(photoContainerRef.current, { position: "absolute", top: 0, left: 0, width: "100%", height: "100vh", zIndex: 1, backgroundColor: "#111" });
         
         // Atur Overlay & Teks Awal (Transparan, Teks Putih)
+        // Set zIndex 50 agar berada di bawah page-curtain (9999) tetapi di atas photo (1)
         gsap.set(overlayRef.current, { 
-          position: "absolute", top: 0, left: 0, width: "100%", height: "100%", zIndex: 9999,
+          position: "absolute", top: 0, left: 0, width: "100%", height: "100vh", zIndex: 50,
           display: "flex", flexDirection: "column", justifyContent: "center",
           backgroundColor: "rgba(255, 255, 255, 0)",
-          mixBlendMode: "normal" // Disable screen mode on mobile so text is visible!
+          mixBlendMode: "normal" // Disable screen mode on mobile so text is visible
         });
         gsap.set([nameLeftRef.current, nameRightRef.current], { color: "rgb(255, 255, 255)", opacity: 1 });
         gsap.set([indexRef.current, taglineRef.current], { color: "rgba(255, 255, 255, 0.7)", opacity: 1 });
 
-        // Sembunyikan Panel di Sebelah Kanan Layar (Z-Index di bawah Overlay Hero agar teks Hero tampil di atas)
+        // Sembunyikan Panel di Sebelah Kanan Layar
         gsap.set(aboutWrapperRef.current, {
-          position: "absolute", top: 0, left: "100vw", width: "200vw", height: "100svh",
+          position: "absolute", top: 0, left: "100vw", width: "200vw", height: "100vh",
           display: "flex", flexDirection: "row", zIndex: 10000
         });
-        gsap.set(panelsRef.current, { width: "100vw", height: "100svh", flexShrink: 0 });
+        gsap.set(panelsRef.current, { width: "100vw", height: "100vh", flexShrink: 0 });
 
         // 2. Entrance Animation
         const tl = gsap.timeline({ delay: 0.2 });
         if (imgRef.current) tl.fromTo(imgRef.current, { scale: 1.15 }, { scale: 1, duration: 2.5, ease: "power2.out" }, 0);
-        tl.fromTo(sectionRef.current, { opacity: 0 }, { opacity: 1, duration: 0.8, ease: "expo.out" }, 0)
-          .fromTo(indexRef.current, { opacity: 0, y: -8 }, { opacity: 1, y: 0, duration: 0.6, ease: "expo.out" }, 0.4)
-          .fromTo(nameLeftRef.current, { opacity: 0, xPercent: -50 }, { opacity: 1, xPercent: 0, duration: 1, ease: "power3.out" }, 0.6)
-          .fromTo(nameRightRef.current, { opacity: 0, xPercent: 50 }, { opacity: 1, xPercent: 0, duration: 1, ease: "power3.out" }, 0.6)
-          .fromTo(taglineRef.current, { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }, 1.0);
+        tl.fromTo(sectionRef.current, { opacity: 0 }, { opacity: 1, duration: 0.8, ease: "expo.out" }, 0);
+        // Removed text entrance animations as requested to make text static
 
         // 3. Scroll Hijack Timeline (Mobile)
         const mobileScrollTl = gsap.timeline({
@@ -283,14 +281,14 @@ export default function HeroSection() {
 
       {/* Layer 3: About Section Panels (Checkerboard 50/50 Tanpa Whitespace) */}
       <div 
-        className="about-wrapper max-lg:absolute max-lg:top-0 max-lg:left-[100vw] max-lg:flex max-lg:flex-row max-lg:w-[200vw] max-lg:h-[100svh] z-30" 
+        className="about-wrapper max-lg:absolute max-lg:top-0 max-lg:left-[100vw] max-lg:flex max-lg:flex-row max-lg:w-[200vw] max-lg:h-[100vh] z-30" 
         ref={aboutWrapperRef} 
         id="about"
       >
         {/* PANEL 1: 01 / THE MINDSET (Teks Atas 50%, Gambar Bawah 50%) */}
-        <div className="w-[100vw] h-[100svh] lg:min-h-screen lg:h-[100vh] flex flex-col lg:flex-row max-lg:flex-shrink-0 bg-[#0a0a0a]" ref={(el) => { panelsRef.current[0] = el; }}>
+        <div className="w-[100vw] h-[100vh] lg:min-h-screen lg:h-[100vh] flex flex-col lg:flex-row max-lg:flex-shrink-0 bg-[#0a0a0a]" ref={(el) => { panelsRef.current[0] = el; }}>
           
-          <div className="w-full h-[50svh] lg:h-full lg:w-1/2 flex-1 flex flex-col justify-center bg-[var(--chalk)] relative z-10 px-6 py-6 lg:p-24 overflow-y-auto" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(3rem, 8vh, 6rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}>
+          <div className="w-full h-[50vh] lg:h-full lg:w-1/2 flex-1 flex flex-col justify-center bg-[var(--chalk)] relative z-10 px-6 py-6 lg:p-24" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(3rem, 8vh, 6rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}>
             <div className="w-full">
               <span className="about__label">01 / THE MINDSET</span>
               <h2 className="about__title !text-[clamp(1.5rem,4vw,5rem)]" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', hyphens: 'auto' }}>THE CATALYST.</h2>
@@ -304,7 +302,7 @@ export default function HeroSection() {
             </div>
           </div>
 
-          <div className="w-full h-[50svh] lg:h-full lg:w-1/2 relative bg-[var(--chalk)]">
+          <div className="w-full h-[50vh] lg:h-full lg:w-1/2 relative bg-[var(--chalk)]">
             <Image 
               src="/images/casual.webp" 
               alt="Natanael Alexander Casual" 
@@ -317,9 +315,9 @@ export default function HeroSection() {
         </div>
 
         {/* PANEL 2: 02 / THE FOUNDATION (Gambar Atas 50%, Teks Bawah 50%) */}
-        <div className="w-[100vw] h-[100svh] lg:min-h-screen lg:h-[100vh] flex flex-col lg:flex-row-reverse max-lg:flex-shrink-0 bg-[#0a0a0a]" ref={(el) => { panelsRef.current[1] = el; }}>
+        <div className="w-[100vw] h-[100vh] lg:min-h-screen lg:h-[100vh] flex flex-col lg:flex-row-reverse max-lg:flex-shrink-0 bg-[#0a0a0a]" ref={(el) => { panelsRef.current[1] = el; }}>
           
-          <div className="w-full h-[50svh] lg:h-full lg:w-1/2 relative bg-[var(--chalk)]">
+          <div className="w-full h-[50vh] lg:h-full lg:w-1/2 relative bg-[var(--chalk)]">
             <Image 
               src="/images/formal.webp" 
               alt="Natanael Alexander Formal" 
@@ -329,7 +327,7 @@ export default function HeroSection() {
             />
           </div>
 
-          <div className="w-full h-[50svh] lg:h-full lg:w-1/2 lg:flex-1 flex flex-col justify-center bg-[var(--chalk)] relative z-10 px-6 py-6 lg:p-24 overflow-y-auto" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(2rem, 10vh, 8rem)", paddingBottom: "clamp(2rem, 10vh, 8rem)" }}>
+          <div className="w-full h-[50vh] lg:h-full lg:w-1/2 lg:flex-1 flex flex-col justify-center bg-[var(--chalk)] relative z-10 px-6 py-6 lg:p-24" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(2rem, 10vh, 8rem)", paddingBottom: "clamp(2rem, 10vh, 8rem)" }}>
             <div className="w-full">
               <span className="about__label">02 / THE FOUNDATION</span>
               <h2 className="about__title !text-[clamp(1.5rem,4vw,5rem)]" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', hyphens: 'auto' }}>DUAL PERSPECTIVE.</h2>
