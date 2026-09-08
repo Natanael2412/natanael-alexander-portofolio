@@ -159,80 +159,6 @@ export default function InfiniteArchiveGrid({ projects = [] }: { projects: Proje
         clearTimeout(idleTimer);
       };
     } 
-    
-    // ============================================
-    // MOBILE LOGIC (Vertical Infinite Scroll)
-    // ============================================
-    else if (!isDesktop && mobileContainerRef.current && mobileGridRef.current) {
-      const cards = gsap.utils.toArray('.mobile-card') as HTMLElement[];
-      if (cards.length === 0) return;
-
-      // Duplicate content to allow seamless scrolling
-      const grid = mobileGridRef.current;
-      const clone = grid.cloneNode(true) as HTMLElement;
-      mobileContainerRef.current.appendChild(clone);
-
-      let totalScroll = 50000;
-      window.scrollTo(0, 25000);
-
-      let autoScrollOffset = 0;
-      let currentScroll = 0;
-      let isIdle = true;
-      let idleTimer: NodeJS.Timeout;
-
-      const resetIdle = () => {
-        isIdle = false;
-        clearTimeout(idleTimer);
-        idleTimer = setTimeout(() => { isIdle = true; }, 2000);
-      };
-
-      const handleScroll = () => resetIdle();
-      window.addEventListener("scroll", handleScroll, { passive: true });
-      window.addEventListener("wheel", handleScroll, { passive: true });
-      window.addEventListener("touchmove", handleScroll, { passive: true });
-
-      resetIdle();
-
-      const singleGridHeight = grid.offsetHeight;
-
-      const ticker = () => {
-        const lenis = (window as any).lenis;
-        if (isIdle) autoScrollOffset -= 0.8; // Slower vertical autoscroll
-
-        const scrollY = lenis ? lenis.scroll : window.scrollY;
-
-        // Infinite Scrollbar Trick (Vertical)
-        if (scrollY < 5000) {
-          const diff = 25000 - scrollY;
-          if (lenis) lenis.scrollTo(25000, { immediate: true });
-          else window.scrollTo(0, 25000);
-          autoScrollOffset -= diff;
-        } else if (scrollY > 45000) {
-          const diff = scrollY - 25000;
-          if (lenis) lenis.scrollTo(25000, { immediate: true });
-          else window.scrollTo(0, 25000);
-          autoScrollOffset += diff;
-        }
-
-        currentScroll = scrollY - autoScrollOffset;
-
-        // Wrap the grid smoothly
-        const yPos = currentScroll % singleGridHeight;
-        gsap.set([grid, clone], {
-          y: (i) => -yPos + (i * singleGridHeight)
-        });
-      };
-
-      gsap.ticker.add(ticker);
-      return () => {
-        window.removeEventListener("scroll", handleScroll);
-        window.removeEventListener("wheel", handleScroll);
-        window.removeEventListener("touchmove", handleScroll);
-        gsap.ticker.remove(ticker);
-        clearTimeout(idleTimer);
-        if (clone && clone.parentNode) clone.parentNode.removeChild(clone);
-      };
-    }
   }, { dependencies: [activeYear], scope: containerRef });
 
   return (
@@ -343,43 +269,39 @@ export default function InfiniteArchiveGrid({ projects = [] }: { projects: Proje
         </section>
       </div>
 
-      {/* ── MOBILE / TABLET LAYOUT (Vertical Infinite Scroll - Dark) ──── */}
-      <section className="block lg:hidden fixed top-0 left-0 w-full h-screen overflow-hidden bg-[#111] z-10 pointer-events-none">
-        {/* We use a container that will hold the main grid and its clone for infinite scrolling */}
-        <div className="relative w-full h-full pointer-events-auto" ref={mobileContainerRef}>
-          {/* Main Grid Wrapper */}
-          <div className="absolute top-0 left-0 w-full pt-[60vh] pb-8" ref={mobileGridRef}>
-            <div className="px-4 grid grid-cols-2 gap-3">
-              {displayProjects.map((project, idx) => (
-                <Link
-                  href={`/portfolio/${project.slug}`}
-                  key={`mobile-${project.slug}-${idx}`}
-                  className="mobile-card relative block overflow-hidden bg-[#222] aspect-[4/5] group"
-                >
-                  {project.hero_image_url ? (
-                    project.hero_image_url.endsWith(".mp4") || project.hero_image_url.endsWith(".webm") ? (
-                      <video src={project.hero_image_url} autoPlay loop muted playsInline className="object-cover object-center w-full h-full absolute inset-0" />
-                    ) : (
-                      <Image src={project.hero_image_url} alt={project.title} fill className="object-cover object-center" sizes="50vw" />
-                    )
+      {/* ── MOBILE / TABLET LAYOUT (Standard Vertical Scroll - Dark) ──── */}
+      <section className="block lg:hidden relative w-full min-h-[100svh] bg-[#111] z-10">
+        <div className="relative w-full pt-[20vh] pb-[10vh]">
+          <div className="px-4 grid grid-cols-2 gap-3">
+            {filteredProjects.map((project, idx) => (
+              <Link
+                href={`/portfolio/${project.slug}`}
+                key={`mobile-${project.slug}-${idx}`}
+                className="mobile-card relative block overflow-hidden bg-[#222] aspect-[4/5] group"
+              >
+                {project.hero_image_url ? (
+                  project.hero_image_url.endsWith(".mp4") || project.hero_image_url.endsWith(".webm") ? (
+                    <video src={project.hero_image_url} autoPlay loop muted playsInline className="object-cover object-center w-full h-full absolute inset-0" />
                   ) : (
-                    <div className="absolute inset-0 bg-[#1a1a1a] flex items-center justify-center">
-                      <span className="text-white/10 font-playfair font-black text-6xl uppercase tracking-tighter">
-                        {project.title.split(' ').map(n => n[0]).join('').substring(0, 2)}
-                      </span>
-                    </div>
-                  )}
-                  
-                  <div className="absolute inset-0 bg-black/50 transition-colors duration-300 group-hover:bg-black/20" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80" />
-                  
-                  <div className="absolute inset-0 p-4 flex flex-col justify-end">
-                    <h3 className="font-playfair text-sm sm:text-base text-white font-black uppercase tracking-tighter leading-tight line-clamp-3">{project.title}</h3>
-                    <p className="font-montserrat text-[9px] sm:text-[10px] font-bold text-white/70 tracking-[0.1em] uppercase mt-1 line-clamp-1">{project.role}</p>
+                    <Image src={project.hero_image_url} alt={project.title} fill className="object-cover object-center" sizes="50vw" />
+                  )
+                ) : (
+                  <div className="absolute inset-0 bg-[#1a1a1a] flex items-center justify-center">
+                    <span className="text-white/10 font-playfair font-black text-6xl uppercase tracking-tighter">
+                      {project.title.split(' ').map(n => n[0]).join('').substring(0, 2)}
+                    </span>
                   </div>
-                </Link>
-              ))}
-            </div>
+                )}
+                
+                <div className="absolute inset-0 bg-black/50 transition-colors duration-300 group-hover:bg-black/20" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80" />
+                
+                <div className="absolute inset-0 p-4 flex flex-col justify-end">
+                  <h3 className="font-playfair text-sm sm:text-base text-white font-black uppercase tracking-tighter leading-tight line-clamp-3">{project.title}</h3>
+                  <p className="font-montserrat text-[9px] sm:text-[10px] font-bold text-white/70 tracking-[0.1em] uppercase mt-1 line-clamp-1">{project.role}</p>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>

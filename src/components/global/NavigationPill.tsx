@@ -59,18 +59,38 @@ export default function NavigationPill() {
         // Clear existing idle timer
         if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
 
-        if (diff > 2 && currentY > 100) {
-          // Scrolling down — hide
-          hidePill();
-        } else if (diff < -2) {
-          // Scrolling up — show
-          showPill();
+        // Check if we are still in the Hero section (before Panel 01 is fully visible)
+        let isHeroPhase = false;
+        const desktopTrigger = ScrollTrigger.getById("about-scroll");
+        const mobileTrigger = ScrollTrigger.getById("mobile-scroll");
+        const st = desktopTrigger || mobileTrigger;
+
+        if (st) {
+          // Both desktop and mobile animations place Panel 01 fully in view roughly at 50% progress
+          if (st.progress < 0.5) {
+            isHeroPhase = true;
+          }
+        } else if (currentY < window.innerHeight) {
+          // Fallback if ScrollTrigger is not found
+          isHeroPhase = true;
         }
 
-        // Set idle timer to show pill after 1.5s of no scrolling
-        idleTimerRef.current = setTimeout(() => {
-          showPill();
-        }, 1500);
+        if (isHeroPhase) {
+          hidePill();
+        } else {
+          if (diff > 2 && currentY > 100) {
+            // Scrolling down — hide
+            hidePill();
+          } else if (diff < -2) {
+            // Scrolling up — show
+            showPill();
+          }
+
+          // Set idle timer to show pill after 1.5s of no scrolling
+          idleTimerRef.current = setTimeout(() => {
+            showPill();
+          }, 1500);
+        }
 
         // ScrollSpy logic to automatically update URL hash using accurate visual position
         let currentSection = "/";

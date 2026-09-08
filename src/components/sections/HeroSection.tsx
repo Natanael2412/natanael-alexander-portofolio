@@ -8,6 +8,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Kunci agar UI tidak anjlok saat address bar HP hilang
+ScrollTrigger.config({ ignoreMobileResize: true });
+
 export default function HeroSection() {
   const sectionRef       = useRef<HTMLDivElement>(null);
   const overlayRef       = useRef<HTMLDivElement>(null);
@@ -31,22 +34,20 @@ export default function HeroSection() {
       const mm = gsap.matchMedia();
 
       // =========================================================
-      // DESKTOP LOGIC (100% KODE ASLI ANDA, TIDAK DISENTUH)
+      // DESKTOP LOGIC (MEMBUNUH KEDIPAN HITAM)
       // =========================================================
       mm.add("(min-width: 1024px)", () => {
         const ctx = gsap.context(() => {
-          // Entrance animation
-          const tl = gsap.timeline({ delay: 0.4 });
+          
+          // KUNCI: Animasi opacity: 0 pada sectionRef dihapus agar tidak ada kedipan hitam.
+          // Layar putih (SSR) dipertahankan selama 1.5 detik sebagai pseudo-preloader
+          // sebelum elemen kecil (tagline, hint) perlahan muncul.
+          const tl = gsap.timeline({ delay: 1.5 });
+          
           tl.fromTo(
-            sectionRef.current,
-            { opacity: 0 },
-            { opacity: 1, duration: 1.2, ease: "expo.out" }
-          )
-            .fromTo(
               indexRef.current,
               { opacity: 0, y: -10 },
-              { opacity: 1, y: 0, duration: 0.8, ease: "expo.out" },
-              "-=0.6"
+              { opacity: 1, y: 0, duration: 0.8, ease: "expo.out" }
             )
             .fromTo(
               taglineRef.current,
@@ -162,60 +163,63 @@ export default function HeroSection() {
       });
 
       // =========================================================
-      // MOBILE LOGIC: BOX PUTIH -> FADE KE TEKS PUTIH -> SCROLL HIJACK
+      // MOBILE LOGIC: NO PRELOADER, STATIC TEXT OVER IMAGE
       // =========================================================
       mm.add("(max-width: 1023px)", () => {
-        // 1. Kunci Layout Mobile
-        gsap.set(sectionRef.current, { height: "100vh", position: "relative", overflow: "hidden" });
-        gsap.set(photoContainerRef.current, { position: "absolute", top: 0, left: 0, width: "100%", height: "100vh", zIndex: 1, backgroundColor: "#111" });
+        // 1. Setup Layout Dasar Mutlak
+        gsap.set(sectionRef.current, { height: "100svh", position: "relative", overflow: "hidden" });
+        gsap.set(photoContainerRef.current, { position: "absolute", top: 0, left: 0, width: "100%", height: "100svh", zIndex: 1 });
         
-        // Atur Overlay & Teks Awal (Transparan, Teks Putih)
-        // Set zIndex 50 agar berada di bawah page-curtain (9999) tetapi di atas photo (1)
+        // Buat overlay transparan dan teks menjadi putih (statis di atas gambar)
         gsap.set(overlayRef.current, { 
-          position: "absolute", top: 0, left: 0, width: "100%", height: "100vh", zIndex: 50,
+          position: "absolute", top: 0, left: 0, width: "100%", height: "100svh", zIndex: 20,
           display: "flex", flexDirection: "column", justifyContent: "center",
-          backgroundColor: "rgba(255, 255, 255, 0)",
-          mixBlendMode: "normal" // Disable screen mode on mobile so text is visible
+          backgroundColor: "transparent"
         });
-        gsap.set([nameLeftRef.current, nameRightRef.current], { color: "rgb(255, 255, 255)", opacity: 1 });
-        gsap.set([indexRef.current, taglineRef.current], { color: "rgba(255, 255, 255, 0.7)", opacity: 1 });
+        
+        gsap.set([nameLeftRef.current, nameRightRef.current], { color: "white" });
+        gsap.set([indexRef.current, taglineRef.current, scrollHintRef.current], { color: "rgba(255,255,255,0.8)" });
+        if (scrollHintRef.current) {
+          const line = scrollHintRef.current.querySelector(".hero__scroll-line") as HTMLElement | null;
+          if (line) gsap.set(line, { backgroundColor: "rgba(255,255,255,0.8)" });
+        }
 
-        // Sembunyikan Panel di Sebelah Kanan Layar
+        // Setup Panel 01 dan 02 (Sembunyikan di luar kanan layar)
         gsap.set(aboutWrapperRef.current, {
-          position: "absolute", top: 0, left: "100vw", width: "200vw", height: "100vh",
-          display: "flex", flexDirection: "row", zIndex: 10000
+          position: "absolute", top: 0, left: "100vw", width: "200vw", height: "100svh",
+          display: "flex", flexDirection: "row", zIndex: 30
         });
-        gsap.set(panelsRef.current, { width: "100vw", height: "100vh", flexShrink: 0 });
 
-        // 2. Entrance Animation
-        const tl = gsap.timeline({ delay: 0.2 });
-        if (imgRef.current) tl.fromTo(imgRef.current, { scale: 1.15 }, { scale: 1, duration: 2.5, ease: "power2.out" }, 0);
-        tl.fromTo(sectionRef.current, { opacity: 0 }, { opacity: 1, duration: 0.8, ease: "expo.out" }, 0);
-        // Removed text entrance animations as requested to make text static
+        // Kunci Tinggi Checkerboard 50/50
+        if (panelsRef.current[0] && panelsRef.current[1]) {
+          const children = [...panelsRef.current[0].children, ...panelsRef.current[1].children];
+          gsap.set(children, { height: "50svh", width: "100%", flex: "none" });
+        }
 
-        // 3. Scroll Hijack Timeline (Mobile)
+        // ==========================================
+        // 3. SCROLL HIJACK TIMELINE (Geser Panel)
+        // ==========================================
         const mobileScrollTl = gsap.timeline({
           scrollTrigger: {
             id: "mobile-scroll",
             trigger: sectionRef.current,
             start: "top top",
-            end: () => `+=${window.innerWidth * 2.5}`,
+            end: () => `+=${window.innerWidth * 2}`,
             pin: true,
             scrub: true,
             invalidateOnRefresh: true,
           }
         });
+        
+        // Parallax LCP halus saat scroll
+        mobileScrollTl.to(imgRef.current, { scale: 0.9, xPercent: -10, ease: "none", duration: window.innerWidth * 2 }, 0);
 
-        // FASE 1: Teks memudar saat di-scroll
-        mobileScrollTl.to([nameLeftRef.current, nameRightRef.current, indexRef.current, taglineRef.current], { opacity: 0, ease: "power2.inOut", duration: 0.5 }, 0);
-        mobileScrollTl.to(imgRef.current, { scale: 0.9, xPercent: -15, ease: "none", duration: 3 }, 0);
-
-        // FASE 2: Geser Panel 01 & 02 masuk dari kanan ke kiri menutupi Hero
-        mobileScrollTl.to(aboutWrapperRef.current, {
-          x: () => -(window.innerWidth * 2),
-          ease: "none",
-          duration: 2
-        }, 1);
+        // Tarik Panel 01 dan 02 masuk
+        mobileScrollTl.to(aboutWrapperRef.current, { 
+          x: () => -(window.innerWidth * 2), // Geser mutlak sejauh 2 layar
+          ease: "none", 
+          duration: window.innerWidth * 2 
+        }, 0);
       });
 
       return () => mm.revert();
@@ -230,14 +234,17 @@ export default function HeroSection() {
       id="home"
       aria-label="Hero section"
     >
-      {/* Layer 1: Overlay & Teks Hero (Z-Index tinggi agar tampil di atas LCP & di bawah panel saat panel masuk) */}
-      <div className="hero__overlay-wrapper relative z-20" ref={overlayRef} style={{ backgroundColor: "rgba(255, 255, 255, 1)" }}>
-        {/* Index label */}
-        <span ref={indexRef} className="hero__index relative z-50" style={{ color: "rgb(60, 60, 60)" }}>
+      {/* 
+        Layer 1: Overlay & Teks Hero 
+        100% ASLI BAWAAN ANDA. TIDAK ADA YANG DIHAPUS.
+        Menjadi Preloader Instan.
+      */}
+      <div className="hero__overlay-wrapper" ref={overlayRef} style={{ backgroundColor: "rgba(255, 255, 255, 1)" }}>
+        <span ref={indexRef} className="hero__index" style={{ color: "rgb(60, 60, 60)" }}>
           Portfolio &nbsp;&bull;&nbsp; {new Date().getFullYear()}
         </span>
 
-        <h1 className="hero__name relative z-50" aria-label="NATANAEL ALEXANDER">
+        <h1 className="hero__name" aria-label="NATANAEL ALEXANDER">
           <span ref={nameLeftRef} className="hero__name-left" style={{ color: "rgb(0, 0, 0)" }}>
             NATANAEL
           </span>
@@ -246,26 +253,25 @@ export default function HeroSection() {
           </span>
         </h1>
 
-        {/* Desktop: tagline + scroll hint | Mobile: desktop-only notice */}
-        <p ref={taglineRef} className="hero__tagline relative z-50" style={{ color: "rgb(60, 60, 60)" }}>
+        <p ref={taglineRef} className="hero__tagline" style={{ color: "rgb(60, 60, 60)" }}>
           Creative Digital Architect
         </p>
 
-        {/* Mobile-only: "Best on Desktop" notice */}
         <p
-          className="lg:hidden absolute bottom-6 left-0 right-0 text-center font-montserrat tracking-widest uppercase text-[0.6rem] sm:text-[0.65rem] px-4 relative z-50 text-white drop-shadow-md"
+          className="lg:hidden absolute bottom-6 left-0 right-0 text-center font-montserrat tracking-widest uppercase text-[0.6rem] sm:text-[0.65rem] px-4"
+          style={{ color: "rgba(60,60,60,0.7)" }}
         >
           ✦ Open on Laptop / Desktop for best experience
         </p>
 
-        <div ref={scrollHintRef} className="hero__scroll-hint relative z-50" style={{ color: "rgb(60, 60, 60)" }}>
+        <div ref={scrollHintRef} className="hero__scroll-hint" style={{ color: "rgb(60, 60, 60)" }}>
           <span className="hero__scroll-line" aria-hidden="true" style={{ backgroundColor: "rgb(60, 60, 60)" }} />
           Scroll to reveal
         </div>
       </div>
 
-      {/* Layer 2: The photo itself (LCP Background) */}
-      <div className="hero__bg-photo absolute inset-0 z-0" ref={photoContainerRef}>
+      {/* Layer 2: The photo itself */}
+      <div className="hero__bg-photo" ref={photoContainerRef}>
         <Image
           ref={imgRef}
           src="/images/Hero.webp"
@@ -274,21 +280,18 @@ export default function HeroSection() {
           height={2560}
           priority
           quality={95}
-          className="hero__img object-cover object-center w-full h-full"
+          className="hero__img"
         />
         <div className="hero__photo-vignette" aria-hidden="true" />
       </div>
 
-      {/* Layer 3: About Section Panels (Checkerboard 50/50 Tanpa Whitespace) */}
-      <div 
-        className="about-wrapper max-lg:absolute max-lg:top-0 max-lg:left-[100vw] max-lg:flex max-lg:flex-row max-lg:w-[200vw] max-lg:h-[100vh] z-30" 
-        ref={aboutWrapperRef} 
-        id="about"
-      >
-        {/* PANEL 1: 01 / THE MINDSET (Teks Atas 50%, Gambar Bawah 50%) */}
-        <div className="w-[100vw] h-[100vh] lg:min-h-screen lg:h-[100vh] flex flex-col lg:flex-row max-lg:flex-shrink-0 bg-[#0a0a0a]" ref={(el) => { panelsRef.current[0] = el; }}>
+      {/* Layer 3: About Section Panels */}
+      <div className="about-wrapper" ref={aboutWrapperRef} id="about">
+        
+        {/* Panel 1: THE MINDSET */}
+        <div className="w-[100vw] min-h-screen lg:h-[100vh] flex flex-col lg:flex-row" ref={(el) => { panelsRef.current[0] = el; }}>
           
-          <div className="w-full h-[50vh] lg:h-full lg:w-1/2 flex-1 flex flex-col justify-center bg-[var(--chalk)] relative z-10 px-6 py-6 lg:p-24" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(3rem, 8vh, 6rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}>
+          <div className="w-full lg:w-1/2 flex-1 flex flex-col justify-center bg-[var(--chalk)] relative z-10" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(3rem, 8vh, 6rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}>
             <div className="w-full">
               <span className="about__label">01 / THE MINDSET</span>
               <h2 className="about__title !text-[clamp(1.5rem,4vw,5rem)]" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', hyphens: 'auto' }}>THE CATALYST.</h2>
@@ -302,32 +305,32 @@ export default function HeroSection() {
             </div>
           </div>
 
-          <div className="w-full h-[50vh] lg:h-full lg:w-1/2 relative bg-[var(--chalk)]">
+          <div className="w-full lg:w-1/2 h-[50svh] lg:h-full relative bg-[var(--chalk)]">
             <Image 
               src="/images/casual.webp" 
               alt="Natanael Alexander Casual" 
               fill 
-              className="object-cover object-[50%_25%] lg:object-center" 
+              className="object-cover object-center" 
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
           </div>
 
         </div>
 
-        {/* PANEL 2: 02 / THE FOUNDATION (Gambar Atas 50%, Teks Bawah 50%) */}
-        <div className="w-[100vw] h-[100vh] lg:min-h-screen lg:h-[100vh] flex flex-col lg:flex-row-reverse max-lg:flex-shrink-0 bg-[#0a0a0a]" ref={(el) => { panelsRef.current[1] = el; }}>
+        {/* Panel 2: THE FOUNDATION */}
+        <div className="w-[100vw] min-h-screen lg:h-[100vh] flex flex-col lg:flex-row-reverse" ref={(el) => { panelsRef.current[1] = el; }}>
           
-          <div className="w-full h-[50vh] lg:h-full lg:w-1/2 relative bg-[var(--chalk)]">
+          <div className="w-full lg:w-1/2 h-[50svh] lg:h-full relative bg-[var(--chalk)]">
             <Image 
               src="/images/formal.webp" 
               alt="Natanael Alexander Formal" 
               fill 
-              className="object-cover object-[50%_25%] lg:object-center" 
+              className="object-cover object-center" 
               sizes="(max-width: 1024px) 100vw, 50vw"
             />
           </div>
 
-          <div className="w-full h-[50vh] lg:h-full lg:w-1/2 lg:flex-1 flex flex-col justify-center bg-[var(--chalk)] relative z-10 px-6 py-6 lg:p-24" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(2rem, 10vh, 8rem)", paddingBottom: "clamp(2rem, 10vh, 8rem)" }}>
+          <div className="w-full lg:w-1/2 flex-1 flex flex-col justify-center bg-[var(--chalk)] relative z-10" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(2rem, 10vh, 8rem)", paddingBottom: "clamp(2rem, 10vh, 8rem)" }}>
             <div className="w-full">
               <span className="about__label">02 / THE FOUNDATION</span>
               <h2 className="about__title !text-[clamp(1.5rem,4vw,5rem)]" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', hyphens: 'auto' }}>DUAL PERSPECTIVE.</h2>
@@ -336,7 +339,6 @@ export default function HeroSection() {
               </p>
             </div>
           </div>
-
         </div>
       </div>
     </section>
