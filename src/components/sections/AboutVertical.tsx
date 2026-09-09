@@ -24,6 +24,39 @@ export default function AboutVertical({
   const yearsOfExperience = new Date().getFullYear() - 2024;
   
   useGSAP(() => {
+    const panels = gsap.utils.toArray('.panel-section') as HTMLElement[];
+    
+    panels.forEach((panel, i) => {
+      // The last panel doesn't need to scale down
+      if (i === panels.length - 1) return;
+
+      const inner = panel.querySelector('.panel-inner');
+      if (!inner) return;
+      
+      ScrollTrigger.create({
+        trigger: panel,
+        start: "top top",
+        endTrigger: panels[i + 1],
+        end: "top top",
+        pin: true,
+        pinSpacing: false,
+        scrub: true,
+        snap: {
+          snapTo: 1, // Snap to start or end of the trigger
+          directional: true,
+          duration: { min: 0.2, max: 0.5 },
+          delay: 0.1,
+          ease: "power1.inOut"
+        },
+        animation: gsap.to(inner, { 
+          scale: 0.85, 
+          opacity: 0.7, 
+          filter: "blur(12px)",
+          ease: "power2.inOut" 
+        })
+      });
+    });
+
     // Counter Animation
     const counters = gsap.utils.toArray('.stat-counter') as HTMLElement[];
     
@@ -55,10 +88,14 @@ export default function AboutVertical({
   }, { scope: containerRef });
 
   return (
-    <div ref={containerRef} className="bg-white text-black relative z-20 w-full overflow-hidden">
+    <div ref={containerRef} className="bg-white text-black relative z-20 w-full">
       
       {/* Panel 3: THE PHILOSOPHY */}
-      <div className="w-full min-h-screen lg:h-[100vh] flex flex-col lg:flex-row border-b border-gray-100" ref={(el) => { panelsRef.current[0] = el; }}>
+      <section className="sticky top-0 w-full h-[100svh] overflow-hidden panel-section bg-gray-100">
+        <div className="absolute inset-0 z-0">
+          <Image src="/images/logo-weatso.webp" alt="Background" fill className="object-cover opacity-40 blur-2xl scale-110 pointer-events-none" priority />
+        </div>
+        <div className="panel-inner w-full h-full flex flex-col lg:flex-row border-b border-gray-100 bg-white relative z-10" ref={(el) => { panelsRef.current[0] = el; }}>
         
         {/* Left: Visual */}
         <div className="w-full lg:w-1/2 h-[50svh] lg:h-full relative bg-white flex items-center justify-center overflow-hidden">
@@ -79,10 +116,15 @@ export default function AboutVertical({
           </div>
         </div>
 
-      </div>
+        </div>
+      </section>
 
       {/* Panel 4: PRODUCTION LEADERSHIP + Team Photo */}
-      <div className="w-full min-h-screen lg:h-[100vh] flex flex-col-reverse lg:flex-row border-b border-gray-100" ref={(el) => { panelsRef.current[1] = el; }}>
+      <section className="sticky top-0 w-full h-[100svh] overflow-hidden panel-section bg-gray-100">
+        <div className="absolute inset-0 z-0">
+          <Image src="/images/team.webp" alt="Background" fill className="object-cover opacity-40 blur-2xl scale-110 pointer-events-none" />
+        </div>
+        <div className="panel-inner w-full h-full flex flex-col-reverse lg:flex-row border-b border-gray-100 bg-white relative z-10" ref={(el) => { panelsRef.current[1] = el; }}>
         
         {/* Left: Text */}
         <div className="w-full lg:w-1/2 flex flex-col justify-center bg-[var(--chalk)] relative z-10" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(3rem, 8vh, 6rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}>
@@ -107,10 +149,15 @@ export default function AboutVertical({
           />
         </div>
 
-      </div>
+        </div>
+      </section>
 
       {/* Panel 5: THE EXPERIENCE */}
-      <div className="w-full min-h-screen lg:h-[100vh] flex flex-col lg:flex-row border-b border-gray-100" ref={(el) => { panelsRef.current[2] = el; }}>
+      <section className="sticky top-0 w-full h-[100svh] overflow-hidden panel-section bg-gray-100">
+        <div className="absolute inset-0 z-0">
+          <Image src="/images/Experience.webp" alt="Background" fill className="object-cover opacity-40 blur-2xl scale-110 pointer-events-none" />
+        </div>
+        <div className="panel-inner w-full h-full flex flex-col lg:flex-row border-b border-gray-100 bg-white relative z-10" ref={(el) => { panelsRef.current[2] = el; }}>
         
         {/* Left: Photo */}
         <div className="w-full lg:w-1/2 h-[50svh] lg:h-full relative bg-gray-100">
@@ -174,10 +221,12 @@ export default function AboutVertical({
           </div>
         </div>
 
-      </div>
+        </div>
+      </section>
 
       {/* Panel 6: THE NEXT */}
-      <div className="w-full min-h-[50svh] lg:h-[100vh] flex flex-row border-b border-gray-100" ref={(el) => { panelsRef.current[3] = el; }}>
+      <section className="sticky top-0 w-full h-[100svh] overflow-hidden panel-section bg-white">
+        <div className="panel-inner w-full h-full flex flex-row border-b border-gray-100 bg-white relative z-10" ref={(el) => { panelsRef.current[3] = el; }}>
         <div className="w-full flex flex-col justify-center items-center bg-[var(--chalk)] relative z-10 text-center" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(4rem, 10vh, 8rem)", paddingBottom: "clamp(4rem, 10vh, 8rem)" }}>
           <div className="w-full max-w-2xl mx-auto">
             <span className="about__label mx-auto">06 / THE NEXT</span>
@@ -197,7 +246,8 @@ export default function AboutVertical({
           </div>
         </div>
 
-      </div>
+        </div>
+      </section>
 
     </div>
   );

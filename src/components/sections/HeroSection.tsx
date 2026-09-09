@@ -118,6 +118,7 @@ export default function HeroSection() {
               scrub: true,
               snap: {
                 snapTo: [0, ...panels.map((_, i) => (0.5 + i + 1) / (0.5 + panels.length))],
+                directional: true,
                 duration: { min: 1.0, max: 1.8 },
                 delay: 0,
                 ease: "power3.inOut"
@@ -195,12 +196,19 @@ export default function HeroSection() {
           ease: "none",
           scrollTrigger: {
             id: "mobile-horizontal",
-            trigger: aboutWrapperRef.current, // Trigger-nya adalah kontainer Panel, bukan Hero
-            start: "top top",                 // Mulai saat Panel 01 mencapai pucuk layar
-            end: () => `+=${window.innerWidth}`, // Mengunci selama 1x tinggi scroll layar
+            trigger: aboutWrapperRef.current,
+            start: "top top",
+            end: () => `+=${window.innerWidth}`,
             pin: true,                        // Mengunci layar
             scrub: true,                      // Terikat pada scroll pengguna
             invalidateOnRefresh: true,
+            snap: {
+              snapTo: 1, // Snap to start (0) or end (1) of the animation
+              directional: true,
+              duration: { min: 0.2, max: 0.5 },
+              delay: 0.1,
+              ease: "power1.inOut"
+            }
           }
         });
       });

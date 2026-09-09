@@ -6,6 +6,8 @@ import { usePathname } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import LanguageSwitcher from "./LanguageSwitcher";
+
 
 gsap.registerPlugin(ScrollTrigger);
 
