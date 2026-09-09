@@ -54,6 +54,21 @@ export default function RootLayout({
             {children}
           </PageTransition>
         </LenisProvider>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "ProfilePage",
+              "mainEntity": {
+                "@type": "Person",
+                "name": "Natanael Alexander",
+                "jobTitle": ["Creative Digital Architect", "Production Lead", "Technical Engineer"],
+                "url": "https://natanael.anugerahventures.com",
+              }
+            }),
+          }}
+        />
       </body>
     </html>
   );
