@@ -18,6 +18,7 @@ export default function HeroSection() {
   const taglineRef       = useRef<HTMLParagraphElement>(null);
   const scrollHintRef    = useRef<HTMLDivElement>(null);
   const indexRef         = useRef<HTMLSpanElement>(null);
+  const mobileNoticeRef  = useRef<HTMLParagraphElement>(null);
   
   const photoContainerRef = useRef<HTMLDivElement>(null);
   const imgRef           = useRef<HTMLImageElement>(null);
@@ -48,19 +49,29 @@ export default function HeroSection() {
       const mm = gsap.matchMedia();
 
       // =========================================================
-      // DESKTOP LOGIC
+      // DESKTOP LOGIC (100% KODE ANDA YANG SUDAH FIX)
       // =========================================================
       mm.add("(min-width: 1024px)", () => {
         const ctx = gsap.context(() => {
-          gsap.set(overlayRef.current, { backgroundColor: "rgba(255, 255, 255, 1)", display: "flex" });
-          gsap.set([nameLeftRef.current, nameRightRef.current], { color: "rgb(0, 0, 0)" });
-          gsap.set([indexRef.current, taglineRef.current, scrollHintRef.current], { color: "rgb(60, 60, 60)" });
+          const tl = gsap.timeline({ delay: 1.5 });
 
-          const tl = gsap.timeline({ delay: 0.1 });
-          tl.fromTo(indexRef.current, { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.8, ease: "expo.out" })
-            .fromTo([nameLeftRef.current, nameRightRef.current], { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 1.2, ease: "expo.out", stagger: 0.1 }, "-=0.6")
-            .fromTo(taglineRef.current, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.8, ease: "expo.out" }, "-=0.8")
-            .fromTo(scrollHintRef.current, { opacity: 0 }, { opacity: 1, duration: 0.6 }, "-=0.4");
+          tl.fromTo(
+              indexRef.current,
+              { opacity: 0, y: -10 },
+              { opacity: 1, y: 0, duration: 0.8, ease: "expo.out" }
+            )
+            .fromTo(
+              taglineRef.current,
+              { opacity: 0, y: 15 },
+              { opacity: 1, y: 0, duration: 0.8, ease: "expo.out" },
+              "-=0.6"
+            )
+            .fromTo(
+              scrollHintRef.current,
+              { opacity: 0 },
+              { opacity: 1, duration: 0.6 },
+              "-=0.4"
+            );
 
           ScrollTrigger.create({
             trigger: sectionRef.current,
@@ -126,46 +137,72 @@ export default function HeroSection() {
       });
 
       // =========================================================
-      // MOBILE LOGIC
+      // MOBILE LOGIC: MORPH PRELOADER + VERTICAL TO HORIZONTAL SCROLL
       // =========================================================
       mm.add("(max-width: 1023px)", () => {
-        gsap.set(overlayRef.current, { display: "none", opacity: 0 });
-        gsap.set(sectionRef.current, { height: "100svh", position: "relative", overflow: "hidden" });
-
-        // CSS BLEED 120vh: Menyediakan bantalan untuk scroll bar yang hilang
-        gsap.set(photoContainerRef.current, { position: "absolute", top: 0, left: 0, width: "100%", height: "120vh", zIndex: 1 });
-
+        // 1. SETUP LAYOUT
+        gsap.set(sectionRef.current, { height: "auto", position: "relative", display: "flex", flexDirection: "column", overflow: "hidden" });
+        gsap.set(photoContainerRef.current, { position: "relative", top: "auto", left: "auto", width: "100%", height: "100svh", zIndex: 1 });
+        
+        // Memaksa About Wrapper membentang 2x layar ke samping (Horizontal Ready)
         gsap.set(aboutWrapperRef.current, {
-          position: "absolute", top: 0, left: "100vw", width: "200vw", height: "100svh",
-          display: "flex", flexDirection: "row", zIndex: 30
+          position: "relative", top: "auto", left: "auto", width: "200vw", height: "100svh",
+          display: "flex", flexDirection: "row", zIndex: 10
         });
 
+        // Panel 01 dan 02 diset sebelahan di dalam wrapper 200vw
+        gsap.set(panelsRef.current, { width: "100vw", height: "100svh", display: "flex", flexDirection: "column", flexShrink: 0 });
         if (panelsRef.current[0] && panelsRef.current[1]) {
           const children = [...panelsRef.current[0].children, ...panelsRef.current[1].children];
           gsap.set(children, { height: "50svh", width: "100%", flex: "none" });
         }
 
-        // CINEMATIC PRELOADER: Fade in from black
-        const initTl = gsap.timeline();
-        if (imgRef.current) {
-          initTl.fromTo(sectionRef.current, { opacity: 0 }, { opacity: 1, duration: 1.5, delay: 0.5, ease: "power2.inOut" }, 0);
-          initTl.fromTo(imgRef.current, { scale: 1.15 }, { scale: 1, duration: 2.5, ease: "power2.out" }, 0);
+        // 2. ANIMASI MORPH PRELOADER (1.5 DETIK)
+        const initTl = gsap.timeline({ delay: 1.5 });
+        
+        // Background Putih -> Hitam Transparan (50%)
+        initTl.to(overlayRef.current, { backgroundColor: "rgba(0, 0, 0, 0.5)", duration: 1.2, ease: "power2.inOut" }, 0);
+        
+        // Teks Hitam -> Teks Putih
+        initTl.to([nameLeftRef.current, nameRightRef.current], { color: "rgb(255, 255, 255)", duration: 1.2, ease: "power2.inOut" }, 0);
+        initTl.to([indexRef.current, taglineRef.current, scrollHintRef.current], { color: "rgba(255, 255, 255, 0.8)", duration: 1.2, ease: "power2.inOut" }, 0);
+        if (mobileNoticeRef.current) {
+          initTl.to(mobileNoticeRef.current, { color: "rgba(255, 255, 255, 0.6)", duration: 1.2, ease: "power2.inOut" }, 0);
         }
 
-        const mobileScrollTl = gsap.timeline({
+        // Cinematic reveal foto
+        if (imgRef.current) {
+          initTl.fromTo(imgRef.current, { scale: 1.15 }, { scale: 1, duration: 2, ease: "power2.out" }, 0);
+        }
+
+        // 3. PARALLAX NATIVE SCROLL PADA HERO (LCP)
+        gsap.to(imgRef.current, {
+          yPercent: 15,
+          ease: "none",
           scrollTrigger: {
-            id: "mobile-scroll",
-            trigger: sectionRef.current,
+            trigger: photoContainerRef.current,
             start: "top top",
-            end: () => `+=${window.innerWidth * 2}`,
-            pin: true,
-            scrub: true,
-            invalidateOnRefresh: true,
+            end: "bottom top",
+            scrub: true
           }
         });
 
-        mobileScrollTl.to(imgRef.current, { yPercent: -10, ease: "none", duration: window.innerWidth * 2 }, 0);
-        mobileScrollTl.to(aboutWrapperRef.current, { x: () => -(window.innerWidth * 2), ease: "none", duration: window.innerWidth * 2 }, 0);
+        // 4. EFEK "AKSEN KHUSUS": PANEL 02 MELUNCUR DARI KANAN
+        // Scroll vertical akan normal sampai Panel 01 mentok di atas layar.
+        // Saat mentok, layar ditahan, dan user scroll untuk menarik Panel 02 masuk.
+        gsap.to(aboutWrapperRef.current, {
+          x: () => -window.innerWidth, // Menggeser kontainer ke kiri sejauh 1 layar
+          ease: "none",
+          scrollTrigger: {
+            id: "mobile-horizontal",
+            trigger: aboutWrapperRef.current, // Trigger-nya adalah kontainer Panel, bukan Hero
+            start: "top top",                 // Mulai saat Panel 01 mencapai pucuk layar
+            end: () => `+=${window.innerWidth}`, // Mengunci selama 1x tinggi scroll layar
+            pin: true,                        // Mengunci layar
+            scrub: true,                      // Terikat pada scroll pengguna
+            invalidateOnRefresh: true,
+          }
+        });
       });
 
       return () => mm.revert();
@@ -174,41 +211,55 @@ export default function HeroSection() {
   );
 
   return (
-    <section ref={sectionRef} className="hero bg-[#0a0a0a]" id="home" aria-label="Hero section">
-      {/* Layer 1: Overlay & Teks Hero */}
-      <div className="hero__overlay-wrapper max-lg:!hidden bg-white" ref={overlayRef}>
-        <span ref={indexRef} className="hero__index opacity-0 text-[#3c3c3c]">
+    <section ref={sectionRef} className="hero" id="home" aria-label="Hero section">
+      
+      {/* Layer 1: Overlay (Morph Target) */}
+      <div 
+        className="hero__overlay-wrapper max-lg:absolute max-lg:inset-0 max-lg:z-50 max-lg:flex max-lg:flex-col max-lg:justify-center" 
+        ref={overlayRef} 
+        style={{ backgroundColor: "rgba(255, 255, 255, 1)" }}
+      >
+        <span ref={indexRef} className="hero__index" style={{ color: "rgb(60, 60, 60)" }}>
           Portfolio &nbsp;&bull;&nbsp; {new Date().getFullYear()}
         </span>
 
         <h1 className="hero__name" aria-label="NATANAEL ALEXANDER">
-          <span ref={nameLeftRef} className="hero__name-left opacity-0 text-black">NATANAEL</span>
-          <span ref={nameRightRef} className="hero__name-right opacity-0 text-black">ALEXANDER</span>
+          <span ref={nameLeftRef} className="hero__name-left" style={{ color: "rgb(0, 0, 0)" }}>
+            NATANAEL
+          </span>
+          <span ref={nameRightRef} className="hero__name-right" style={{ color: "rgb(0, 0, 0)" }}>
+            ALEXANDER
+          </span>
         </h1>
 
-        <p ref={taglineRef} className="hero__tagline opacity-0 text-[#3c3c3c]">
+        <p ref={taglineRef} className="hero__tagline" style={{ color: "rgb(60, 60, 60)" }}>
           Creative Digital Architect
         </p>
 
-        <p className="lg:hidden absolute bottom-6 left-0 right-0 text-center font-montserrat tracking-widest uppercase text-[0.6rem] sm:text-[0.65rem] px-4 opacity-0 text-gray-400">
+        <p
+          ref={mobileNoticeRef}
+          className="lg:hidden absolute bottom-6 left-0 right-0 text-center font-montserrat tracking-widest uppercase text-[0.6rem] sm:text-[0.65rem] px-4"
+          style={{ color: "rgba(60,60,60,0.7)" }}
+        >
           ✦ Open on Laptop / Desktop for best experience
         </p>
 
-        <div ref={scrollHintRef} className="hero__scroll-hint opacity-0 hidden lg:flex text-[#3c3c3c]">
-          <span className="hero__scroll-line bg-[#3c3c3c]" aria-hidden="true" />
+        <div ref={scrollHintRef} className="hero__scroll-hint hidden lg:flex" style={{ color: "rgb(60, 60, 60)" }}>
+          <span className="hero__scroll-line" aria-hidden="true" style={{ backgroundColor: "rgb(60, 60, 60)" }} />
           Scroll to reveal
         </div>
       </div>
 
-      {/* Layer 2: The photo itself — LCP optimized */}
-      <div className="hero__bg-photo absolute inset-0 z-0" ref={photoContainerRef}>
+      {/* Layer 2: The photo itself */}
+      <div className="hero__bg-photo" ref={photoContainerRef}>
         <Image
           ref={imgRef}
           src="/images/Hero.webp"
           alt="Natanael Alexander Hero"
-          className="hero__img object-cover object-center"
+          width={1920}
+          height={2560}
+          className="hero__img object-cover object-center w-full h-full"
           fetchPriority="high"
-          fill
           priority
           quality={80}
           sizes="(max-width: 1023px) 100vw, 100vw"
@@ -218,7 +269,7 @@ export default function HeroSection() {
 
       {/* Layer 3: About Section Panels */}
       <div
-        className="about-wrapper max-lg:absolute max-lg:top-0 max-lg:left-[100vw] max-lg:flex max-lg:flex-row max-lg:w-[200vw] max-lg:h-[100svh] z-30"
+        className="about-wrapper z-30"
         ref={aboutWrapperRef}
         id="about"
       >

@@ -1,4 +1,7 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from 'next-intl/plugin';
+
+const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
@@ -34,6 +37,7 @@ const nextConfig: NextConfig = {
   },
   async rewrites() {
     return [
+      // Default locale (id) — no prefix
       {
         source: "/about",
         destination: "/",
@@ -45,7 +49,20 @@ const nextConfig: NextConfig = {
       {
         source: "/contact",
         destination: "/",
-      }
+      },
+      // Non-default locale (en) — with prefix
+      {
+        source: "/en/about",
+        destination: "/en",
+      },
+      {
+        source: "/en/work",
+        destination: "/en",
+      },
+      {
+        source: "/en/contact",
+        destination: "/en",
+      },
     ];
   },
   async redirects() {
@@ -59,4 +76,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withNextIntl(nextConfig);
