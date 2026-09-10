@@ -139,44 +139,36 @@ export default function HeroSection() {
 
       // =========================================================
       // MOBILE LOGIC: MORPH PRELOADER + VERTICAL TO HORIZONTAL SCROLL
+      // PERBAIKAN: HAPUS svh JADI vh/%, HAPUS SNAPPING
       // =========================================================
       mm.add("(max-width: 1023px)", () => {
-        // 1. SETUP LAYOUT
         gsap.set(sectionRef.current, { height: "auto", position: "relative", display: "flex", flexDirection: "column", overflow: "hidden" });
-        gsap.set(photoContainerRef.current, { position: "relative", top: "auto", left: "auto", width: "100%", height: "100svh", zIndex: 1 });
+        gsap.set(photoContainerRef.current, { position: "relative", top: "auto", left: "auto", width: "100%", height: "100vh", zIndex: 1 }); // vh
         
-        // Memaksa About Wrapper membentang 2x layar ke samping (Horizontal Ready)
         gsap.set(aboutWrapperRef.current, {
-          position: "relative", top: "auto", left: "auto", width: "200vw", height: "100svh",
+          position: "relative", top: "auto", left: "auto", width: "200vw", height: "100vh", // vh
           display: "flex", flexDirection: "row", zIndex: 10
         });
 
-        // Panel 01 dan 02 diset sebelahan di dalam wrapper 200vw
-        gsap.set(panelsRef.current, { width: "100vw", height: "100svh", display: "flex", flexDirection: "column", flexShrink: 0 });
+        gsap.set(panelsRef.current, { width: "100vw", height: "100vh", display: "flex", flexDirection: "column", flexShrink: 0 }); // vh
         if (panelsRef.current[0] && panelsRef.current[1]) {
           const children = [...panelsRef.current[0].children, ...panelsRef.current[1].children];
-          gsap.set(children, { height: "50svh", width: "100%", flex: "none" });
+          gsap.set(children, { height: "50%", width: "100%", flex: "none" }); // 50%
         }
 
-        // 2. ANIMASI MORPH PRELOADER (1.5 DETIK)
         const initTl = gsap.timeline({ delay: 1.5 });
         
-        // Background Putih -> Hitam Transparan (50%)
         initTl.to(overlayRef.current, { backgroundColor: "rgba(0, 0, 0, 0.5)", duration: 1.2, ease: "power2.inOut" }, 0);
-        
-        // Teks Hitam -> Teks Putih
         initTl.to([nameLeftRef.current, nameRightRef.current], { color: "rgb(255, 255, 255)", duration: 1.2, ease: "power2.inOut" }, 0);
         initTl.to([indexRef.current, taglineRef.current, scrollHintRef.current], { color: "rgba(255, 255, 255, 0.8)", duration: 1.2, ease: "power2.inOut" }, 0);
         if (mobileNoticeRef.current) {
           initTl.to(mobileNoticeRef.current, { color: "rgba(255, 255, 255, 0.6)", duration: 1.2, ease: "power2.inOut" }, 0);
         }
 
-        // Cinematic reveal foto
         if (imgRef.current) {
           initTl.fromTo(imgRef.current, { scale: 1.15 }, { scale: 1, duration: 2, ease: "power2.out" }, 0);
         }
 
-        // 3. PARALLAX NATIVE SCROLL PADA HERO (LCP)
         gsap.to(imgRef.current, {
           yPercent: 15,
           ease: "none",
@@ -188,27 +180,18 @@ export default function HeroSection() {
           }
         });
 
-        // 4. EFEK "AKSEN KHUSUS": PANEL 02 MELUNCUR DARI KANAN
-        // Scroll vertical akan normal sampai Panel 01 mentok di atas layar.
-        // Saat mentok, layar ditahan, dan user scroll untuk menarik Panel 02 masuk.
         gsap.to(aboutWrapperRef.current, {
-          x: () => -window.innerWidth, // Menggeser kontainer ke kiri sejauh 1 layar
+          x: () => -window.innerWidth,
           ease: "none",
           scrollTrigger: {
             id: "mobile-horizontal",
             trigger: aboutWrapperRef.current,
             start: "top top",
             end: () => `+=${window.innerWidth}`,
-            pin: true,                        // Mengunci layar
-            scrub: true,                      // Terikat pada scroll pengguna
+            pin: true,
+            scrub: true,
             invalidateOnRefresh: true,
-            snap: {
-              snapTo: 1, // Snap to start (0) or end (1) of the animation
-              directional: true,
-              duration: { min: 0.2, max: 0.5 },
-              delay: 0.1,
-              ease: "power1.inOut"
-            }
+            // DI SINI SNAP SUDAH DIHAPUS SEPENUHNYA AGAR TIDAK MELOMPAT BRUTAL
           }
         });
       });
@@ -219,9 +202,8 @@ export default function HeroSection() {
   );
 
   return (
-    <section ref={sectionRef} className="hero" id="home" aria-label="Hero section">
+    <section ref={sectionRef} className="hero bg-[#0a0a0a]" id="home" aria-label="Hero section">
       
-      {/* Layer 1: Overlay (Morph Target) */}
       <div 
         className="hero__overlay-wrapper max-lg:absolute max-lg:inset-0 max-lg:z-50 max-lg:flex max-lg:flex-col max-lg:justify-center" 
         ref={overlayRef} 
@@ -258,7 +240,6 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* Layer 2: The photo itself */}
       <div className="hero__bg-photo" ref={photoContainerRef}>
         <Image
           ref={imgRef}
@@ -275,19 +256,20 @@ export default function HeroSection() {
         <div className="hero__photo-vignette" aria-hidden="true" />
       </div>
 
-      {/* Layer 3: About Section Panels */}
       <div
-        className="about-wrapper z-30"
+        className="about-wrapper z-30 bg-[#0a0a0a]"
         ref={aboutWrapperRef}
         id="about"
       >
-        {/* Panel 1: THE MINDSET */}
+        {/* Panel 1 */}
+        {/* PERBAIKAN: h-[100svh] diganti ke h-[100vh] */}
         <div
-          className="w-[100vw] h-[100svh] lg:min-h-screen lg:h-[100vh] flex flex-col lg:flex-row max-lg:flex-shrink-0 bg-[#0a0a0a]"
+          className="w-[100vw] h-[100vh] lg:min-h-screen lg:h-[100vh] flex flex-col lg:flex-row max-lg:flex-shrink-0 bg-[#0a0a0a]"
           ref={(el) => { panelsRef.current[0] = el; }}
         >
+          {/* PERBAIKAN: h-[50svh] diganti ke h-[50%] */}
           <div
-            className="w-full h-[50svh] lg:h-full lg:w-1/2 flex-1 flex flex-col justify-center bg-[var(--chalk)] relative z-10 px-6 py-6 lg:p-24"
+            className="w-full h-[50%] lg:h-full lg:w-1/2 flex-1 flex flex-col justify-center bg-[var(--chalk)] relative z-10 px-6 py-6 lg:p-24"
             style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(3rem, 8vh, 6rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}
           >
             <div className="w-full">
@@ -302,7 +284,8 @@ export default function HeroSection() {
               </p>
             </div>
           </div>
-          <div className="w-full h-[50svh] lg:h-full lg:w-1/2 relative bg-[var(--chalk)]">
+          {/* PERBAIKAN: h-[50svh] diganti ke h-[50%] */}
+          <div className="w-full h-[50%] lg:h-full lg:w-1/2 relative bg-[var(--chalk)]">
             <Image
               alt="Natanael Alexander Casual"
               className="object-cover object-center"
@@ -313,12 +296,14 @@ export default function HeroSection() {
           </div>
         </div>
 
-        {/* Panel 2: THE FOUNDATION */}
+        {/* Panel 2 */}
+        {/* PERBAIKAN: h-[100svh] diganti ke h-[100vh] */}
         <div
-          className="w-[100vw] h-[100svh] lg:min-h-screen lg:h-[100vh] flex flex-col-reverse lg:flex-row-reverse max-lg:flex-shrink-0 bg-[#0a0a0a]"
+          className="w-[100vw] h-[100vh] lg:min-h-screen lg:h-[100vh] flex flex-col-reverse lg:flex-row-reverse max-lg:flex-shrink-0 bg-[#0a0a0a]"
           ref={(el) => { panelsRef.current[1] = el; }}
         >
-          <div className="w-full h-[50svh] lg:h-full lg:w-1/2 relative bg-[var(--chalk)]">
+          {/* PERBAIKAN: h-[50svh] diganti ke h-[50%] */}
+          <div className="w-full h-[50%] lg:h-full lg:w-1/2 relative bg-[var(--chalk)]">
             <Image
               alt="Natanael Alexander Formal"
               className="object-cover object-center"
@@ -327,8 +312,9 @@ export default function HeroSection() {
               src="/images/formal.webp"
             />
           </div>
+          {/* PERBAIKAN: h-[50svh] diganti ke h-[50%] */}
           <div
-            className="w-full h-[50svh] lg:h-full lg:w-1/2 lg:flex-1 flex flex-col justify-center bg-[var(--chalk)] relative z-10 px-6 py-6 lg:p-24"
+            className="w-full h-[50%] lg:h-full lg:w-1/2 lg:flex-1 flex flex-col justify-center bg-[var(--chalk)] relative z-10 px-6 py-6 lg:p-24"
             style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(2rem, 10vh, 8rem)", paddingBottom: "clamp(2rem, 10vh, 8rem)" }}
           >
             <div className="w-full">

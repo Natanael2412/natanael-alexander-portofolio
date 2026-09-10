@@ -33,6 +33,7 @@ export default function AboutVertical({
       const inner = panel.querySelector('.panel-inner');
       if (!inner) return;
       
+      // SNAP DIHAPUS SEPENUHNYA AGAR SCROLL SANGAT SMOOTH DAN NATURAL (TIDAK BRUTAL)
       ScrollTrigger.create({
         trigger: panel,
         start: "top top",
@@ -41,13 +42,6 @@ export default function AboutVertical({
         pin: true,
         pinSpacing: false,
         scrub: true,
-        snap: {
-          snapTo: 1, // Snap to start or end of the trigger
-          directional: true,
-          duration: { min: 0.2, max: 0.5 },
-          delay: 0.1,
-          ease: "power1.inOut"
-        },
         animation: gsap.to(inner, { 
           scale: 0.85, 
           opacity: 0.7, 
@@ -84,29 +78,29 @@ export default function AboutVertical({
       });
     });
 
-
   }, { scope: containerRef });
 
   return (
     <div ref={containerRef} className="bg-white text-black relative z-20 w-full">
       
       {/* Panel 3: THE PHILOSOPHY */}
-      <section className="sticky top-0 w-full h-[100svh] overflow-hidden panel-section bg-gray-100">
+      {/* PERBAIKAN: svh -> vh */}
+      <section className="sticky top-0 w-full h-[100vh] overflow-hidden panel-section bg-gray-100">
         <div className="absolute inset-0 z-0">
           <Image src="/images/logo-weatso.webp" alt="Background" fill className="object-cover opacity-40 blur-2xl scale-110 pointer-events-none" priority />
         </div>
         <div className="panel-inner w-full h-full flex flex-col lg:flex-row border-b border-gray-100 bg-white relative z-10" ref={(el) => { panelsRef.current[0] = el; }}>
         
-        {/* Left: Visual */}
-        <div className="w-full lg:w-1/2 h-[50svh] lg:h-full relative bg-white flex items-center justify-center overflow-hidden">
+        {/* Left: Visual - PERBAIKAN: h-[50%] untuk presisi Mobile */}
+        <div className="w-full h-[50%] lg:w-1/2 lg:h-full relative bg-white flex items-center justify-center overflow-hidden">
           <LogoShader 
             className="absolute inset-0 z-10" 
             imageUrl="/images/logo-weatso.webp" 
           />
         </div>
 
-        {/* Right: Text */}
-        <div className="w-full lg:w-1/2 flex flex-col justify-center bg-[var(--chalk)] relative z-10" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(3rem, 8vh, 6rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}>
+        {/* Right: Text - PERBAIKAN: h-[50%] untuk presisi Mobile */}
+        <div className="w-full h-[50%] lg:w-1/2 lg:h-full flex flex-col justify-center bg-[var(--chalk)] relative z-10" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(3rem, 8vh, 6rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}>
           <div className="w-full">
             <span className="about__label">03 / THE PHILOSOPHY</span>
             <h2 className="about__title !text-[clamp(1.5rem,4vw,5rem)]" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', hyphens: 'auto' }}>CREATIVE DIGITAL ARCHITECT.</h2>
@@ -120,14 +114,14 @@ export default function AboutVertical({
       </section>
 
       {/* Panel 4: PRODUCTION LEADERSHIP + Team Photo */}
-      <section className="sticky top-0 w-full h-[100svh] overflow-hidden panel-section bg-gray-100">
+      <section className="sticky top-0 w-full h-[100vh] overflow-hidden panel-section bg-gray-100">
         <div className="absolute inset-0 z-0">
           <Image src="/images/team.webp" alt="Background" fill className="object-cover opacity-40 blur-2xl scale-110 pointer-events-none" />
         </div>
         <div className="panel-inner w-full h-full flex flex-col-reverse lg:flex-row border-b border-gray-100 bg-white relative z-10" ref={(el) => { panelsRef.current[1] = el; }}>
         
         {/* Left: Text */}
-        <div className="w-full lg:w-1/2 flex flex-col justify-center bg-[var(--chalk)] relative z-10" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(3rem, 8vh, 6rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}>
+        <div className="w-full h-[50%] lg:w-1/2 lg:h-full flex flex-col justify-center bg-[var(--chalk)] relative z-10" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(3rem, 8vh, 6rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}>
           <div className="w-full">
             <span className="about__label">04 / PRODUCTION LEADERSHIP</span>
             <h2 className="about__title !text-[clamp(1.5rem,4vw,5rem)]" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', hyphens: 'auto' }}>WEATSO | Bespoke IT Consultancy &amp; Digital Presence.</h2>
@@ -139,7 +133,7 @@ export default function AboutVertical({
         </div>
 
         {/* Right: Photo */}
-        <div className="w-full lg:w-1/2 h-[50svh] lg:h-full relative bg-[var(--chalk)]">
+        <div className="w-full h-[50%] lg:w-1/2 lg:h-full relative bg-[var(--chalk)]">
           <Image 
             src="/images/team.webp" 
             alt="WEATSO Team" 
@@ -153,14 +147,14 @@ export default function AboutVertical({
       </section>
 
       {/* Panel 5: THE EXPERIENCE */}
-      <section className="sticky top-0 w-full h-[100svh] overflow-hidden panel-section bg-gray-100">
+      <section className="sticky top-0 w-full h-[100vh] overflow-hidden panel-section bg-gray-100">
         <div className="absolute inset-0 z-0">
           <Image src="/images/Experience.webp" alt="Background" fill className="object-cover opacity-40 blur-2xl scale-110 pointer-events-none" />
         </div>
         <div className="panel-inner w-full h-full flex flex-col lg:flex-row border-b border-gray-100 bg-white relative z-10" ref={(el) => { panelsRef.current[2] = el; }}>
         
         {/* Left: Photo */}
-        <div className="w-full lg:w-1/2 h-[50svh] lg:h-full relative bg-gray-100">
+        <div className="w-full h-[50%] lg:w-1/2 lg:h-full relative bg-gray-100">
           <Image 
             src="/images/Experience.webp" 
             alt="Experience" 
@@ -171,7 +165,7 @@ export default function AboutVertical({
         </div>
 
         {/* Right: Text & Stats */}
-        <div className="w-full lg:w-1/2 flex flex-col justify-center bg-[var(--chalk)] relative z-10" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(3rem, 8vh, 6rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}>
+        <div className="w-full h-[50%] lg:w-1/2 lg:h-full flex flex-col justify-center bg-[var(--chalk)] relative z-10" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(3rem, 8vh, 6rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}>
           <div className="w-full">
             <span className="about__label">05 / THE EXPERIENCE</span>
             <h2 className="about__title !text-[clamp(1.5rem,4vw,5rem)]" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', hyphens: 'auto' }}>EXPERIENCE IN NUMBERS.</h2>
@@ -182,7 +176,6 @@ export default function AboutVertical({
             {/* Stats Grid */}
             <div className="grid grid-cols-2 gap-8 md:gap-12">
               
-              {/* Stat 1 */}
               <div>
                 <div className="flex items-baseline gap-1 font-playfair font-black text-5xl md:text-7xl tracking-tighter">
                   <span className="stat-counter" data-target={yearsOfExperience}>0</span>
@@ -191,7 +184,6 @@ export default function AboutVertical({
                 <p className="font-montserrat text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mt-2 opacity-60">Years of Experience</p>
               </div>
 
-              {/* Stat 2 */}
               <div>
                 <div className="flex items-baseline gap-1 font-playfair font-black text-5xl md:text-7xl tracking-tighter">
                   <span className="stat-counter" data-target={projectsCount}>0</span>
@@ -200,7 +192,6 @@ export default function AboutVertical({
                 <p className="font-montserrat text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mt-2 opacity-60">Digital Projects</p>
               </div>
 
-              {/* Stat 3 */}
               <div>
                 <div className="flex items-baseline gap-1 font-playfair font-black text-5xl md:text-7xl tracking-tighter">
                   <span className="stat-counter" data-target="10">0</span>
@@ -209,7 +200,6 @@ export default function AboutVertical({
                 <p className="font-montserrat text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mt-2 opacity-60">Certifications</p>
               </div>
 
-              {/* Stat 4 */}
               <div>
                 <div className="flex items-baseline gap-1 font-playfair font-black text-5xl md:text-7xl tracking-tighter">
                   <span className="stat-counter" data-target={articlesCount}>0</span>
@@ -225,9 +215,9 @@ export default function AboutVertical({
       </section>
 
       {/* Panel 6: THE NEXT */}
-      <section className="sticky top-0 w-full h-[100svh] overflow-hidden panel-section bg-white">
+      <section className="sticky top-0 w-full h-[100vh] overflow-hidden panel-section bg-white">
         <div className="panel-inner w-full h-full flex flex-row border-b border-gray-100 bg-white relative z-10" ref={(el) => { panelsRef.current[3] = el; }}>
-        <div className="w-full flex flex-col justify-center items-center bg-[var(--chalk)] relative z-10 text-center" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(4rem, 10vh, 8rem)", paddingBottom: "clamp(4rem, 10vh, 8rem)" }}>
+        <div className="w-full h-full flex flex-col justify-center items-center bg-[var(--chalk)] relative z-10 text-center" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(4rem, 10vh, 8rem)", paddingBottom: "clamp(4rem, 10vh, 8rem)" }}>
           <div className="w-full max-w-2xl mx-auto">
             <span className="about__label mx-auto">06 / THE NEXT</span>
             <h2 className="about__title !text-[clamp(1.5rem,4vw,5rem)]" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', hyphens: 'auto' }}>WHAT NEXT?</h2>

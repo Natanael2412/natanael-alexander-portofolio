@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useEffect } from "react";
-import { usePathname } from "next/navigation";
 import gsap from "gsap";
 
 export default function PageTransition({
@@ -10,31 +9,27 @@ export default function PageTransition({
   children: React.ReactNode;
 }) {
   const curtainRef = useRef<HTMLDivElement>(null);
-  const pathname = usePathname();
 
-  // Entrance animation only on initial mount for SPA
   useEffect(() => {
     if (!curtainRef.current) return;
-
-    const ctx = gsap.context(() => {
+    
+    // Animasi curtain hanya berjalan di Desktop
+    const mm = gsap.matchMedia();
+    mm.add("(min-width: 1024px)", () => {
       gsap.fromTo(
         curtainRef.current,
         { scaleY: 1, transformOrigin: "top" },
-        {
-          scaleY: 0,
-          duration: 0.9,
-          ease: "expo.inOut",
-          delay: 0.1,
-        }
+        { scaleY: 0, duration: 0.9, ease: "expo.inOut", delay: 0.1 }
       );
     });
 
-    return () => ctx.revert();
+    return () => mm.revert();
   }, []);
 
   return (
     <>
-      <div ref={curtainRef} className="page-curtain" aria-hidden="true" />
+      {/* KUNCI: Class 'hidden lg:block' memastikan curtain tidak pernah ada di Mobile */}
+      <div ref={curtainRef} className="page-curtain hidden lg:block" aria-hidden="true" />
       <main>{children}</main>
     </>
   );

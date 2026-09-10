@@ -1,0 +1,5195 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+messages/
+  en.json
+  id.json
+public/
+  fonts/
+    PlayfairDisplay-Bold.ttf
+  images/
+    casual.webp
+    Experience.webp
+    formal.webp
+    Hero.webp
+    logo-weatso.webp
+    team.webp
+  file.svg
+  globe.svg
+  next.svg
+  vercel.svg
+  window.svg
+src/
+  app/
+    [locale]/
+      portfolio/
+        [slug]/
+          page.tsx
+          ProjectClient.tsx
+        page.tsx
+      error.tsx
+      icon.tsx
+      layout.tsx
+      not-found.tsx
+      opengraph-image.tsx
+      page.tsx
+      twitter-image.tsx
+    globals.css
+  components/
+    global/
+      CustomCursor.tsx
+      FooterShader.tsx
+      LanguageSwitcher.tsx
+      LenisProvider.tsx
+      LogoShader.tsx
+      NavigationPill.tsx
+      PageTransition.tsx
+    sections/
+      AboutVertical.tsx
+      ContactFooter.tsx
+      GameSelectionCarousel.tsx
+      HeroSection.tsx
+      InfiniteArchiveGrid.tsx
+      NarrativeShowcase.tsx
+      SelectedWork.tsx
+    three/
+      HeroCanvas.tsx
+  i18n/
+    request.ts
+    routing.ts
+  lib/
+    supabase.ts
+  middleware.ts
+.gitignore
+AGENTS.md
+CLAUDE.md
+eslint.config.mjs
+git_log.txt
+next.config.ts
+package.json
+postcss.config.mjs
+README.md
+tailwind.config.ts
+tsconfig.json
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="messages/en.json">
+{}
+</file>
+
+<file path="messages/id.json">
+{}
+</file>
+
+<file path="public/file.svg">
+<svg fill="none" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M14.5 13.5V5.41a1 1 0 0 0-.3-.7L9.8.29A1 1 0 0 0 9.08 0H1.5v13.5A2.5 2.5 0 0 0 4 16h8a2.5 2.5 0 0 0 2.5-2.5m-1.5 0v-7H8v-5H3v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1M9.5 5V2.12L12.38 5zM5.13 5h-.62v1.25h2.12V5zm-.62 3h7.12v1.25H4.5zm.62 3h-.62v1.25h7.12V11z" clip-rule="evenodd" fill="#666" fill-rule="evenodd"/></svg>
+</file>
+
+<file path="public/globe.svg">
+<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><g clip-path="url(#a)"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.27 14.1a6.5 6.5 0 0 0 3.67-3.45q-1.24.21-2.7.34-.31 1.83-.97 3.1M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.48-1.52a7 7 0 0 1-.96 0H7.5a4 4 0 0 1-.84-1.32q-.38-.89-.63-2.08a40 40 0 0 0 3.92 0q-.25 1.2-.63 2.08a4 4 0 0 1-.84 1.31zm2.94-4.76q1.66-.15 2.95-.43a7 7 0 0 0 0-2.58q-1.3-.27-2.95-.43a18 18 0 0 1 0 3.44m-1.27-3.54a17 17 0 0 1 0 3.64 39 39 0 0 1-4.3 0 17 17 0 0 1 0-3.64 39 39 0 0 1 4.3 0m1.1-1.17q1.45.13 2.69.34a6.5 6.5 0 0 0-3.67-3.44q.65 1.26.98 3.1M8.48 1.5l.01.02q.41.37.84 1.31.38.89.63 2.08a40 40 0 0 0-3.92 0q.25-1.2.63-2.08a4 4 0 0 1 .85-1.32 7 7 0 0 1 .96 0m-2.75.4a6.5 6.5 0 0 0-3.67 3.44 29 29 0 0 1 2.7-.34q.31-1.83.97-3.1M4.58 6.28q-1.66.16-2.95.43a7 7 0 0 0 0 2.58q1.3.27 2.95.43a18 18 0 0 1 0-3.44m.17 4.71q-1.45-.12-2.69-.34a6.5 6.5 0 0 0 3.67 3.44q-.65-1.27-.98-3.1" fill="#666"/></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h16v16H0z"/></clipPath></defs></svg>
+</file>
+
+<file path="public/next.svg">
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 394 80"><path fill="#000" d="M262 0h68.5v12.7h-27.2v66.6h-13.6V12.7H262V0ZM149 0v12.7H94v20.4h44.3v12.6H94v21h55v12.6H80.5V0h68.7zm34.3 0h-17.8l63.8 79.4h17.9l-32-39.7 32-39.6h-17.9l-23 28.6-23-28.6zm18.3 56.7-9-11-27.1 33.7h17.8l18.3-22.7z"/><path fill="#000" d="M81 79.3 17 0H0v79.3h13.6V17l50.2 62.3H81Zm252.6-.4c-1 0-1.8-.4-2.5-1s-1.1-1.6-1.1-2.6.3-1.8 1-2.5 1.6-1 2.6-1 1.8.3 2.5 1a3.4 3.4 0 0 1 .6 4.3 3.7 3.7 0 0 1-3 1.8zm23.2-33.5h6v23.3c0 2.1-.4 4-1.3 5.5a9.1 9.1 0 0 1-3.8 3.5c-1.6.8-3.5 1.3-5.7 1.3-2 0-3.7-.4-5.3-1s-2.8-1.8-3.7-3.2c-.9-1.3-1.4-3-1.4-5h6c.1.8.3 1.6.7 2.2s1 1.2 1.6 1.5c.7.4 1.5.5 2.4.5 1 0 1.8-.2 2.4-.6a4 4 0 0 0 1.6-1.8c.3-.8.5-1.8.5-3V45.5zm30.9 9.1a4.4 4.4 0 0 0-2-3.3 7.5 7.5 0 0 0-4.3-1.1c-1.3 0-2.4.2-3.3.5-.9.4-1.6 1-2 1.6a3.5 3.5 0 0 0-.3 4c.3.5.7.9 1.3 1.2l1.8 1 2 .5 3.2.8c1.3.3 2.5.7 3.7 1.2a13 13 0 0 1 3.2 1.8 8.1 8.1 0 0 1 3 6.5c0 2-.5 3.7-1.5 5.1a10 10 0 0 1-4.4 3.5c-1.8.8-4.1 1.2-6.8 1.2-2.6 0-4.9-.4-6.8-1.2-2-.8-3.4-2-4.5-3.5a10 10 0 0 1-1.7-5.6h6a5 5 0 0 0 3.5 4.6c1 .4 2.2.6 3.4.6 1.3 0 2.5-.2 3.5-.6 1-.4 1.8-1 2.4-1.7a4 4 0 0 0 .8-2.4c0-.9-.2-1.6-.7-2.2a11 11 0 0 0-2.1-1.4l-3.2-1-3.8-1c-2.8-.7-5-1.7-6.6-3.2a7.2 7.2 0 0 1-2.4-5.7 8 8 0 0 1 1.7-5 10 10 0 0 1 4.3-3.5c2-.8 4-1.2 6.4-1.2 2.3 0 4.4.4 6.2 1.2 1.8.8 3.2 2 4.3 3.4 1 1.4 1.5 3 1.5 5h-5.8z"/></svg>
+</file>
+
+<file path="public/vercel.svg">
+<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1155 1000"><path d="m577.3 0 577.4 1000H0z" fill="#fff"/></svg>
+</file>
+
+<file path="public/window.svg">
+<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" clip-rule="evenodd" d="M1.5 2.5h13v10a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1zM0 1h16v11.5a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 0 12.5zm3.75 4.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5M7 4.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0m1.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5" fill="#666"/></svg>
+</file>
+
+<file path="src/app/[locale]/portfolio/[slug]/page.tsx">
+import { notFound } from "next/navigation";
+import { supabase, Project } from "@/lib/supabase";
+import ProjectClient from "./ProjectClient";
+
+export const revalidate = 1800; // Cache for 30 minutes
+
+export async function generateStaticParams() {
+  const { data: projects } = await supabase
+    .from("projects")
+    .select("slug")
+    .eq("is_personal_published", true);
+
+  if (!projects) return [];
+
+  return projects.map((project) => ({
+    slug: project.slug,
+  }));
+}
+
+export default async function ProjectPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const { data: project } = await supabase
+    .from("projects")
+    .select("*")
+    .eq("slug", slug)
+    .eq("is_personal_published", true)
+    .single();
+
+  if (!project) {
+    notFound();
+  }
+
+  return <ProjectClient project={project as Project} />;
+}
+</file>
+
+<file path="src/app/[locale]/portfolio/[slug]/ProjectClient.tsx">
+"use client";
+
+import Image from "next/image";
+import { ArrowRight } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Project } from "@/lib/supabase";
+import { useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+
+// ─── Layout constants ────────────────────────────────────────────────────────
+// Everything lines up to this one value. Change here, changes everywhere.
+const PAD_LEFT = "clamp(1.5rem, 5vw, 6rem)";
+
+export default function ProjectClient({ project }: { project: Project }) {
+  const router = useRouter();
+  const gallery = project.gallery_urls || [];
+
+  const containerRef = useRef<HTMLDivElement>(null);
+  const row1Ref = useRef<HTMLDivElement>(null);
+  const row2Ref = useRef<HTMLDivElement>(null);
+
+  // Duplicate until we have enough images to fill the marquee
+  let baseGallery = [...gallery];
+  while (baseGallery.length > 0 && baseGallery.length < 8) {
+    baseGallery = [...baseGallery, ...gallery];
+  }
+  const reversedGallery = [...baseGallery].reverse();
+
+  // ── GSAP Marquee ──────────────────────────────────────────────────────────
+  useGSAP(() => {
+    if (!row1Ref.current || !row2Ref.current) return;
+
+    const setupMarquee = (rowRef: React.RefObject<HTMLDivElement | null>, speed: number) => {
+      const row = rowRef.current;
+      if (!row) return () => {};
+
+      const cards = gsap.utils.toArray(row.children) as HTMLElement[];
+      if (cards.length === 0) return () => {};
+
+      let currentX = 0;
+      const logicalCards = cards.map(card => {
+        const width = card.getBoundingClientRect().width;
+        const obj = { el: card, x: currentX, width };
+        currentX += width;
+        return obj;
+      });
+
+      const totalWidth = currentX;
+
+      // Pre-wrap for right-moving row so the left isn't empty on load
+      if (speed > 0) {
+        logicalCards.forEach(card => {
+          if (card.x > row.offsetWidth) card.x -= totalWidth;
+        });
+      }
+
+      // Set initial absolute positions
+      logicalCards.forEach(card => {
+        gsap.set(card.el, { position: "absolute", top: 0, left: 0, x: card.x });
+      });
+
+      const ticker = () => {
+        for (const card of logicalCards) {
+          card.x += speed;
+          if (speed < 0 && card.x <= -card.width) card.x += totalWidth;
+          else if (speed > 0 && card.x >= totalWidth - card.width) card.x -= totalWidth;
+          gsap.set(card.el, { x: card.x });
+        }
+      };
+
+      gsap.ticker.add(ticker);
+      return () => gsap.ticker.remove(ticker);
+    };
+
+    const cleanup1 = setupMarquee(row1Ref, -1.0);
+    const cleanup2 = setupMarquee(row2Ref, 1.0);
+    return () => { cleanup1(); cleanup2(); };
+  }, { dependencies: [gallery], scope: containerRef });
+
+  // ── Render ────────────────────────────────────────────────────────────────
+  return (
+    <div
+      style={{
+        position: "relative",
+        width: "100%",
+        minHeight: "100vh",
+        backgroundColor: "var(--ink)",
+        color: "white",
+        fontFamily: "var(--font-montserrat, sans-serif)",
+        overflow: "hidden",
+      }}
+    >
+      {/* ── Background ──────────────────────────────────────────────────── */}
+      <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
+        {project.hero_image_url ? (
+          project.hero_image_url.endsWith(".mp4") || project.hero_image_url.endsWith(".webm") ? (
+            <video
+              src={project.hero_image_url}
+              autoPlay loop muted playsInline
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            />
+          ) : (
+            <Image
+              src={project.hero_image_url}
+              alt={project.title}
+              fill
+              style={{ objectFit: "cover" }}
+              priority
+            />
+          )
+        ) : (
+          <div style={{ width: "100%", height: "100%", background: "#111", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <span style={{ color: "rgba(255,255,255,0.05)", fontFamily: "var(--font-playfair)", fontWeight: 900, fontSize: "30vw", textTransform: "uppercase", letterSpacing: "-0.05em" }}>
+              {project.title.split(" ").map((n: string) => n[0]).join("").substring(0, 2)}
+            </span>
+          </div>
+        )}
+        {/* Dark gradient: solid on left, transparent on right */}
+        <div style={{
+          position: "absolute", inset: 0,
+          background: "linear-gradient(to right, var(--ink) 0%, rgba(7,7,10,0.85) 45%, rgba(7,7,10,0.15) 100%)",
+          pointerEvents: "none",
+        }} />
+      </div>
+
+      {/* ── PAGE LAYOUT ───────────────────────────────────────────────────── */}
+      {/*
+          CSS Grid: 2 columns on desktop (lg+), 1 column on mobile.
+          Col 1 (42%): Back button row + content row
+          Col 2 (58%): Marquee (spans both rows)
+      */}
+      <div
+        ref={containerRef}
+        className="project-layout"
+        style={{
+          position: "relative",
+          zIndex: 10,
+          display: "grid",
+          gridTemplateColumns: "42% 1fr",
+          gridTemplateRows: "auto 1fr",
+          minHeight: "100vh",
+        }}
+      >
+        {/* ── [1,1] BACK button ─────────────────────────────────────────── */}
+        <div style={{
+          gridColumn: "1",
+          gridRow: "1",
+          paddingLeft: PAD_LEFT,
+          paddingTop: "clamp(1.25rem, 3vh, 2.5rem)",
+          paddingBottom: "1.5rem",
+        }}>
+          <button
+            onClick={() => router.push("/portfolio")}
+            style={{
+              display: "inline-flex", alignItems: "center", gap: "0.625rem",
+              background: "none", border: "none",
+              color: "rgba(255,255,255,0.55)",
+              fontFamily: "inherit", fontSize: "0.7rem",
+              letterSpacing: "0.3em", fontWeight: 600,
+              textTransform: "uppercase", cursor: "pointer",
+              transition: "color 0.2s", padding: 0,
+            }}
+            onMouseEnter={e => (e.currentTarget.style.color = "white")}
+            onMouseLeave={e => (e.currentTarget.style.color = "rgba(255,255,255,0.55)")}
+          >
+            <span style={{ fontSize: "1rem", lineHeight: 1 }}>←</span>BACK
+          </button>
+        </div>
+
+        {/* ── [1,2] LEFT CONTENT ────────────────────────────────────────── */}
+        <div style={{
+          gridColumn: "1",
+          gridRow: "2",
+          paddingLeft: PAD_LEFT,
+          paddingRight: "clamp(1rem, 3vw, 4rem)",
+          paddingBottom: "clamp(2rem, 5vh, 4rem)",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+        }}>
+          {/* Year Badge */}
+          <div style={{
+            display: "inline-block", padding: "0.375rem 1rem",
+            border: "1px solid rgba(255,255,255,0.2)", borderRadius: "9999px",
+            fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.2em",
+            color: "rgba(255,255,255,0.75)", marginBottom: "1.5rem",
+            background: "rgba(0,0,0,0.2)", backdropFilter: "blur(8px)",
+            width: "fit-content",
+          }}>
+            {project.year || "2024"}
+          </div>
+
+          {/* Title */}
+          <h1 style={{
+            fontFamily: "var(--font-playfair)", fontWeight: 900,
+            fontSize: "clamp(2.25rem, 3.5vw, 5rem)",
+            lineHeight: 0.92, letterSpacing: "-0.03em",
+            textTransform: "uppercase", marginBottom: "1.5rem",
+            wordBreak: "break-word", overflowWrap: "break-word",
+          }}>
+            {project.title}
+          </h1>
+
+          {/* Description */}
+          <p style={{
+            fontSize: "clamp(0.8rem, 1vw, 0.95rem)", lineHeight: 1.7,
+            color: "rgba(255,255,255,0.75)", marginBottom: "2rem",
+            fontWeight: 400, maxWidth: "42ch",
+          }}>
+            {project.description}
+          </p>
+
+          {/* Stats */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem 2rem", marginBottom: "2rem" }}>
+            <div>
+              <p style={{ fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: "0.2em", color: "rgba(255,255,255,0.4)", marginBottom: "0.35rem", fontWeight: 700 }}>Client</p>
+              <p style={{ fontWeight: 500, fontSize: "0.875rem" }}>{project.client || "Confidential"}</p>
+            </div>
+            <div>
+              <p style={{ fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: "0.2em", color: "rgba(255,255,255,0.4)", marginBottom: "0.35rem", fontWeight: 700 }}>Role</p>
+              <p style={{ fontWeight: 500, fontSize: "0.875rem" }}>{project.role}</p>
+            </div>
+          </div>
+
+          {/* Tech Stack */}
+          {project.tech_stack && project.tech_stack.length > 0 && (
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", marginBottom: "2.5rem" }}>
+              {project.tech_stack.map((tech: string) => (
+                <span key={tech} style={{
+                  padding: "0.25rem 0.625rem",
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  borderRadius: "2px", fontSize: "0.65rem",
+                  letterSpacing: "0.15em", textTransform: "uppercase",
+                  color: "rgba(255,255,255,0.65)",
+                }}>
+                  {tech}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {/* Live Link */}
+          {project.live_url && (
+            <a
+              href={project.live_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "inline-flex", alignItems: "center", gap: "0.75rem",
+                background: "white", color: "black",
+                padding: "0.875rem 1.75rem",
+                fontSize: "0.7rem", letterSpacing: "0.2em",
+                fontWeight: 700, textTransform: "uppercase",
+                textDecoration: "none", width: "fit-content",
+                transition: "opacity 0.2s",
+              }}
+              onMouseEnter={e => (e.currentTarget.style.opacity = "0.85")}
+              onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
+            >
+              View Live Project <ArrowRight size={14} />
+            </a>
+          )}
+        </div>
+
+        {/* ── [2, span 2 rows] RIGHT: Marquee Gallery ──────────────────── */}
+        {gallery.length > 0 && (
+          <div style={{
+            gridColumn: "2",
+            gridRow: "1 / 3",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            gap: 0,
+            overflow: "hidden",
+            WebkitMaskImage: "linear-gradient(to right, transparent, black 12%, black 88%, transparent)",
+            maskImage: "linear-gradient(to right, transparent, black 12%, black 88%, transparent)",
+          }}>
+            {/* Row 1 – moves left */}
+            <div ref={row1Ref} style={{ position: "relative", width: "100%", height: "clamp(160px, 18vw, 280px)" }}>
+              {[...baseGallery, ...baseGallery].map((url: string, idx: number) => (
+                <div key={`r1-${idx}`} style={{ display: "inline-block" }}>
+                  <GalleryItem url={url} />
+                </div>
+              ))}
+            </div>
+
+            {/* Row 2 – moves right */}
+            <div ref={row2Ref} style={{ position: "relative", width: "100%", height: "clamp(160px, 18vw, 280px)" }}>
+              {[...reversedGallery, ...reversedGallery].map((url: string, idx: number) => (
+                <div key={`r2-${idx}`} style={{ display: "inline-block" }}>
+                  <GalleryItem url={url} />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* ── Mobile override ───────────────────────────────────────────────── */}
+      <style>{`
+        @media (max-width: 1023px) {
+          .project-layout {
+            grid-template-columns: 1fr !important;
+            grid-template-rows: auto auto auto !important;
+          }
+          .project-layout > *:nth-child(1) { grid-column: 1 !important; grid-row: 1 !important; }
+          .project-layout > *:nth-child(2) { grid-column: 1 !important; grid-row: 2 !important; }
+          .project-layout > *:nth-child(3) { grid-column: 1 !important; grid-row: 3 !important; height: 55vw !important; min-height: 280px; }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+function GalleryItem({ url }: { url: string }) {
+  return (
+    <div style={{
+      position: "relative",
+      width: "clamp(220px, 26vw, 400px)",
+      aspectRatio: "16/10",
+      flexShrink: 0,
+      overflow: "hidden",
+      background: "var(--ink)",
+    }}>
+      <Image
+        src={url}
+        alt="Gallery background"
+        fill
+        style={{ objectFit: "cover", opacity: 0.25, filter: "blur(40px)", transform: "scale(1.1)" }}
+      />
+      <Image
+        src={url}
+        alt="Gallery item"
+        fill
+        style={{ objectFit: "contain", padding: "0.5rem" }}
+        sizes="(max-width: 1024px) 50vw, 26vw"
+      />
+    </div>
+  );
+}
+</file>
+
+<file path="src/app/[locale]/portfolio/page.tsx">
+import { Metadata } from "next";
+import InfiniteArchiveGrid from "@/components/sections/InfiniteArchiveGrid";
+import { supabase, Project } from "@/lib/supabase";
+
+export const revalidate = 1800; // Cache for 30 minutes
+
+export const metadata: Metadata = {
+  title: "Archive — Natanael Alexander",
+  description: "Complete archive of selected works.",
+};
+
+export default async function WorkPage() {
+  const { data, error } = await supabase
+    .from('projects')
+    .select('slug, title, description, client, role, year, hero_image_url, tech_stack')
+    .eq('is_personal_published', true)
+    .order('sort_order', { ascending: true })
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error("Supabase Error:", error);
+  } else {
+    console.log("Fetched projects count:", data?.length);
+  }
+
+  const projects = (data || []) as Partial<Project>[] as Project[];
+
+  return (
+    <main className="bg-[#f5f5f5] min-h-screen">
+      <InfiniteArchiveGrid projects={projects} />
+    </main>
+  );
+}
+</file>
+
+<file path="src/app/[locale]/error.tsx">
+"use client";
+
+export default function Error({ reset }: { reset: () => void }) {
+  return (
+    <div className="w-screen h-screen flex flex-col items-center justify-center bg-[#0a0a0a] text-white font-montserrat z-[99999] relative">
+      <h1 className="font-playfair text-6xl font-black mb-4">ERROR</h1>
+      <p className="tracking-[0.2em] text-xs uppercase mb-8 opacity-60">Something went wrong.</p>
+      <button
+        onClick={() => reset()}
+        className="px-8 py-3 border border-white/20 hover:bg-white hover:text-black transition-colors text-xs tracking-widest uppercase"
+      >
+        Try Again
+      </button>
+    </div>
+  );
+}
+</file>
+
+<file path="src/app/[locale]/icon.tsx">
+import { ImageResponse } from 'next/og';
+
+export const runtime = 'edge';
+
+export const size = {
+  width: 32,
+  height: 32,
+};
+
+export const contentType = 'image/png';
+
+export default function Icon() {
+  return new ImageResponse(
+    (
+      <div
+        style={{
+          background: '#0A0A0A',
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#FFFFFF',
+          fontSize: 18,
+          fontWeight: 700,
+        }}
+      >
+        NA
+      </div>
+    ),
+    {
+      ...size,
+    }
+  );
+}
+</file>
+
+<file path="src/app/[locale]/layout.tsx">
+import type { Metadata } from "next";
+import { Playfair_Display, Montserrat } from "next/font/google";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages } from "next-intl/server";
+import { routing } from "@/i18n/routing";
+import { notFound } from "next/navigation";
+import "../globals.css";
+import NavigationPill from "@/components/global/NavigationPill";
+import PageTransition from "@/components/global/PageTransition";
+import CustomCursor from "@/components/global/CustomCursor";
+import LenisProvider from "@/components/global/LenisProvider";
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800", "900"],
+});
+
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  variable: "--font-montserrat",
+  display: "swap",
+  weight: ["300", "400", "500", "600", "700"],
+});
+
+export const metadata: Metadata = {
+  metadataBase: new URL("https://natanael.anugerahventures.com/"),
+  title: "Natanael Alexander — Creative Digital Architect",
+  description:
+    "Portfolio of Natanael Alexander — Creative Digital Architect.",
+  keywords: ["portfolio", "creative developer", "ui/ux", "web design", "natanael alexander"],
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "Natanael Alexander",
+    description: "Creative Digital Architect",
+    type: "website",
+    url: "/",
+  },
+};
+
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
+export default async function RootLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+
+  // Validate locale
+  if (!routing.locales.includes(locale as any)) {
+    notFound();
+  }
+
+  const messages = await getMessages();
+
+  return (
+    <html lang={locale} className={`${playfair.variable} ${montserrat.variable}`}>
+      <body className="overflow-x-hidden w-full">
+        <NextIntlClientProvider messages={messages}>
+          <LenisProvider>
+            <div className="noise-overlay" aria-hidden="true" />
+            <CustomCursor />
+            <NavigationPill />
+            <PageTransition>
+              {children}
+            </PageTransition>
+          </LenisProvider>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                "@type": "ProfilePage",
+                "mainEntity": {
+                  "@type": "Person",
+                  "name": "Natanael Alexander",
+                  "jobTitle": ["Creative Digital Architect", "Production Lead", "Technical Engineer"],
+                  "url": "https://natanael.anugerahventures.com",
+                }
+              }),
+            }}
+          />
+        </NextIntlClientProvider>
+      </body>
+    </html>
+  );
+}
+</file>
+
+<file path="src/app/[locale]/not-found.tsx">
+import Link from 'next/link';
+
+export default function NotFound() {
+  return (
+    <div className="w-screen h-screen flex flex-col items-center justify-center bg-[#0a0a0a] text-white font-montserrat z-[99999] relative">
+      <h1 className="font-playfair text-8xl md:text-[150px] font-black mb-4">404</h1>
+      <p className="tracking-[0.2em] text-xs md:text-sm uppercase mb-8 opacity-60 text-center px-4">
+        Page not found or still in development.
+      </p>
+      <Link
+        href="/"
+        className="px-8 py-3 border border-white/20 hover:bg-white hover:text-black transition-colors text-xs tracking-widest uppercase"
+      >
+        Return Home
+      </Link>
+    </div>
+  );
+}
+</file>
+
+<file path="src/app/[locale]/opengraph-image.tsx">
+import { ImageResponse } from 'next/og';
+
+export const runtime = 'edge';
+
+export const alt = 'Natanael Alexander — Creative Digital Architect';
+export const size = { width: 1200, height: 630 };
+export const contentType = 'image/png';
+
+export default function Image() {
+  return new ImageResponse(
+    (
+      <div
+        style={{
+          background: '#0A0A0A',
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#FFFFFF',
+        }}
+      >
+        <div style={{ display: 'flex', fontSize: 180, fontWeight: 700, letterSpacing: '-0.04em', marginBottom: '20px' }}>
+          NA
+        </div>
+        <div style={{ display: 'flex', fontSize: 35, fontWeight: 400, color: '#A0A0A0', letterSpacing: '0.2em' }}>
+          CREATIVE DIGITAL ARCHITECT
+        </div>
+      </div>
+    ),
+    {
+      ...size,
+    }
+  );
+}
+</file>
+
+<file path="src/app/[locale]/page.tsx">
+import HeroSection from "@/components/sections/HeroSection";
+import AboutVertical from "@/components/sections/AboutVertical";
+import SelectedWork from "@/components/sections/SelectedWork";
+import ContactFooter from "@/components/sections/ContactFooter";
+import { supabase, Project } from "@/lib/supabase";
+
+export const revalidate = 1800; // Cache for 30 minutes
+
+export default async function Home() {
+  const { data, error } = await supabase
+    .from('projects')
+    .select('slug, title, description, client, role, year, hero_image_url, tech_stack')
+    .eq('is_personal_published', true)
+    .eq('is_personal_featured', true)
+    .order('sort_order', { ascending: true })
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error("Supabase Error (Home):", error.message || error, JSON.stringify(error, Object.getOwnPropertyNames(error)));
+  }
+
+  // Fetch counts for stats section
+  const { count: projectsCount } = await supabase
+    .from('projects')
+    .select('*', { count: 'exact', head: true });
+    
+  const { count: articlesCount } = await supabase
+    .from('articles')
+    .select('*', { count: 'exact', head: true });
+
+  const projects = (data || []) as Partial<Project>[] as Project[];
+
+  return (
+    <>
+      <HeroSection />
+      <AboutVertical projectsCount={projectsCount || 0} articlesCount={articlesCount || 0} />
+      <SelectedWork projects={projects} />
+      
+      {/* Credentials Marquee Section (Placeholder) */}
+      <section className="w-full py-24 bg-black text-white flex flex-col justify-center border-t border-white/20 relative z-20 overflow-hidden">
+        {/* Watermark Overlay */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-30">
+          <span className="font-playfair text-6xl md:text-[120px] font-black uppercase tracking-tighter whitespace-nowrap -rotate-12 opacity-20 text-white select-none">
+            IN DEVELOPMENT
+          </span>
+        </div>
+
+        <div className="w-full text-center opacity-40 relative z-10 filter blur-[2px] transition-all duration-500 hover:blur-none space-y-16">
+          <div className="px-6">
+            <h2 className="font-playfair text-3xl md:text-5xl font-black mb-4 uppercase tracking-tighter">CREDENTIALS</h2>
+            <p className="font-montserrat text-sm tracking-[0.2em] leading-relaxed max-w-2xl mx-auto text-white/60">
+              PROFESSIONAL ACCREDITATIONS
+            </p>
+          </div>
+
+          {/* Marquee Track */}
+          <div className="w-full overflow-hidden flex select-none">
+            <div className="animate-marquee flex gap-8 whitespace-nowrap items-center px-4">
+              {[...Array(2)].map((_, i) => (
+                <div key={i} className="flex gap-8 items-center">
+                  
+                  {/* Certificate Card 1 */}
+                  <div className="relative w-[360px] h-[260px] bg-white/5 border border-white/20 p-8 flex flex-col items-center justify-center hover:bg-white/10 transition-colors cursor-default text-center group">
+                    <div className="absolute inset-2 border border-white/10 pointer-events-none"></div>
+                    <span className="text-[10px] font-montserrat tracking-[0.3em] text-white/40 mb-4 uppercase">2026</span>
+                    <h3 className="font-playfair text-xl font-bold mb-3 whitespace-normal leading-tight group-hover:scale-105 transition-transform duration-500">GOOGLE CLOUD ARCHITECT</h3>
+                    <div className="w-8 h-[1px] bg-white/30 mb-3"></div>
+                    <p className="text-[10px] font-montserrat opacity-60 tracking-[0.2em] uppercase">Professional Certification</p>
+                  </div>
+                  
+                  {/* Certificate Card 2 */}
+                  <div className="relative w-[360px] h-[260px] bg-white/5 border border-white/20 p-8 flex flex-col items-center justify-center hover:bg-white/10 transition-colors cursor-default text-center group">
+                    <div className="absolute inset-2 border border-white/10 pointer-events-none"></div>
+                    <span className="text-[10px] font-montserrat tracking-[0.3em] text-white/40 mb-4 uppercase">2025</span>
+                    <h3 className="font-playfair text-xl font-bold mb-3 whitespace-normal leading-tight group-hover:scale-105 transition-transform duration-500">AWS SOLUTIONS EXPERT</h3>
+                    <div className="w-8 h-[1px] bg-white/30 mb-3"></div>
+                    <p className="text-[10px] font-montserrat opacity-60 tracking-[0.2em] uppercase">Amazon Web Services</p>
+                  </div>
+                  
+                  {/* Certificate Card 3 */}
+                  <div className="relative w-[360px] h-[260px] bg-white/5 border border-white/20 p-8 flex flex-col items-center justify-center hover:bg-white/10 transition-colors cursor-default text-center group">
+                    <div className="absolute inset-2 border border-white/10 pointer-events-none"></div>
+                    <span className="text-[10px] font-montserrat tracking-[0.3em] text-white/40 mb-4 uppercase">2024</span>
+                    <h3 className="font-playfair text-xl font-bold mb-3 whitespace-normal leading-tight group-hover:scale-105 transition-transform duration-500">CISA CERTIFIED</h3>
+                    <div className="w-8 h-[1px] bg-white/30 mb-3"></div>
+                    <p className="text-[10px] font-montserrat opacity-60 tracking-[0.2em] uppercase">ISACA Global</p>
+                  </div>
+
+                  {/* Certificate Card 4 */}
+                  <div className="relative w-[360px] h-[260px] bg-white/5 border border-white/20 p-8 flex flex-col items-center justify-center hover:bg-white/10 transition-colors cursor-default text-center group">
+                    <div className="absolute inset-2 border border-white/10 pointer-events-none"></div>
+                    <span className="text-[10px] font-montserrat tracking-[0.3em] text-white/40 mb-4 uppercase">2023</span>
+                    <h3 className="font-playfair text-xl font-bold mb-3 whitespace-normal leading-tight group-hover:scale-105 transition-transform duration-500">SYSTEM ARCHITECTURE</h3>
+                    <div className="w-8 h-[1px] bg-white/30 mb-3"></div>
+                    <p className="text-[10px] font-montserrat opacity-60 tracking-[0.2em] uppercase">Tech Institute</p>
+                  </div>
+                  
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Insights / Articles Section (Placeholder) */}
+      <section className="w-full min-h-[70vh] py-24 flex flex-col justify-center items-center bg-[var(--chalk)] relative z-20 text-center px-6 overflow-hidden">
+        {/* Watermark Overlay */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-30">
+          <span className="font-playfair text-6xl md:text-[120px] font-black uppercase tracking-tighter whitespace-nowrap -rotate-12 opacity-[0.08] text-black select-none">
+            IN DEVELOPMENT
+          </span>
+        </div>
+
+        <div className="w-full max-w-2xl mx-auto opacity-40 relative z-10 filter blur-sm transition-all duration-500 hover:blur-none">
+          <span className="block font-montserrat text-xs font-bold tracking-[0.2em] uppercase mb-4">ARTICLES / INSIGHTS</span>
+          <h2 className="font-playfair text-3xl md:text-5xl font-black mb-4 uppercase tracking-tighter">COMING SOON</h2>
+          <p className="font-montserrat text-sm tracking-[0.2em] leading-relaxed">
+            Ruang di mana saya membagikan perspektif teknis, studi kasus arsitektur, dan pemikiran bisnis seputar rekayasa perangkat lunak.
+          </p>
+          
+          <div className="mt-12 w-full border border-gray-300 rounded-lg p-8 bg-[#f9f9f9] flex flex-col items-center shadow-inner">
+             <div className="w-12 h-12 rounded-full bg-gray-200 mb-6 animate-pulse"></div>
+             <div className="w-3/4 h-3 bg-gray-200 mb-3 animate-pulse rounded"></div>
+             <div className="w-1/2 h-3 bg-gray-200 mb-6 animate-pulse rounded"></div>
+             <div className="w-full h-32 bg-gray-200 animate-pulse rounded"></div>
+          </div>
+        </div>
+      </section>
+
+      <ContactFooter />
+    </>
+  );
+}
+</file>
+
+<file path="src/app/[locale]/twitter-image.tsx">
+import { ImageResponse } from 'next/og';
+
+export const runtime = 'edge';
+
+export const alt = 'Natanael Alexander — Creative Digital Architect';
+export const size = { width: 1200, height: 630 };
+export const contentType = 'image/png';
+
+export default function Image() {
+  return new ImageResponse(
+    (
+      <div
+        style={{
+          background: '#0A0A0A',
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#FFFFFF',
+        }}
+      >
+        <div style={{ display: 'flex', fontSize: 180, fontWeight: 700, letterSpacing: '-0.04em', marginBottom: '20px' }}>
+          NA
+        </div>
+        <div style={{ display: 'flex', fontSize: 35, fontWeight: 400, color: '#A0A0A0', letterSpacing: '0.2em' }}>
+          CREATIVE DIGITAL ARCHITECT
+        </div>
+      </div>
+    ),
+    {
+      ...size,
+    }
+  );
+}
+</file>
+
+<file path="src/components/global/CustomCursor.tsx">
+"use client";
+
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+
+export default function CustomCursor() {
+  const dotRef = useRef<HTMLDivElement>(null);
+  const ringRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const dot = dotRef.current;
+    const ring = ringRef.current;
+    if (!dot || !ring) return;
+
+    const xQuick = gsap.quickTo(dot, "x", { duration: 0.1, ease: "none" });
+    const yQuick = gsap.quickTo(dot, "y", { duration: 0.1, ease: "none" });
+    const xRing = gsap.quickTo(ring, "x", { duration: 0.5, ease: "power2.out" });
+    const yRing = gsap.quickTo(ring, "y", { duration: 0.5, ease: "power2.out" });
+
+    const onMove = (e: MouseEvent) => {
+      xQuick(e.clientX);
+      yQuick(e.clientY);
+      xRing(e.clientX);
+      yRing(e.clientY);
+    };
+
+    window.addEventListener("mousemove", onMove);
+    return () => window.removeEventListener("mousemove", onMove);
+  }, []);
+
+  return (
+    <>
+      <div ref={dotRef} className="cursor-dot" aria-hidden="true" />
+      <div ref={ringRef} className="cursor-ring" aria-hidden="true" />
+    </>
+  );
+}
+</file>
+
+<file path="src/components/global/FooterShader.tsx">
+"use client";
+
+import { useEffect, useRef } from "react";
+
+const VERTEX_SHADER = `
+attribute vec2 a_position;
+void main() {
+    gl_Position = vec4(a_position, 0.0, 1.0);
+}
+`;
+
+const FRAGMENT_SHADER = `
+#ifdef GL_ES
+precision mediump float;
+#endif
+
+uniform vec2 u_resolution;
+uniform vec2 u_mouse;
+uniform float u_time;
+
+float hash(vec2 p) {
+    return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
+}
+
+float noise(vec2 p) {
+    vec2 i = floor(p);
+    vec2 f = fract(p);
+    f = f * f * (3.0 - 2.0 * f);
+    return mix(mix(hash(i + vec2(0.0, 0.0)), hash(i + vec2(1.0, 0.0)), f.x),
+               mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), f.x), f.y);
+}
+
+float fbm(vec2 uv) {
+    float f = 0.0;
+    float amp = 0.5;
+    mat2 rot = mat2(cos(0.5), sin(0.5), -sin(0.5), cos(0.50));
+    for (int i = 0; i < 4; i++) {
+        f += amp * noise(uv);
+        uv = rot * uv * 2.0 + vec2(100.0);
+        amp *= 0.5;
+    }
+    return f;
+}
+
+void main() {
+    vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+    vec2 mouse = u_mouse.xy / u_resolution.xy;
+    mouse.y = 1.0 - mouse.y; 
+
+    vec2 aspect = vec2(u_resolution.x/u_resolution.y, 1.0);
+    float mouseDist = distance(uv * aspect, mouse * aspect);
+    
+    float cursorInfluence = smoothstep(0.4, 0.0, mouseDist);
+    vec2 distortedUV = uv + (uv - mouse) * cursorInfluence * 0.05;
+
+    // Warna dasar harus SAMA PERSIS dengan bg Tailwind container (#0a0a0a)
+    vec3 solidColor = vec3(0.04, 0.04, 0.04); 
+    vec3 fluidColor = vec3(0.6, 0.6, 0.6); 
+    
+    float t = u_time * 0.3; 
+
+    vec2 q = vec2(0.);
+    q.x = fbm(distortedUV + 0.00 * t);
+    q.y = fbm(distortedUV + vec2(1.0));
+    
+    vec2 r = vec2(0.);
+    r.x = fbm(distortedUV + 1.0 * q + vec2(1.7, 9.2) + 0.15 * t);
+    r.y = fbm(distortedUV + 1.0 * q + vec2(8.3, 2.8) + 0.126 * t);
+    
+    float f = fbm(distortedUV + r + cursorInfluence * 0.2);
+    f = smoothstep(0.1, 0.7, f);
+    
+    vec3 shaderPattern = mix(solidColor, fluidColor, f);
+
+    // PERBAIKAN MASKING: Transisi sangat halus dari 20% layar kiri hingga 60% layar. 
+    // Tidak akan ada lagi garis putus kasar.
+    float mask = smoothstep(0.6, 0.2, uv.x); 
+    vec3 finalColor = mix(shaderPattern, solidColor, mask);
+
+    float grain = hash(uv * 100.0 + u_time) * 0.015;
+    finalColor += grain;
+
+    gl_FragColor = vec4(finalColor, 1.0);
+}
+`;
+
+function createShader(gl: WebGLRenderingContext, type: number, source: string) {
+  const shader = gl.createShader(type);
+  if (!shader) return null;
+  gl.shaderSource(shader, source);
+  gl.compileShader(shader);
+  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+    console.error("Shader compile error:", gl.getShaderInfoLog(shader));
+    gl.deleteShader(shader);
+    return null;
+  }
+  return shader;
+}
+
+export default function FooterShader({ className }: { className?: string }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const mouseRef = useRef({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const gl = canvas.getContext("webgl");
+    if (!gl) {
+      console.error("WebGL not supported");
+      return;
+    }
+
+    const vertexShader = createShader(gl, gl.VERTEX_SHADER, VERTEX_SHADER);
+    const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, FRAGMENT_SHADER);
+
+    if (!vertexShader || !fragmentShader) return;
+
+    const program = gl.createProgram();
+    if (!program) return;
+    
+    gl.attachShader(program, vertexShader);
+    gl.attachShader(program, fragmentShader);
+    gl.linkProgram(program);
+
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+      console.error("Program link error:", gl.getProgramInfoLog(program));
+      return;
+    }
+
+    gl.useProgram(program);
+
+    // Create a full-screen quad
+    const positionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    const positions = new Float32Array([
+      -1.0, -1.0,
+       1.0, -1.0,
+      -1.0,  1.0,
+      -1.0,  1.0,
+       1.0, -1.0,
+       1.0,  1.0,
+    ]);
+    gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
+
+    const positionLocation = gl.getAttribLocation(program, "a_position");
+    gl.enableVertexAttribArray(positionLocation);
+    gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+    const resolutionLocation = gl.getUniformLocation(program, "u_resolution");
+    const mouseLocation = gl.getUniformLocation(program, "u_mouse");
+    const timeLocation = gl.getUniformLocation(program, "u_time");
+
+    let animationFrameId: number;
+    let isVisible = false;
+
+    const resize = () => {
+      // Use devicePixelRatio for sharper rendering on high DPI displays
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      gl.viewport(0, 0, canvas.width, canvas.height);
+    };
+
+    window.addEventListener("resize", resize);
+    resize();
+
+    const render = (time: number) => {
+      if (!isVisible) return; // Only render when visible
+
+      gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
+      gl.uniform2f(mouseLocation, mouseRef.current.x * (window.devicePixelRatio || 1), mouseRef.current.y * (window.devicePixelRatio || 1));
+      gl.uniform1f(timeLocation, time * 0.001);
+
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
+      animationFrameId = requestAnimationFrame(render);
+    };
+
+    // Intersection Observer to stop rendering when not visible
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          if (!isVisible) {
+            isVisible = true;
+            animationFrameId = requestAnimationFrame(render);
+          }
+        } else {
+          isVisible = false;
+          if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+          }
+        }
+      });
+    }, { threshold: 0 });
+
+    observer.observe(canvas);
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      // Calculate mouse position relative to canvas
+      mouseRef.current.x = e.clientX - rect.left;
+      mouseRef.current.y = e.clientY - rect.top;
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      window.removeEventListener("resize", resize);
+      window.removeEventListener("mousemove", handleMouseMove);
+      observer.disconnect();
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+      gl.deleteProgram(program);
+      gl.deleteShader(vertexShader);
+      gl.deleteShader(fragmentShader);
+      gl.deleteBuffer(positionBuffer);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className={`w-full h-full block ${className || ""}`}
+    />
+  );
+}
+</file>
+
+<file path="src/components/global/LanguageSwitcher.tsx">
+"use client";
+
+import { useLocale } from 'next-intl';
+import { usePathname, useRouter } from '@/i18n/routing';
+
+export default function LanguageSwitcher() {
+  const locale = useLocale();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const toggleLanguage = () => {
+    const nextLocale = locale === 'id' ? 'en' : 'id';
+    router.replace(pathname, { locale: nextLocale });
+  };
+
+  return (
+    <button 
+      onClick={toggleLanguage}
+      className="font-montserrat text-[10px] md:text-xs tracking-widest uppercase hover:opacity-50 transition-opacity"
+    >
+      {locale === 'id' ? 'EN' : 'ID'}
+    </button>
+  );
+}
+</file>
+
+<file path="src/components/global/LenisProvider.tsx">
+"use client";
+
+import { useEffect } from "react";
+import Lenis from "lenis";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+export default function LenisProvider({ children }: { children: React.ReactNode }) {
+  useEffect(() => {
+    // Initialize Lenis
+    const lenis = new Lenis({
+      lerp: 0.08, // Dinaikkan dari 0.03 ke 0.08 agar momentum scroll lebih cepat berhenti
+      orientation: "vertical",
+      gestureOrientation: "vertical",
+      smoothWheel: true,
+      wheelMultiplier: 1.0, // Dikembalikan ke normal
+      touchMultiplier: 1.5,
+    });
+
+    // Expose lenis globally for navigation links to use
+    // @ts-ignore
+    window.lenis = lenis;
+
+    // Synchronize Lenis with GSAP ScrollTrigger
+    lenis.on("scroll", ScrollTrigger.update);
+
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000);
+    });
+
+    gsap.ticker.lagSmoothing(0);
+
+    return () => {
+      lenis.destroy();
+      gsap.ticker.remove((time) => {
+        lenis.raf(time * 1000);
+      });
+    };
+  }, []);
+
+  return <>{children}</>;
+}
+</file>
+
+<file path="src/components/global/PageTransition.tsx">
+"use client";
+
+import { useRef, useEffect } from "react";
+import { usePathname } from "next/navigation";
+import gsap from "gsap";
+
+export default function PageTransition({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const curtainRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+
+  // Entrance animation only on initial mount for SPA
+  useEffect(() => {
+    if (!curtainRef.current) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        curtainRef.current,
+        { scaleY: 1, transformOrigin: "top" },
+        {
+          scaleY: 0,
+          duration: 0.9,
+          ease: "expo.inOut",
+          delay: 0.1,
+        }
+      );
+    });
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <>
+      <div ref={curtainRef} className="page-curtain" aria-hidden="true" />
+      <main>{children}</main>
+    </>
+  );
+}
+</file>
+
+<file path="src/components/three/HeroCanvas.tsx">
+"use client";
+
+import { useRef, useEffect, useState, useMemo } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { OrbitControls, Environment, Float } from "@react-three/drei";
+import * as THREE from "three";
+
+function AbstractHead() {
+  const meshRef = useRef<THREE.Mesh>(null);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollProgress(max > 0 ? window.scrollY / max : 0);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useFrame((state) => {
+    if (!meshRef.current) return;
+    const t = state.clock.elapsedTime;
+    meshRef.current.rotation.y =
+      Math.sin(t * 0.3) * 0.15 + scrollProgress * Math.PI * 0.5;
+    meshRef.current.rotation.x = Math.sin(t * 0.2) * 0.05;
+  });
+
+  return (
+    <Float speed={1.2} rotationIntensity={0.15} floatIntensity={0.4}>
+      <mesh ref={meshRef} castShadow>
+        <sphereGeometry args={[1.4, 64, 64]} />
+        <meshStandardMaterial
+          color="#E8E0D5"
+          roughness={0.3}
+          metalness={0.05}
+          envMapIntensity={1.5}
+        />
+      </mesh>
+
+      {/* Orbital rings */}
+      <mesh rotation={[Math.PI / 2.4, 0, 0]}>
+        <torusGeometry args={[2.2, 0.015, 8, 100]} />
+        <meshStandardMaterial color="#B0A898" roughness={0.6} metalness={0.2} />
+      </mesh>
+
+      <mesh rotation={[Math.PI / 3, 0.5, 0]}>
+        <torusGeometry args={[1.9, 0.008, 8, 100]} />
+        <meshStandardMaterial color="#C8C0B6" roughness={0.5} metalness={0.3} />
+      </mesh>
+    </Float>
+  );
+}
+
+function ParticleField() {
+  const count = 120;
+  const meshRef = useRef<THREE.Points>(null);
+
+  const positions = useMemo(() => {
+    return new Float32Array(
+      Array.from({ length: count * 3 }, () => (Math.random() - 0.5) * 8)
+    );
+  }, []);
+
+  const geometry = useMemo(() => {
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    return geo;
+  }, [positions]);
+
+  useFrame((state) => {
+    if (!meshRef.current) return;
+    meshRef.current.rotation.y = state.clock.elapsedTime * 0.04;
+  });
+
+  return (
+    <points ref={meshRef} geometry={geometry}>
+      <pointsMaterial size={0.025} color="#8A8070" transparent opacity={0.6} />
+    </points>
+  );
+}
+
+export default function HeroCanvas() {
+  const isMobile =
+    typeof window !== "undefined" && window.innerWidth < 768;
+
+  const pixelRatio =
+    typeof window !== "undefined"
+      ? Math.min(window.devicePixelRatio, isMobile ? 1 : 2)
+      : 1;
+
+  return (
+    <Canvas
+      camera={{ position: [0, 0, 5], fov: 45 }}
+      gl={{ antialias: !isMobile }}
+      dpr={pixelRatio}
+      shadows={!isMobile}
+      style={{ width: "100%", height: "100%" }}
+    >
+      <ambientLight intensity={0.4} />
+      <directionalLight
+        position={[5, 8, 5]}
+        intensity={1.5}
+        castShadow={!isMobile}
+      />
+      <directionalLight
+        position={[-5, -2, -5]}
+        intensity={0.4}
+        color="#F0E8E0"
+      />
+      <Environment preset="studio" />
+      <AbstractHead />
+      <ParticleField />
+      {!isMobile && (
+        <OrbitControls
+          enableZoom={false}
+          enablePan={false}
+          autoRotate={false}
+          maxPolarAngle={Math.PI / 1.6}
+          minPolarAngle={Math.PI / 3}
+        />
+      )}
+    </Canvas>
+  );
+}
+</file>
+
+<file path="src/i18n/request.ts">
+import { getRequestConfig } from 'next-intl/server';
+import { routing } from './routing';
+
+export default getRequestConfig(async ({ requestLocale }) => {
+  let locale = await requestLocale;
+  if (!locale || !routing.locales.includes(locale as any)) {
+    locale = routing.defaultLocale;
+  }
+  return {
+    locale,
+    messages: (await import(`../../messages/${locale}.json`)).default
+  };
+});
+</file>
+
+<file path="src/i18n/routing.ts">
+import { defineRouting } from 'next-intl/routing';
+import { createNavigation } from 'next-intl/navigation';
+
+export const routing = defineRouting({
+  locales: ['id', 'en'],
+  defaultLocale: 'id',
+  localePrefix: 'as-needed' // Only adds /en for English, keeps root clean for Indonesian
+});
+
+export const { Link, redirect, usePathname, useRouter, getPathname } =
+  createNavigation(routing);
+</file>
+
+<file path="src/middleware.ts">
+import createMiddleware from 'next-intl/middleware';
+import { routing } from './i18n/routing';
+
+export default createMiddleware(routing);
+
+export const config = {
+  // Match all paths except Next.js internals and static files
+  matcher: ['/((?!api|_next|.*\\..*).*)']
+};
+</file>
+
+<file path="AGENTS.md">
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
+</file>
+
+<file path="CLAUDE.md">
+@AGENTS.md
+</file>
+
+<file path="eslint.config.mjs">
+import { defineConfig, globalIgnores } from "eslint/config";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTs from "eslint-config-next/typescript";
+
+const eslintConfig = defineConfig([
+  ...nextVitals,
+  ...nextTs,
+  // Override default ignores of eslint-config-next.
+  globalIgnores([
+    // Default ignores of eslint-config-next:
+    ".next/**",
+    "out/**",
+    "build/**",
+    "next-env.d.ts",
+  ]),
+]);
+
+export default eslintConfig;
+</file>
+
+<file path="git_log.txt">
+commit 1eebc3cd7a4431e90f271df4e299a4903d2ec668
+Author: Natanael2412 <natanaelalexandergani@gmail.com>
+Date:   Wed Aug 5 18:49:08 2026 +0700
+
+    Initial commit from Create Next App
+
+diff --git a/src/app/globals.css b/src/app/globals.css
+new file mode 100644
+index 0000000..a2dc41e
+--- /dev/null
++++ b/src/app/globals.css
+@@ -0,0 +1,26 @@
++@import "tailwindcss";
++
++:root {
++  --background: #ffffff;
++  --foreground: #171717;
++}
++
++@theme inline {
++  --color-background: var(--background);
++  --color-foreground: var(--foreground);
++  --font-sans: var(--font-geist-sans);
++  --font-mono: var(--font-geist-mono);
++}
++
++@media (prefers-color-scheme: dark) {
++  :root {
++    --background: #0a0a0a;
++    --foreground: #ededed;
++  }
++}
++
++body {
++  background: var(--background);
++  color: var(--foreground);
++  font-family: Arial, Helvetica, sans-serif;
++}
+</file>
+
+<file path="postcss.config.mjs">
+const config = {
+  plugins: {
+    "@tailwindcss/postcss": {},
+  },
+};
+
+export default config;
+</file>
+
+<file path="README.md">
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+## Getting Started
+
+First, run the development server:
+
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+</file>
+
+<file path="tsconfig.json">
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts",
+    "**/*.mts"
+  ],
+  "exclude": ["node_modules"]
+}
+</file>
+
+<file path="src/components/global/LogoShader.tsx">
+"use client";
+
+import { useEffect, useRef } from "react";
+
+const VERTEX_SHADER = `
+attribute vec2 a_position;
+varying vec2 v_uv;
+void main() {
+    v_uv = a_position * 0.5 + 0.5; // Map -1..1 to 0..1
+    gl_Position = vec4(a_position, 0.0, 1.0);
+}
+`;
+
+const FRAGMENT_SHADER = `
+#ifdef GL_ES
+precision mediump float;
+#endif
+
+uniform vec2 u_resolution;
+uniform vec2 u_mouse;
+uniform float u_time;
+uniform sampler2D u_image;
+uniform vec2 u_imageResolution;
+
+varying vec2 v_uv;
+
+float hash(vec2 p) {
+    return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453);
+}
+
+float noise(vec2 p) {
+    vec2 i = floor(p);
+    vec2 f = fract(p);
+    f = f * f * (3.0 - 2.0 * f);
+    return mix(mix(hash(i + vec2(0.0, 0.0)), hash(i + vec2(1.0, 0.0)), f.x),
+               mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), f.x), f.y);
+}
+
+float fbm(vec2 uv) {
+    float f = 0.0;
+    float amp = 0.5;
+    mat2 rot = mat2(cos(0.5), sin(0.5), -sin(0.5), cos(0.50));
+    for (int i = 0; i < 4; i++) {
+        f += amp * noise(uv);
+        uv = rot * uv * 2.0 + vec2(100.0);
+        amp *= 0.5;
+    }
+    return f;
+}
+
+void main() {
+    // === 1. COORDINATES ===
+    vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+    vec2 mouse = u_mouse.xy / u_resolution.xy;
+    mouse.y = 1.0 - mouse.y; 
+
+    // Aspect ratio correction for accurate distance
+    float aspect = u_resolution.x / u_resolution.y;
+    vec2 uvAspect = vec2(uv.x * aspect, uv.y);
+    vec2 mouseAspect = vec2(mouse.x * aspect, mouse.y);
+    
+    float mouseDist = distance(uvAspect, mouseAspect);
+    float cursorInfluence = smoothstep(0.4, 0.0, mouseDist); // Radius of cursor liquid effect
+
+    // === 2. FLUID DYNAMICS (FBM) ===
+    float t = u_time * 1.5;
+    vec2 q = vec2(fbm(uv * 3.0 + t), fbm(uv * 3.0 + t * 0.8 + vec2(5.2, 1.3)));
+    vec2 r = vec2(fbm(uv * 4.0 + 1.0 * q + t), fbm(uv * 4.0 + 1.0 * q + t * 0.9 + vec2(8.3, 2.8)));
+    
+    // The distortion vector to push pixels around
+    vec2 fluidDistortion = (r - 0.5) * 2.0; 
+    
+    // === 3. FLUID BACKGROUND ===
+    // Generate a beautiful, subtly moving fluid background (White to Light Blue)
+    float bgNoise = fbm(uv * 5.0 + r);
+    bgNoise = smoothstep(0.1, 0.8, bgNoise);
+    vec3 bgColor = mix(vec3(1.0, 1.0, 1.0), vec3(0.85, 0.92, 1.0), bgNoise); // White -> Ice Blue
+    
+    // Add vibrant blue when cursor hovers over background
+    bgColor = mix(bgColor, vec3(0.4, 0.7, 1.0), cursorInfluence * 0.3);
+
+    // === 4. LOGO UV MAPPING (Object-Fit: Contain) ===
+    float imgAsp = u_imageResolution.x / u_imageResolution.y;
+    // Prevent divide by zero if not loaded yet
+    if (imgAsp == 0.0) imgAsp = 1.0; 
+    
+    vec2 uvMap = uv - 0.5;
+    if (aspect > imgAsp) {
+        uvMap.x *= aspect / imgAsp;
+    } else {
+        uvMap.y *= imgAsp / aspect;
+    }
+    
+    // Scale down to add padding
+    uvMap = uvMap * 1.8; 
+    uvMap += 0.5;
+
+    // Apply fluid distortion only when near cursor
+    uvMap += fluidDistortion * cursorInfluence * 0.15;
+
+    // === 5. COMPOSITING ===
+    vec3 finalColor = bgColor;
+    
+    // Boundary check so texture doesn't repeat
+    if (uvMap.x >= 0.0 && uvMap.x <= 1.0 && uvMap.y >= 0.0 && uvMap.y <= 1.0) {
+        vec4 texColor = texture2D(u_image, vec2(uvMap.x, 1.0 - uvMap.y)); // Flip Y
+        
+        // Luma Keying: Make the white background of the PNG transparent!
+        // White is rgb(1.0, 1.0, 1.0). If brightness is high, alpha goes to 0.
+        float brightness = dot(texColor.rgb, vec3(0.3333));
+        float logoAlpha = smoothstep(0.95, 0.85, brightness) * texColor.a; 
+        
+        // Blend logo over background
+        finalColor = mix(bgColor, texColor.rgb, logoAlpha);
+    }
+
+    gl_FragColor = vec4(finalColor, 1.0);
+}
+`;
+
+function createShader(gl: WebGLRenderingContext, type: number, source: string) {
+  const shader = gl.createShader(type);
+  if (!shader) return null;
+  gl.shaderSource(shader, source);
+  gl.compileShader(shader);
+  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+    console.error("Shader compile error:", gl.getShaderInfoLog(shader));
+    gl.deleteShader(shader);
+    return null;
+  }
+  return shader;
+}
+
+export default function LogoShader({ className, imageUrl = "/images/logo-weatso.webp" }: { className?: string, imageUrl?: string }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const mouseRef = useRef({ x: -1000, y: -1000 }); // Default offscreen
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const gl = canvas.getContext("webgl");
+    if (!gl) {
+      console.error("WebGL not supported");
+      return;
+    }
+
+    const vertexShader = createShader(gl, gl.VERTEX_SHADER, VERTEX_SHADER);
+    const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, FRAGMENT_SHADER);
+
+    if (!vertexShader || !fragmentShader) return;
+
+    const program = gl.createProgram();
+    if (!program) return;
+    
+    gl.attachShader(program, vertexShader);
+    gl.attachShader(program, fragmentShader);
+    gl.linkProgram(program);
+
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+      console.error("Program link error:", gl.getProgramInfoLog(program));
+      return;
+    }
+
+    gl.useProgram(program);
+
+    // Create a full-screen quad
+    const positionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    const positions = new Float32Array([
+      -1.0, -1.0,
+       1.0, -1.0,
+      -1.0,  1.0,
+      -1.0,  1.0,
+       1.0, -1.0,
+       1.0,  1.0,
+    ]);
+    gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
+
+    const positionLocation = gl.getAttribLocation(program, "a_position");
+    gl.enableVertexAttribArray(positionLocation);
+    gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+    const resolutionLocation = gl.getUniformLocation(program, "u_resolution");
+    const mouseLocation = gl.getUniformLocation(program, "u_mouse");
+    const timeLocation = gl.getUniformLocation(program, "u_time");
+    const imageResolutionLocation = gl.getUniformLocation(program, "u_imageResolution");
+    const imageSamplerLocation = gl.getUniformLocation(program, "u_image");
+
+    let animationFrameId: number;
+    let isVisible = false;
+    let textureLoaded = false;
+    let imgWidth = 1000.0; // Default safe value to prevent div by 0
+    let imgHeight = 1000.0;
+
+    // Load Texture
+    const texture = gl.createTexture();
+    const image = new window.Image();
+    image.src = imageUrl;
+    image.crossOrigin = "anonymous";
+    image.onload = () => {
+      imgWidth = image.width;
+      imgHeight = image.height;
+      
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      textureLoaded = true;
+    };
+
+    const resize = () => {
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      gl.viewport(0, 0, canvas.width, canvas.height);
+    };
+
+    window.addEventListener("resize", resize);
+    resize();
+
+    const render = (time: number) => {
+      if (!isVisible || !textureLoaded) {
+        if (isVisible) animationFrameId = requestAnimationFrame(render);
+        return;
+      }
+
+      gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
+      gl.uniform2f(mouseLocation, mouseRef.current.x * (window.devicePixelRatio || 1), mouseRef.current.y * (window.devicePixelRatio || 1));
+      gl.uniform1f(timeLocation, time * 0.001);
+      
+      gl.uniform2f(imageResolutionLocation, imgWidth, imgHeight);
+
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+      gl.uniform1i(imageSamplerLocation, 0);
+
+      gl.drawArrays(gl.TRIANGLES, 0, 6);
+      animationFrameId = requestAnimationFrame(render);
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          if (!isVisible) {
+            isVisible = true;
+            animationFrameId = requestAnimationFrame(render);
+          }
+        } else {
+          isVisible = false;
+          if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+          }
+        }
+      });
+    }, { threshold: 0 });
+
+    observer.observe(canvas);
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      mouseRef.current.x = e.clientX - rect.left;
+      mouseRef.current.y = e.clientY - rect.top;
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      window.removeEventListener("resize", resize);
+      window.removeEventListener("mousemove", handleMouseMove);
+      observer.disconnect();
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+      gl.deleteProgram(program);
+      gl.deleteShader(vertexShader);
+      gl.deleteShader(fragmentShader);
+      gl.deleteBuffer(positionBuffer);
+      gl.deleteTexture(texture);
+    };
+  }, [imageUrl]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className={`w-full h-full block cursor-crosshair ${className || ""}`}
+    />
+  );
+}
+</file>
+
+<file path="src/components/sections/GameSelectionCarousel.tsx">
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import gsap from "gsap";
+
+// Dummy data built from existing 3 projects duplicated to create a long list
+const BASE_PROJECTS = [
+  {
+    slug: "ac",
+    title: "AC Production",
+    tags: "Production · Visual",
+    image: "/images/work/AC.webp",
+    year: "2026",
+  },
+  {
+    slug: "evory",
+    title: "Evory",
+    tags: "Branding · Design",
+    image: "/images/work/evory.webp",
+    year: "2026",
+  },
+  {
+    slug: "tangwin",
+    title: "Tangwin Cut Studio",
+    tags: "Identity · Digital",
+    image: "/images/work/tangwincutstudio.webp",
+    year: "2025",
+  },
+];
+
+// Generate 15 projects by duplicating the base projects
+const PROJECTS = Array.from({ length: 15 }).map((_, i) => {
+  const base = BASE_PROJECTS[i % BASE_PROJECTS.length];
+  return {
+    ...base,
+    slug: `${base.slug}-${i}`,
+  };
+});
+
+export default function GameSelectionCarousel() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    // Use IntersectionObserver to determine which card is closest to the center
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+            const index = Number(entry.target.getAttribute("data-index"));
+            setActiveIndex(index);
+          }
+        });
+      },
+      {
+        root: container,
+        threshold: 0.5,
+      }
+    );
+
+    const cards = container.querySelectorAll(".game-card");
+    cards.forEach((card) => observer.observe(card));
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <section className="relative w-[100vw] h-[100vh] bg-black overflow-hidden flex flex-col justify-center">
+      {/* Top Navigation / Back Button */}
+      <div className="absolute top-8 left-8 md:top-12 md:left-12 z-50">
+        <Link href="/" className="text-white opacity-50 hover:opacity-100 transition-opacity font-montserrat text-sm tracking-widest uppercase">
+          ← Back to Main
+        </Link>
+      </div>
+
+      {/* Header Info */}
+      <div className="absolute top-12 right-12 z-50 text-right">
+        <h1 className="text-white font-playfair text-3xl md:text-5xl font-bold italic mb-2">Selected Work</h1>
+        <p className="text-white opacity-50 font-montserrat text-xs tracking-[0.3em] uppercase">Archive Collection</p>
+      </div>
+
+      {/* Horizontal Scroll Carousel */}
+      <div 
+        ref={containerRef}
+        className="flex overflow-x-auto w-full px-[50vw] gap-4 md:gap-8 pb-12 snap-x snap-mandatory hide-scrollbar items-center"
+        style={{ scrollBehavior: "smooth" }}
+      >
+        {PROJECTS.map((project, index) => {
+          const isActive = activeIndex === index;
+          return (
+            <div
+              key={project.slug}
+              data-index={index}
+              className={`game-card group relative shrink-0 snap-center transition-all duration-700 ease-out cursor-pointer ${
+                isActive 
+                  ? "w-[75vw] md:w-[40vw] aspect-[3/4] md:aspect-[4/5] scale-100 hover:scale-[1.03] opacity-100 z-20 shadow-2xl ring-1 ring-white/20" 
+                  : "w-[60vw] md:w-[30vw] aspect-[3/4] md:aspect-[4/5] scale-90 hover:scale-95 opacity-40 z-10 hover:opacity-70"
+              }`}
+              onClick={() => {
+                // If clicked and not active, scroll it to center
+                const card = document.querySelector(`[data-index="${index}"]`);
+                if (card && containerRef.current) {
+                  card.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+                }
+              }}
+            >
+              {/* Card Image */}
+              <div className="w-full h-full relative overflow-hidden bg-neutral-900">
+                <Image
+                  src={project.image}
+                  alt={project.title}
+                  fill
+                  className="object-cover object-center"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+                
+                {/* Gradient Overlay for Text - Hides on Hover */}
+                <div className={`absolute inset-0 bg-gradient-to-t from-white via-white/50 to-transparent transition-opacity duration-500 group-hover:opacity-0 ${isActive ? 'opacity-100' : 'opacity-0'}`} />
+                <div className={`absolute inset-0 bg-gradient-to-t from-white/90 via-white/20 to-transparent transition-opacity duration-500 group-hover:opacity-0 ${isActive ? 'opacity-100' : 'opacity-0'}`} />
+                
+                {/* Text Content (Inside Image, bottom left) - Hides on Hover, explicit inset positioning for guaranteed spacing */}
+                <div className={`absolute inset-x-6 bottom-6 md:inset-x-12 md:bottom-12 flex justify-between items-end transition-opacity duration-500 pointer-events-none group-hover:opacity-0 ${isActive ? 'opacity-100' : 'opacity-0'}`}>
+                  <div>
+                    <h3 className="font-playfair text-3xl md:text-5xl font-black text-black leading-none mb-1 md:mb-2 tracking-tighter uppercase">{project.title}</h3>
+                    <p className="font-montserrat text-xs md:text-sm font-bold text-black/60 tracking-[0.2em] uppercase">{project.tags}</p>
+                  </div>
+                  <div className="text-black font-playfair font-black text-xl md:text-2xl opacity-50">
+                    {project.year}
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <style jsx global>{`
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
+    </section>
+  );
+}
+</file>
+
+<file path="src/components/sections/NarrativeShowcase.tsx">
+"use client";
+
+import { useRef } from "react";
+import Image from "next/image";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
+
+const PANELS = [
+  {
+    id: "education",
+    index: "01",
+    image: "/images/formal.webp",
+    imageAlt: "Natanael in university formal attire",
+    imagePosition: "left",
+    title: "Academic\nFoundation",
+    body: "Pursuing excellence at Unika Soegijapranata, where rigorous academic discipline meets creative ambition. Every challenge sharpened into a tool for innovation.",
+    stats: [
+      { value: "3.8", label: "GPA" },
+      { value: "4+", label: "Years" },
+    ],
+  },
+  {
+    id: "casual",
+    index: "02",
+    image: "/images/casual.webp",
+    imageAlt: "Natanael casual portrait",
+    imagePosition: "right",
+    title: "Beyond\nthe Screen",
+    body: "Curiosity doesn't clock out. Off the screen, exploring cities, absorbing culture, and finding design inspiration in the most unexpected moments.",
+    stats: [
+      { value: "∞", label: "Ideas" },
+      { value: "24/7", label: "Creative" },
+    ],
+  },
+  {
+    id: "team",
+    index: "03",
+    image: "/images/team.webp",
+    imageAlt: "Natanael and team at elegant venue",
+    imagePosition: "left",
+    title: "Built on\nCollaboration",
+    body: "Great work is never solo. Embedded in teams that challenge each other to think bigger — and deliver together under stunning pressure and beautiful constraints.",
+    stats: [
+      { value: "10+", label: "Projects" },
+      { value: "4", label: "Teammates" },
+    ],
+  },
+];
+
+export default function NarrativeShowcase() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      if (!trackRef.current || !stickyRef.current || !sectionRef.current) return;
+      if (typeof window !== "undefined" && !window.matchMedia("(min-aspect-ratio: 1/1)").matches) return;
+
+      const ctx = gsap.context(() => {
+        const panels = trackRef.current!.querySelectorAll(".narrative__panel");
+        const totalWidth = (panels.length - 1) * window.innerWidth;
+
+        // Pin section and scroll horizontally
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top top",
+            end: () => `+=${totalWidth}`,
+            scrub: 1.2,
+            pin: stickyRef.current,
+            anticipatePin: 1,
+          },
+        });
+
+        tl.to(trackRef.current, {
+          x: -totalWidth,
+          ease: "none",
+        });
+
+        // Animate content in each panel as it enters view
+        panels.forEach((panel, i) => {
+          const title = panel.querySelector(".narrative__panel-title");
+          const body = panel.querySelector(".narrative__panel-body");
+          const stats = panel.querySelectorAll(".narrative__stat");
+          const image = panel.querySelector(".narrative__image-side img");
+
+          if (i === 0) return; // first panel already visible
+
+          gsap.set([title, body, stats], { y: 50, opacity: 0 });
+          gsap.set(image, { scale: 1.1, filter: "grayscale(60%)" });
+
+          ScrollTrigger.create({
+            trigger: panel,
+            containerAnimation: tl.scrollTrigger?.animation,
+            start: "left center",
+            end: "right center",
+            onEnter: () => {
+              gsap.to([title, body, stats], {
+                y: 0,
+                opacity: 1,
+                duration: 0.9,
+                stagger: 0.1,
+                ease: "expo.out",
+              });
+              gsap.to(image, {
+                scale: 1,
+                filter: "grayscale(0%)",
+                duration: 1.2,
+                ease: "expo.out",
+              });
+            },
+          });
+        });
+      }, sectionRef);
+
+      return () => ctx.revert();
+    },
+    { scope: sectionRef }
+  );
+
+  return (
+    <section
+      ref={sectionRef}
+      className="narrative"
+      id="about"
+      aria-label="Personal narrative"
+    >
+      <div ref={stickyRef} className="narrative__sticky">
+        <div ref={trackRef} className="narrative__track">
+          {PANELS.map((panel) => (
+            <article
+              key={panel.id}
+              id={`panel-${panel.id}`}
+              className="narrative__panel"
+              aria-label={`Panel ${panel.index}: ${panel.title.replace("\n", " ")}`}
+            >
+              {/* IMAGE — free, fills exactly 50% of screen, no card wrapper */}
+              {panel.imagePosition === "left" ? (
+                <>
+                  <div className="narrative__image-side">
+                    <Image
+                      src={panel.image}
+                      alt={panel.imageAlt}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      style={{ objectFit: "cover", objectPosition: "center top" }}
+                      priority={panel.index === "01"}
+                    />
+                  </div>
+                  <div className="narrative__content-side">
+                    <PanelContent panel={panel} />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="narrative__content-side">
+                    <PanelContent panel={panel} />
+                  </div>
+                  <div className="narrative__image-side">
+                    <Image
+                      src={panel.image}
+                      alt={panel.imageAlt}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      style={{ objectFit: "cover", objectPosition: "center top" }}
+                    />
+                  </div>
+                </>
+              )}
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function PanelContent({ panel }: { panel: (typeof PANELS)[0] }) {
+  return (
+    <>
+      <p className="narrative__panel-index">{panel.index} — Story</p>
+      <h2
+        className="narrative__panel-title"
+        style={{ whiteSpace: "pre-line" }}
+      >
+        {panel.title}
+      </h2>
+      <p className="narrative__panel-body">{panel.body}</p>
+      <div className="narrative__panel-stats">
+        {panel.stats.map((stat) => (
+          <div key={stat.label} className="narrative__stat">
+            <span className="narrative__stat-value">{stat.value}</span>
+            <span className="narrative__stat-label">{stat.label}</span>
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}
+</file>
+
+<file path="src/lib/supabase.ts">
+import { createClient } from '@supabase/supabase-js';
+
+export interface Project {
+  id: string;
+  slug: string;
+  title: string;
+  year: number | null;
+  description: string | null;
+  hero_image_url: string | null;
+  gallery_urls: string[] | null;
+  is_av_published: boolean;
+  is_personal_published: boolean;
+  is_av_featured: boolean;
+  is_personal_featured: boolean;
+  project_status: 'public' | 'nda' | 'concept';
+  sort_order: number;
+  client: string | null;
+  role: string | null;
+  tech_stack: string[] | null; 
+  live_url: string | null;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface Article {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string | null;
+  content_html: string | null;
+  cover_image_url: string | null;
+  published_at: string | null;
+  reading_time: number | null;
+  tags: string[] | null;
+  is_av_published: boolean;
+  is_personal_published: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface Role {
+  id: string;
+  name: string;
+  created_at?: string;
+}
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder';
+
+// Singleton instance
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+</file>
+
+<file path=".gitignore">
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+.env.local
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+</file>
+
+<file path="tailwind.config.ts">
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {
+      fontFamily: {
+        playfair: ["var(--font-playfair)", "Georgia", "serif"],
+        montserrat: ["var(--font-montserrat)", "Helvetica Neue", "sans-serif"],
+      },
+      colors: {
+        "ink": "#0A0A0A",
+        "ink-light": "#1A1A1A",
+        "ash": "#6B6B6B",
+        "bone": "#F5F3EF",
+        "chalk": "#FFFFFF",
+      },
+      letterSpacing: {
+        "ultra": "0.25em",
+        "wide-xl": "0.2em",
+      },
+      transitionTimingFunction: {
+        "expo-out": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "expo-in": "cubic-bezier(0.7, 0, 0.84, 0)",
+      },
+      animation: {
+        'marquee': 'marquee 35s linear infinite',
+        'marquee-reverse': 'marquee-reverse 35s linear infinite',
+      },
+      keyframes: {
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+        'marquee-reverse': {
+          '0%': { transform: 'translateX(-50%)' },
+          '100%': { transform: 'translateX(0%)' },
+        },
+      },
+    },
+  },
+  plugins: [],
+};
+
+export default config;
+</file>
+
+<file path="src/app/globals.css">
+/* ================================================================
+   GLOBAL STYLES — Natanael Alexander Portfolio
+   Clean Minimalist High-Fashion Editorial
+   ================================================================ */
+
+@import "tailwindcss";
+/* Fonts are loaded via next/font/google in layout.tsx — no @import needed here */
+
+/* ── CSS Custom Properties ── */
+:root {
+  --ink: #0A0A0A;
+  --ash: #6B6B6B;
+  --chalk: #FFFFFF;
+  --bone: #F5F3EF;
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+}
+
+/* ── Base Reset ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: auto; /* GSAP handles scrolling */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE / Edge */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+body {
+  background-color: #FFFFFF;
+  color: var(--ink);
+  font-family: var(--font-montserrat), 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+
+/* ── Typography ── */
+h1, h2, h3, h4, h5 {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* ── Noise Overlay ── */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  opacity: 0.12;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+}
+
+
+/* ── Nav Pill ── */
+.nav-pill {
+  position: fixed;
+  bottom: clamp(1rem, 3vh, 2rem);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: clamp(0.4rem, 1vh, 0.75rem) clamp(0.75rem, 2vw, 1.5rem);
+  /* iOS Liquid Glass Effect */
+  background: rgba(25, 25, 28, 0.65);
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.1);
+}
+
+.nav-pill__item {
+  position: relative;
+  font-family: var(--font-montserrat), 'Helvetica Neue', sans-serif;
+  font-size: clamp(0.6rem, 1.2vw, 0.7rem);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75); /* Muted white for unselected */
+  text-decoration: none;
+  padding: clamp(0.5rem, 1.2vh, 0.75rem) clamp(0.75rem, 2vw, 1.25rem);
+  border-radius: 9999px;
+  transition: color 0.3s ease;
+  cursor: pointer;
+  white-space: nowrap;
+  user-select: none;
+  min-height: 44px; /* WCAG tap target */
+  display: flex;
+  align-items: center;
+}
+
+.nav-pill__item:hover {
+  color: #FFFFFF; /* Bright white on hover */
+}
+
+.nav-pill__item-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.12); /* Subtle white highlight for dark glass */
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.nav-pill__item:hover .nav-pill__item-bg {
+  opacity: 1;
+}
+
+/* ── Page Transition Curtain ── */
+.page-curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--ink);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  pointer-events: none;
+}
+
+/* ── Hero Section ── */
+.hero {
+  position: relative;
+  width: 100vw;
+  background-color: #FFFFFF;
+  height: max(100vh, calc(100vw * 4 / 3)); /* Tall enough to simulate the 3:4 aspect ratio scroll */
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+}
+
+/* Layer 1: Overlay wrapper containing text and white background (pinned by GSAP) */
+.hero__overlay-wrapper {
+  grid-area: 1 / 1 / 2 / 2;
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0 5vw;
+  mix-blend-mode: screen;
+  will-change: background-color;
+  pointer-events: none;
+}
+
+/* Layer 0: Normal flow photo providing the height for the section */
+/* Uses aspect-ratio to be naturally fluid on all screen sizes */
+.hero__bg-photo {
+  grid-area: 1 / 1 / 2 / 2;
+  position: sticky;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.hero__img {
+  width: 100%;
+  height: max(120vh, calc(100vw * 4 / 3)); /* Natural 3:4 portrait height, boosted to 120vh for seamless parallax */
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+}
+
+/* Soft dark vignette */
+.hero__photo-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.5) 100%);
+  pointer-events: none;
+}
+
+/* Portfolio / year label */
+.hero__index {
+  position: absolute;
+  top: clamp(1rem, 5vh, 3rem);
+  left: clamp(1rem, 5vw, 4rem);
+  font-family: var(--font-montserrat), 'Helvetica Neue', sans-serif;
+  font-size: clamp(0.6rem, 1.2vw, 0.7rem);
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  margin: 0;
+  will-change: color;
+}
+
+/* Oversize name block — fluid across ALL screen widths */
+.hero__name {
+  font-family: var(--font-playfair), Georgia, serif;
+  font-size: clamp(2.5rem, 11.5vw, 15rem);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  will-change: color;
+}
+
+.hero__name-left,
+.hero__name-right {
+  color: rgb(0, 0, 0); /* black text punches hole in screen mode */
+  will-change: color;
+}
+
+.hero__name-left {
+  text-align: left;
+  align-self: flex-start;
+}
+
+.hero__name-right {
+  text-align: right;
+  align-self: flex-end;
+}
+
+.hero__tagline {
+  position: absolute;
+  bottom: clamp(1rem, 5vh, 3rem);
+  right: clamp(1rem, 5vw, 4rem);
+  font-family: var(--font-montserrat), 'Helvetica Neue', sans-serif;
+  font-size: clamp(0.6rem, 1.2vw, 0.7rem);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin: 0;
+  text-align: right;
+  will-change: color;
+}
+
+/* Scroll hint */
+.hero__scroll-hint {
+  position: absolute;
+  bottom: clamp(1rem, 5vh, 3rem);
+  left: clamp(1rem, 5vw, 4rem);
+  font-family: var(--font-montserrat), 'Helvetica Neue', sans-serif;
+  font-size: clamp(0.6rem, 1vw, 0.65rem);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  z-index: 3;
+  will-change: color;
+}
+
+.hero__scroll-line {
+  display: block;
+  width: clamp(1.5rem, 3vw, 2.5rem);
+  height: 1px;
+  transform-origin: left;
+  animation: expandLine 2.4s var(--ease-expo) infinite;
+  will-change: background-color;
+}
+
+@keyframes expandLine {
+  0%   { transform: scaleX(0); opacity: 0; }
+  40%  { transform: scaleX(1); opacity: 1; }
+  100% { transform: scaleX(1); opacity: 0; }
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-100%); }
+}
+
+.animate-marquee {
+  animation: marquee 20s linear infinite;
+  display: flex;
+  white-space: nowrap;
+}
+
+/* ── Narrative Section ── */
+/* Fluid layout: on wide screens horizontal scroll; on narrow screens vertical stack */
+.narrative {
+  position: relative;
+  z-index: 10;
+  background-color: #FFFFFF;
+}
+
+/* Wide screens: horizontal scroll pinned layout */
+@supports (container-type: inline-size) {
+  .narrative { container-type: inline-size; }
+}
+
+/* Use aspect ratio detection: if viewport is wider than tall (landscape/desktop) use horizontal scroll */
+@media (min-aspect-ratio: 1/1) {
+  .narrative {
+    min-height: 100vh;
+  }
+
+  .narrative__sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    background-color: #FFFFFF;
+  }
+
+  .narrative__track {
+    display: flex;
+    align-items: center;
+    will-change: transform;
+  }
+
+  .narrative__panel {
+    width: 100vw;
+    height: 100vh;
+    flex-shrink: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+  }
+
+  .narrative__panel:nth-child(even) {
+    grid-template-columns: 1fr 1fr;
+    direction: rtl;
+  }
+
+  .narrative__panel:nth-child(even) > * {
+    direction: ltr;
+  }
+
+  .narrative__content-side {
+    padding: clamp(2rem, 6vw, 6rem) clamp(1.5rem, 5vw, 4rem);
+  }
+}
+
+/* Narrow/portrait screens (phones, portrait tablets): vertical native scroll */
+@media (max-aspect-ratio: 1/1) {
+  .narrative {
+    height: auto;
+  }
+
+  .narrative__sticky {
+    position: static;
+    height: auto;
+    overflow: visible;
+    flex-direction: column;
+  }
+
+  .narrative__track {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+  }
+
+  .narrative__panel {
+    width: 100vw;
+    height: auto;
+    min-height: 100svh;
+    flex-shrink: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 50svh auto;
+    overflow: hidden;
+  }
+
+  .narrative__panel:nth-child(even) {
+    grid-template-columns: 1fr;
+    direction: ltr;
+  }
+
+  .narrative__panel:nth-child(even) > * {
+    direction: ltr;
+  }
+
+  .narrative__content-side {
+    padding: clamp(1.5rem, 5vw, 3rem) clamp(1.25rem, 5vw, 2.5rem);
+  }
+
+  .narrative__image-side {
+    height: 50svh;
+  }
+}
+
+/* FREE IMAGE — fills exactly half screen, no card, no border */
+.narrative__image-side {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.narrative__image-side img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+
+/* Content side */
+.narrative__content-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #FFFFFF;
+}
+
+.narrative__panel-index {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(0.45rem, 1.2vw, 0.55rem);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ash);
+  margin-bottom: clamp(1rem, 2.5vh, 2rem);
+}
+
+.narrative__panel-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.8rem, 4vw, 5rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: clamp(0.75rem, 2vh, 1.5rem);
+}
+
+.narrative__panel-body {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(0.6rem, 1.5vw, 0.75rem);
+  line-height: 1.9;
+  letter-spacing: 0.05em;
+  color: var(--ash);
+  max-width: 38ch;
+  margin-bottom: clamp(1.5rem, 3vh, 2.5rem);
+}
+
+.narrative__panel-stats {
+  display: flex;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  flex-wrap: wrap;
+}
+
+.narrative__stat-value {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: 800;
+  color: var(--ink);
+  display: block;
+  line-height: 1;
+}
+
+.narrative__stat-label {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(0.4rem, 1vw, 0.5rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ash);
+  display: block;
+  margin-top: 0.25rem;
+}
+
+/* ── Selected Work (Split-Screen Sticky) ── */
+.work-section {
+  display: flex;
+  flex-wrap: wrap;
+  padding: clamp(2rem, 4vh, 4rem) clamp(1rem, 4vw, 3rem) clamp(4rem, 8vh, 8rem);
+  background: var(--paper);
+  color: var(--ink);
+  gap: clamp(2rem, 5vw, 4rem);
+  position: relative;
+}
+
+/* Left Side: Sticky Title */
+.work-section__left {
+  flex: 1 1 300px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  /* Adjust height on mobile so it doesn't take full vh if it stacks */
+  max-height: 100vh;
+}
+
+@media (max-width: 768px) {
+  .work-section__left {
+    position: relative;
+    height: auto;
+    min-height: 50vh;
+  }
+}
+
+.work-section__title {
+  font-family: var(--font-playfair), serif;
+  font-size: clamp(3rem, 9vw, 9rem);
+  font-weight: 800;
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+.work-section__subtitle {
+  font-family: var(--font-montserrat), sans-serif;
+  font-size: clamp(0.5rem, 1.2vw, 0.75rem);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ash);
+}
+
+/* Right Side: Scrolling Images */
+.work-section__right {
+  flex: 2 1 500px;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3rem, 10vh, 8rem);
+  padding-top: clamp(2rem, 15vh, 25vh); /* Offset so first image isn't stuck at top */
+  padding-bottom: 10vh;
+}
+
+@media (max-width: 768px) {
+  .work-section__right {
+    padding-top: 2rem;
+  }
+}
+
+/* Work Card */
+.work-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.work-card__image-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #EAEAEA;
+}
+
+.work-card__image {
+  object-fit: cover;
+  transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.work-card:hover .work-card__image {
+  transform: scale(1.03);
+}
+
+.work-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.2) 0%, transparent 40%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+.work-card:hover .work-card__overlay {
+  opacity: 1;
+}
+
+.work-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0 0.5rem;
+}
+
+.work-card__title {
+  font-family: var(--font-playfair), serif;
+  font-size: clamp(1.25rem, 2.5vw, 2.5rem);
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.01em;
+}
+
+.work-card__tags {
+  font-family: var(--font-montserrat), sans-serif;
+  font-size: clamp(0.45rem, 1vw, 0.6rem);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--ash);
+}
+
+.work-card__year {
+  font-family: var(--font-montserrat), sans-serif;
+  font-size: clamp(0.5rem, 1vw, 0.65rem);
+  font-weight: 500;
+  color: var(--ash);
+  padding: 0.4rem 0.8rem;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 9999px;
+}
+
+/* ── Contact / Footer ── */
+.contact-section {
+  padding: clamp(2rem, 6vw, 6rem) clamp(1.25rem, 5vw, 4rem) clamp(2rem, 5vw, 4rem);
+  background: var(--ink);
+  color: #FFFFFF;
+  overflow: hidden;
+}
+
+.contact-section__big {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.5rem, 10vw, 12rem);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  color: #FFFFFF;
+  margin-bottom: clamp(2rem, 5vh, 4rem);
+}
+
+.contact-section__big em {
+  font-style: italic;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,255,255,0.4);
+}
+
+.contact-links {
+  display: flex;
+  gap: clamp(1rem, 3vw, 3rem);
+  flex-wrap: wrap;
+  margin-bottom: clamp(3rem, 6vw, 6rem);
+}
+
+.contact-link {
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(0.45rem, 1.2vw, 0.6rem);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  position: relative;
+  padding-bottom: 0.25rem;
+  transition: color 0.3s ease;
+}
+
+.contact-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: #FFFFFF;
+  transition: width 0.4s var(--ease-expo);
+}
+
+.contact-link:hover {
+  color: #FFFFFF;
+}
+
+.contact-link:hover::after {
+  width: 100%;
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: clamp(1rem, 2.5vh, 2rem);
+  font-family: 'Montserrat', sans-serif;
+  font-size: clamp(0.4rem, 1vw, 0.5rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+}
+
+/* ── Utility ── */
+.clip-text {
+  overflow: hidden;
+}
+
+.reveal-line {
+  display: block;
+  transform: translateY(110%);
+}
+
+/* ── Section divider ── */
+.divider {
+  width: 1.5px;
+  height: 4rem;
+  background: linear-gradient(to bottom, transparent, var(--ash), transparent);
+  margin: 0 auto;
+}
+
+/* ── Cursor ── */
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--ink);
+  border-radius: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: difference;
+}
+
+.cursor-ring {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--ink);
+  border-radius: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 99998;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: difference;
+  transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
+}
+
+body:has(a:hover) .cursor-ring,
+body:has(button:hover) .cursor-ring {
+  width: 56px;
+  height: 56px;
+}
+
+/* ── About Section (Horizontal Scroll Integrated inside Hero) ── */
+.about-wrapper {
+  grid-area: 1 / 1 / 2 / 2;
+  position: absolute;
+  bottom: 0;
+  left: 100vw;
+  width: 200vw; /* 2 panels * 100vw */
+  height: 100vh;
+  display: flex;
+  z-index: 10;
+  will-change: transform;
+}
+
+.about__panel {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 clamp(1.5rem, 5vw, 5rem);
+  position: relative;
+}
+
+.about__panel--content {
+  background-color: var(--chalk);
+  color: var(--ink);
+}
+
+.about__content {
+  max-width: min(800px, 90vw);
+}
+
+.about__label {
+  display: block;
+  font-family: var(--font-montserrat), sans-serif;
+  font-size: clamp(0.6rem, 1.2vw, 0.7rem);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ash);
+  margin-bottom: clamp(1rem, 2.5vh, 2rem);
+}
+
+.about__title {
+  font-family: var(--font-playfair), serif;
+  font-size: clamp(2rem, 7vw, 8rem);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  margin-bottom: clamp(1.5rem, 3vh, 3rem);
+  text-transform: uppercase;
+}
+
+.about__text {
+  font-family: var(--font-montserrat), sans-serif;
+  font-size: clamp(0.75rem, 1.5vw, 1.25rem);
+  line-height: 1.6;
+  font-weight: 400;
+  max-width: min(600px, 80vw);
+}
+
+/* ── Cursor — hide on touch devices ── */
+@media (hover: none) and (pointer: coarse) {
+  .cursor-dot,
+  .cursor-ring {
+    display: none;
+  }
+}
+
+/* ================================================================
+   RESPONSIVE — Mobile-first breakpoints
+   ================================================================ */
+
+/* ── Hero: Mobile (< 1024px) → vertical stack, no GSAP horizontal ── */
+@media (max-width: 1023px) {
+  .hero {
+    height: auto;
+    min-height: 100svh;
+  }
+
+  .hero__bg-photo {
+    /* Keep sticky so the photo stays pinned while sections below slide up to cover it */
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    z-index: 1;
+  }
+
+  /* Overlay wrapper must also stay sticky above the photo */
+  .hero__overlay-wrapper {
+    z-index: 2;
+  }
+
+  .hero__img {
+    height: 100svh;
+  }
+
+  /* About wrapper: absolute positioned off-screen to the right to allow GSAP horizontal sliding */
+  .about-wrapper {
+    position: absolute;
+    left: 100vw;
+    top: 0;
+    width: 200vw;
+    height: 100svh !important;
+    min-height: unset !important;
+    flex-direction: row;
+    z-index: 10; /* Must be above the sticky photo (z-index: 1) */
+    background-color: var(--chalk); /* Solid background to cover photo below */
+    transform: none; /* GSAP will animate this */
+  }
+
+  /* Override grid placement so it appears below the photo */
+  .about-wrapper {
+    grid-area: unset;
+  }
+
+  /* Panels inside about-wrapper must be horizontal and take full screen on mobile */
+  .about-wrapper > div {
+    width: 100vw !important;
+    height: 100svh !important;
+    min-height: 100svh;
+  }
+}
+
+/* ── About Panels: 50/50 split → full-width stack on mobile ── */
+@media (max-width: 1023px) {
+  /* All 50/50 flex rows in AboutVertical become stacked columns */
+  .about-panel-row {
+    flex-direction: column !important;
+    height: auto !important;
+    min-height: auto !important;
+  }
+
+  .about-panel-row > div {
+    width: 100% !important;
+  }
+
+  /* Image half becomes fixed height on mobile */
+  .about-panel-row .about-panel-image {
+    height: 50svh;
+    min-height: 300px;
+  }
+}
+
+
+/* ── InfiniteArchiveGrid: horizontal → 2-col grid on mobile ── */
+@media (max-width: 1023px) {
+  /* Override: section becomes normal flow (not overflow hidden + pinned) */
+  .archive-section-mobile {
+    height: auto !important;
+    overflow: visible !important;
+  }
+}
+
+/* ── About section title scale on small screens ── */
+@media (max-width: 767px) {
+  .about__title {
+    font-size: clamp(1.75rem, 9vw, 4rem);
+  }
+
+  .about__text {
+    font-size: clamp(0.8rem, 3.5vw, 1rem);
+  }
+
+  .about__label {
+    font-size: clamp(0.5rem, 2.5vw, 0.65rem);
+  }
+}
+
+/* ── Work section title scale ── */
+@media (max-width: 767px) {
+  .work-section__title {
+    font-size: clamp(2.5rem, 14vw, 5rem);
+  }
+}
+
+/* ── ContactFooter: stack links vertically on small screens ── */
+@media (max-width: 767px) {
+  footer h2 {
+    font-size: clamp(2.5rem, 12vw, 5rem) !important;
+    line-height: 0.9 !important;
+  }
+}
+
+/* ── Hero: mobile layout fixes for sticky cover reveal ── */
+@media (max-width: 1023px) {
+  .hero {
+    display: block !important;
+    height: auto !important;
+  }
+  .hero__bg-photo {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    z-index: 1;
+  }
+  .hero__overlay-wrapper {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    margin-top: -100vh;
+    z-index: 2;
+    /* mix-blend-mode: screen is inherited from base CSS */
+  }
+  .about-wrapper {
+    position: relative;
+    z-index: 10;
+  }
+  .hero__tagline {
+    display: none;
+  }
+  .hero__scroll-hint {
+    display: none;
+  }
+}
+
+/* ── Work cards on mobile: reset all GSAP transforms ── */
+@media (max-width: 1023px) {
+  .work-card {
+    opacity: 1 !important;
+    filter: brightness(1) !important;
+    transform: none !important;
+    scale: unset !important;
+  }
+  /* Always show card text content on mobile */
+  .work-card .absolute.inset-0.bg-gradient-to-t {
+    opacity: 1 !important;
+  }
+  .work-card [class*="inset-x"] {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+  }
+}
+
+/* ── About title: prevent horizontal overflow ── */
+@media (max-width: 767px) {
+  .about__title {
+    word-break: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    font-size: clamp(1.75rem, 8vw, 3.5rem) !important;
+    line-height: 0.95 !important;
+  }
+}
+</file>
+
+<file path="src/components/sections/ContactFooter.tsx">
+"use client";
+
+import { useEffect, useState, useRef } from "react";
+import FooterShader from "@/components/global/FooterShader";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger, useGSAP);
+}
+
+export default function ContactFooter() {
+  const [timeStr, setTimeStr] = useState("");
+  const footerRef = useRef<HTMLElement>(null);
+
+
+  useEffect(() => {
+    const updateTime = () => {
+      const semarangTime = new Date().toLocaleString("en-US", {
+        timeZone: "Asia/Jakarta", // Semarang is WIB
+        hour12: false,
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      });
+      setTimeStr(`SEMARANG, ID — ${semarangTime} WIB`);
+    };
+    
+    updateTime(); // Initial run
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <footer
+      ref={footerRef}
+      className="relative w-full bg-[#0a0a0a] overflow-hidden flex flex-col justify-between min-h-[55vh]"
+      id="contact"
+      aria-label="Contact section"
+    >
+      {/* Background Shader */}
+      <FooterShader className="absolute inset-0 z-0" />
+
+      {/* TOP CONTENT: CTA & Nav */}
+      <div className="relative z-20 flex flex-col sm:flex-row sm:justify-between sm:items-start gap-8 sm:gap-4
+        px-6 sm:px-10 md:px-16
+        pt-16 sm:pt-20 md:pt-28
+        text-white w-full"
+      >
+        {/* CTA Typography */}
+        <h2 className="font-playfair text-[2.4rem] sm:text-5xl md:text-6xl lg:text-[90px] xl:text-[120px] leading-[0.88] tracking-tighter select-none shrink-0 max-w-full">
+          <div className="text-white">Let&apos;s make it</div>
+          <div
+            className="text-transparent italic"
+            style={{ WebkitTextStroke: "1.5px rgba(255,255,255,0.9)" }}
+          >
+            happen.
+          </div>
+        </h2>
+
+        {/* Nav Links */}
+        <nav className="flex flex-col items-start sm:items-end gap-4 sm:gap-5 font-montserrat text-base sm:text-lg md:text-xl lg:text-2xl tracking-widest uppercase font-medium sm:mt-1">
+          <a href="https://mail.google.com/mail/?view=cm&fs=1&to=natanaelalexandergani@gmail.com" target="_blank" rel="noopener noreferrer" className="hover:text-gray-300 transition-colors relative group">
+            Email<span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full" />
+          </a>
+          <a href="https://wa.me/6288996555999" target="_blank" rel="noopener noreferrer" className="hover:text-gray-300 transition-colors relative group">
+            WhatsApp<span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full" />
+          </a>
+          <a href="https://instagram.com/natanaelalexander_" target="_blank" rel="noopener noreferrer" className="hover:text-gray-300 transition-colors relative group">
+            Instagram<span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full" />
+          </a>
+          <a href="https://anugerahventures.com" target="_blank" rel="noopener noreferrer" className="hover:text-gray-300 transition-colors relative group">
+            Anugerahventures.com<span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full" />
+          </a>
+        </nav>
+      </div>
+
+      {/* BOTTOM CONTENT: Meta Info (In document flow, will never overlap) */}
+      <div className="relative z-20 px-6 sm:px-10 md:px-16 pb-24 sm:pb-28 md:pb-32 mt-32 md:mt-64 flex flex-col gap-1 pointer-events-none w-full">
+        <p className="font-montserrat text-xs sm:text-sm md:text-base tracking-wider text-white/40">
+          {timeStr || "SEMARANG, ID — --:--:-- WIB"}
+        </p>
+        <p className="font-montserrat text-xs sm:text-sm md:text-base tracking-wider text-white/30">
+          © {new Date().getFullYear()} NATANAEL ALEXANDER. ALL RIGHTS RESERVED.
+        </p>
+      </div>
+
+    </footer>
+  );
+}
+</file>
+
+<file path="package.json">
+{
+  "name": "natanael-alexander-portofolio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@gsap/react": "^2.1.2",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.7.0",
+    "@supabase/supabase-js": "^2.112.4",
+    "@types/three": "^0.185.4",
+    "gsap": "^3.15.0",
+    "lenis": "^1.3.26",
+    "lucide-react": "^1.31.0",
+    "next": "16.3.0",
+    "next-intl": "^4.14.2",
+    "puppeteer": "^25.9.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "three": "^0.185.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/json-schema": "^7.0.15",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.0",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
+</file>
+
+<file path="src/components/global/NavigationPill.tsx">
+"use client";
+
+import { useEffect, useRef } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+import LanguageSwitcher from "./LanguageSwitcher";
+
+
+gsap.registerPlugin(ScrollTrigger);
+
+const NAV_ITEMS = [
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
+  { label: "Work", href: "/work" },
+  { label: "Contact", href: "/contact" },
+];
+
+export default function NavigationPill() {
+  const pathname = usePathname();
+  const pillRef = useRef<HTMLElement>(null);
+  const itemRefs = useRef<HTMLAnchorElement[]>([]);
+  const idleTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  useGSAP(() => {
+    // If we're on a portfolio page, do not mount the GSAP logic
+    if (pathname.startsWith("/portfolio")) return;
+    
+    if (!pillRef.current) return;
+
+    let lastScrollY = window.scrollY;
+
+    const showPill = () => {
+      gsap.to(pillRef.current, {
+        y: 0,
+        opacity: 1,
+        duration: 0.7,
+        ease: "expo.out",
+      });
+    };
+
+    const hidePill = () => {
+      gsap.to(pillRef.current, {
+        y: 100,
+        opacity: 0,
+        duration: 0.5,
+        ease: "expo.in",
+      });
+    };
+
+    const trigger = ScrollTrigger.create({
+      start: 0,
+      end: "max",
+      onUpdate: (self) => {
+        const currentY = window.scrollY;
+        const diff = currentY - lastScrollY;
+        lastScrollY = currentY;
+
+        // Clear existing idle timer
+        if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+
+        // Check if we are still in the Hero section (before Panel 01 is fully visible)
+        let isHeroPhase = false;
+        const desktopTrigger = ScrollTrigger.getById("about-scroll");
+        const mobileTrigger = ScrollTrigger.getById("mobile-scroll");
+        const st = desktopTrigger || mobileTrigger;
+
+        if (st) {
+          // Both desktop and mobile animations place Panel 01 fully in view roughly at 50% progress
+          if (st.progress < 0.5) {
+            isHeroPhase = true;
+          }
+        } else if (currentY < window.innerHeight) {
+          // Fallback if ScrollTrigger is not found
+          isHeroPhase = true;
+        }
+
+        if (isHeroPhase) {
+          hidePill();
+        } else {
+          if (diff > 2 && currentY > 100) {
+            // Scrolling down — hide
+            hidePill();
+          } else if (diff < -2) {
+            // Scrolling up — show
+            showPill();
+          }
+
+          // Set idle timer to show pill after 1.5s of no scrolling
+          idleTimerRef.current = setTimeout(() => {
+            showPill();
+          }, 1500);
+        }
+
+        // ScrollSpy logic to automatically update URL hash using accurate visual position
+        let currentSection = "/";
+        const aboutSection = document.getElementById("about");
+        const workSection = document.getElementById("work");
+        const contactSection = document.getElementById("contact");
+        
+        // GUARD: Only run ScrollSpy if we are actually on a page that has these sections (like the homepage)
+        // This prevents the URL from being forcefully reset to '/' when on the /portfolio page.
+        if (!aboutSection && !workSection && !contactSection) return;
+        
+        const halfScreen = window.innerHeight / 2;
+
+        if (contactSection && contactSection.getBoundingClientRect().top <= halfScreen) {
+          currentSection = "/contact";
+        } else if (workSection && workSection.getBoundingClientRect().top <= halfScreen) {
+          currentSection = "/work";
+        } else if (aboutSection && aboutSection.getBoundingClientRect().top <= halfScreen) {
+          currentSection = "/about";
+        }
+        
+        if (window.location.pathname !== currentSection) {
+          window.history.replaceState(null, '', currentSection);
+          
+          // Dynamically update the browser tab title based on the active section for better UX
+          const titleMap: Record<string, string> = {
+            "/": "Natanael Alexander — Creative Digital Architect",
+            "/about": "About | Natanael Alexander",
+            "/work": "Selected Work | Natanael Alexander",
+            "/contact": "Contact | Natanael Alexander"
+          };
+          document.title = titleMap[currentSection] || "Natanael Alexander";
+        }
+      },
+    });
+
+    return () => {
+      trigger.kill();
+      if (idleTimerRef.current) clearTimeout(idleTimerRef.current);
+    };
+  }, [pathname]);
+
+  // Magnetic effect on each nav item
+  useEffect(() => {
+    const cleanups: (() => void)[] = [];
+
+    itemRefs.current.forEach((item) => {
+      if (!item) return;
+
+      const strength = 0.4;
+
+      const onMouseMove = (e: MouseEvent) => {
+        const rect = item.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        const dx = (e.clientX - cx) * strength;
+        const dy = (e.clientY - cy) * strength;
+        gsap.to(item, { x: dx, y: dy, duration: 0.4, ease: "power2.out" });
+      };
+
+      const onMouseLeave = () => {
+        gsap.to(item, { x: 0, y: 0, duration: 0.6, ease: "elastic.out(1,0.5)" });
+      };
+
+      item.addEventListener("mousemove", onMouseMove);
+      item.addEventListener("mouseleave", onMouseLeave);
+      cleanups.push(() => {
+        item.removeEventListener("mousemove", onMouseMove);
+        item.removeEventListener("mouseleave", onMouseLeave);
+      });
+    });
+
+    return () => cleanups.forEach((fn) => fn());
+  }, []);
+
+  return pathname.startsWith("/portfolio") ? null : (
+    <nav
+      ref={pillRef}
+      className="nav-pill"
+      aria-label="Main navigation"
+    >
+      {NAV_ITEMS.map((item, i) => (
+        <a
+          key={item.href}
+          href={item.href}
+          ref={(el) => {
+            if (el) itemRefs.current[i] = el;
+          }}
+          className="nav-pill__item"
+          id={`nav-${item.label.toLowerCase()}`}
+          onClick={(e) => {
+            e.preventDefault();
+            
+            // @ts-ignore
+            const lenis = (window as any).lenis;
+            
+            // Update URL hash without jumping
+            if (window.history.pushState) {
+              window.history.pushState(null, '', item.href);
+            }
+
+            // Cinematic ease in-out cubic
+            const cinematicEase = (t: number) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+            const scrollConfig = { duration: 2.5, easing: cinematicEase };
+
+            if (item.href === "/") {
+              if (lenis) lenis.scrollTo(0, scrollConfig);
+              else window.scrollTo({ top: 0, behavior: 'smooth' });
+              return;
+            }
+
+            if (item.href === "/about") {
+              const aboutTrigger = ScrollTrigger.getById("about-scroll");
+              if (aboutTrigger) {
+                // Target Y = Start of pin + window.innerHeight (shrinking distance) + window.innerWidth (slide panel 1 in)
+                const targetY = aboutTrigger.start + window.innerHeight + window.innerWidth;
+                if (lenis) lenis.scrollTo(targetY, scrollConfig);
+                else window.scrollTo({ top: targetY, behavior: 'smooth' });
+                return;
+              }
+            }
+
+            const targetId = item.href.replace('/', '');
+            const targetEl = document.getElementById(targetId);
+            if (targetEl) {
+              if (lenis) {
+                lenis.scrollTo(targetEl, scrollConfig);
+              } else {
+                targetEl.scrollIntoView({ behavior: 'smooth' });
+              }
+            }
+          }}
+        >
+          <span className="nav-pill__item-bg" aria-hidden="true" />
+          {item.label}
+        </a>
+      ))}
+    </nav>
+  );
+}
+</file>
+
+<file path="next.config.ts">
+import type { NextConfig } from "next";
+import createNextIntlPlugin from 'next-intl/plugin';
+
+const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
+
+const nextConfig: NextConfig = {
+  poweredByHeader: false,
+  productionBrowserSourceMaps: false,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production"
+      ? { exclude: ["error"] }
+      : false,
+  },
+  images: {
+    formats: ["image/avif", "image/webp"],
+    qualities: [75, 80, 95, 100],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cdn.anugerahventures.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "pub-3f5c4bd8e0904cd59374f969e476a0c2.r2.dev",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        port: "",
+        pathname: "/**",
+      },
+    ],
+  },
+  async rewrites() {
+    return [
+      // Default locale (id) — no prefix
+      {
+        source: "/about",
+        destination: "/",
+      },
+      {
+        source: "/work",
+        destination: "/",
+      },
+      {
+        source: "/contact",
+        destination: "/",
+      },
+      // Non-default locale (en) — with prefix
+      {
+        source: "/en/about",
+        destination: "/en",
+      },
+      {
+        source: "/en/work",
+        destination: "/en",
+      },
+      {
+        source: "/en/contact",
+        destination: "/en",
+      },
+    ];
+  },
+  async redirects() {
+    return [
+      {
+        source: "/portofolio",
+        destination: "/portfolio",
+        permanent: true,
+      },
+    ];
+  },
+};
+
+export default withNextIntl(nextConfig);
+</file>
+
+<file path="src/components/sections/SelectedWork.tsx">
+"use client";
+
+import { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
+
+import { Project } from "@/lib/supabase";
+
+export default function SelectedWork({ projects = [] }: { projects: Project[] }) {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const titleLeftRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  const handleNavigate = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (isTransitioning) return;
+    setIsTransitioning(true);
+
+    // Cinematic exit transition
+    gsap.to(".work-section", {
+      opacity: 0,
+      scale: 0.95,
+      duration: 0.8,
+      ease: "power3.inOut",
+      onComplete: () => {
+        router.push("/portfolio");
+      }
+    });
+  };
+
+  useGSAP(
+    () => {
+      if (!sectionRef.current) return;
+
+      const mm = gsap.matchMedia();
+
+      mm.add("(min-width: 1024px)", () => {
+        const cards = gsap.utils.toArray(".work-card") as HTMLElement[];
+        const wrapper = document.querySelector(".cards-wrapper");
+        
+        if (!wrapper || cards.length === 0) return;
+
+        const ctx = gsap.context(() => {
+          const updateCards = () => {
+            const viewportCenter = window.innerHeight / 2;
+            
+            cards.forEach(card => {
+              const rect = (card as HTMLElement).getBoundingClientRect();
+              const cardCenter = rect.top + rect.height / 2;
+              const distFromCenter = Math.abs(viewportCenter - cardCenter);
+              
+              const maxDist = window.innerHeight * 0.5;
+              let progress = 1 - (distFromCenter / maxDist);
+              if (progress < 0) progress = 0;
+              
+              const minScale = 0.75;
+              const currentScale = minScale + (1 - minScale) * progress;
+              
+              gsap.set(card, {
+                scale: currentScale,
+                filter: `brightness(${0.3 + progress * 0.7})`,
+                opacity: 0.5 + progress * 0.5
+              });
+              
+              if (progress > 0.8) {
+                card.classList.add('is-active');
+              } else {
+                card.classList.remove('is-active');
+              }
+            });
+          };
+
+          gsap.set(cards[0], { scale: 1, filter: 'brightness(1)', opacity: 1 });
+          cards[0].classList.add('is-active');
+          
+          for (let i = 1; i < cards.length; i++) {
+            gsap.set(cards[i], { scale: 0.75, filter: 'brightness(0.3)', opacity: 0.5 });
+            cards[i].classList.remove('is-active');
+          }
+
+          gsap.to(".cards-wrapper", {
+            y: () => {
+              const cardHeight = (cards[0] as HTMLElement).offsetHeight;
+              const gap = window.innerHeight * 0.02;
+              const step = cardHeight + gap;
+              return -(step * (cards.length - 1));
+            },
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top top",
+              end: () => `+=${window.innerHeight * 1.5}`,
+              pin: true,
+              scrub: 1,
+              onUpdate: updateCards
+            },
+          });
+          
+          ScrollTrigger.refresh();
+        }, sectionRef);
+
+        return () => ctx.revert();
+      });
+
+      mm.add("(max-width: 1023px)", () => {
+        const mobileCards = gsap.utils.toArray(".mobile-work-card") as HTMLElement[];
+        const mobileWrapper = document.querySelector(".mobile-cards-wrapper");
+        
+        if (!mobileWrapper || mobileCards.length === 0) return;
+
+        const ctx = gsap.context(() => {
+          const updateMobileCards = () => {
+            const viewportCenter = window.innerWidth / 2;
+            
+            mobileCards.forEach(card => {
+              const rect = (card as HTMLElement).getBoundingClientRect();
+              const cardCenter = rect.left + rect.width / 2;
+              const distFromCenter = Math.abs(viewportCenter - cardCenter);
+              
+              const maxDist = window.innerWidth * 0.6;
+              let progress = 1 - (distFromCenter / maxDist);
+              if (progress < 0) progress = 0;
+              
+              const minScale = 0.85;
+              const currentScale = minScale + (1 - minScale) * progress;
+              
+              gsap.set(card, {
+                scale: currentScale,
+              });
+              
+              const overlay = card.querySelector(".mobile-overlay") as HTMLElement;
+              if (overlay) {
+                 // Active is less dark, inactive is darker
+                 overlay.style.backgroundColor = `rgba(0, 0, 0, ${0.85 - progress * 0.55})`;
+              }
+            });
+          };
+
+          // Initialize cards
+          updateMobileCards();
+
+          gsap.to(".mobile-cards-wrapper", {
+            x: () => {
+              const cardWidth = (mobileCards[0] as HTMLElement).offsetWidth;
+              const gap = parseFloat(getComputedStyle(mobileWrapper).gap || "16");
+              const step = cardWidth + gap;
+              return -(step * (mobileCards.length - 1));
+            },
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top top",
+              end: () => `+=${window.innerHeight * 1.5}`,
+              pin: true,
+              scrub: 1,
+              onUpdate: updateMobileCards
+            },
+          });
+          
+          ScrollTrigger.refresh();
+        }, sectionRef);
+
+        return () => ctx.revert();
+      });
+
+      return () => mm.revert();
+    },
+    { scope: sectionRef }
+  );
+
+  return (
+    <section
+      ref={sectionRef}
+      className="work-section w-full h-[100svh] flex relative overflow-hidden"
+      style={{ backgroundColor: "#F5F3EF" }}
+      id="work"
+      aria-label="Selected work"
+    >
+      {/* LEFT: Static Title Area — hidden on mobile, shown inline above carousel */}
+      <div className="hidden lg:flex w-full lg:w-[45%] h-full flex-col justify-center px-8 lg:px-20 relative z-20 pointer-events-none" ref={titleLeftRef}>
+        <h2 className="work-section__title pointer-events-auto">
+          SELECTED
+          <br />
+          <em style={{ fontStyle: "italic" }}>WORK</em>
+        </h2>
+        
+        <Link 
+          href="/portfolio"
+          onClick={handleNavigate}
+          className="mt-8 lg:mt-12 group flex flex-col w-max pointer-events-auto"
+        >
+          <div className="flex items-center gap-2 font-montserrat text-sm lg:text-base tracking-[0.2em] uppercase font-bold text-black pointer-events-auto">
+            VIEW FULL ARCHIVE 
+            <ArrowUpRight className="w-4 h-4 lg:w-5 lg:h-5 transition-transform duration-300 group-hover:rotate-45" strokeWidth={2.5} />
+          </div>
+          <span className="mt-1 w-0 h-[2px] bg-black transition-all duration-300 group-hover:w-full self-start"></span>
+        </Link>
+      </div>
+
+      {/* MOBILE: Title block stacked above the carousel */}
+      <div className="lg:hidden absolute top-0 left-0 w-full z-20 pointer-events-none pt-10 px-6">
+        <h2 className="work-section__title pointer-events-auto">
+          SELECTED <em style={{ fontStyle: "italic" }}>WORK</em>
+        </h2>
+        <Link 
+          href="/portfolio"
+          onClick={handleNavigate}
+          className="mt-4 group inline-flex flex-col w-max pointer-events-auto"
+        >
+          <div className="flex items-center gap-2 font-montserrat text-xs tracking-[0.2em] uppercase font-bold text-black">
+            VIEW FULL ARCHIVE 
+            <ArrowUpRight className="w-3 h-3 transition-transform duration-300 group-hover:rotate-45" strokeWidth={2.5} />
+          </div>
+          <span className="mt-1 w-0 h-[2px] bg-black transition-all duration-300 group-hover:w-full self-start"></span>
+        </Link>
+      </div>
+
+      {/* RIGHT: Vertical Snapping Carousel (desktop) / Horizontal GSAP (mobile) */}
+      <div className="w-full lg:w-[55%] h-full absolute right-0 top-0 pointer-events-none lg:pr-[4vw] flex items-center lg:items-start overflow-hidden">
+        
+        {/* Desktop: vertical carousel */}
+        <div className="cards-wrapper hidden lg:flex w-full absolute top-[20vh] flex-col gap-[2vh] items-center pointer-events-auto">
+          {projects.map((project) => (
+            <Link
+              href={`/portfolio/${project.slug}`}
+              key={project.slug}
+              className="work-card group relative w-[80%] lg:w-[80%] h-[60vh] shrink-0 z-10 shadow-2xl will-change-transform"
+              id={`work-card-desktop-${project.slug}`}
+              tabIndex={0}
+              aria-label={`Project: ${project.title}`}
+            >
+              <div className="w-full h-full relative overflow-hidden bg-black">
+                {project.hero_image_url ? (
+                  project.hero_image_url.endsWith(".mp4") || project.hero_image_url.endsWith(".webm") ? (
+                    <video
+                      src={project.hero_image_url}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="work-card__image object-cover w-full h-full absolute inset-0"
+                    />
+                  ) : (
+                    <Image
+                      src={project.hero_image_url}
+                      alt={project.title}
+                      fill
+                      sizes="(max-width: 1023px) 60vw, 40vw"
+                      className="work-card__image object-cover"
+                    />
+                  )
+                ) : (
+                  <div className="absolute inset-0 bg-[#111] flex items-center justify-center">
+                    <span className="text-white/10 font-playfair font-black text-[8vw] uppercase tracking-tighter">
+                      {project.title.split(' ').map(n => n[0]).join('').substring(0, 2)}
+                    </span>
+                  </div>
+                )}
+                <div className="absolute inset-0 bg-black/65 transition-colors duration-500 [.is-active_&]:bg-black/40" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 transition-opacity duration-500 [.is-active_&]:opacity-100" />
+                
+                <div className="absolute inset-x-12 bottom-12 flex justify-between items-end opacity-0 translate-y-4 transition-all duration-500 [.is-active_&]:opacity-100 [.is-active_&]:translate-y-0 pointer-events-none">
+                  <div>
+                    <h3 className="font-playfair text-5xl font-black text-white leading-none mb-2 tracking-tighter uppercase">{project.title}</h3>
+                    <p className="font-montserrat text-sm font-bold text-white/80 tracking-[0.2em] uppercase">{project.role}</p>
+                  </div>
+                  <div className="text-white font-playfair font-black text-2xl opacity-60">
+                    {project.year}
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        {/* Mobile: horizontal carousel */}
+        <div className="mobile-cards-wrapper lg:hidden w-max absolute top-[25vh] flex flex-row gap-[16px] px-[10vw] pointer-events-auto items-center">
+          {projects.map((project) => (
+            <Link
+              href={`/portfolio/${project.slug}`}
+              key={`mobile-${project.slug}`}
+              className="mobile-work-card relative w-[65vw] h-[50vh] shrink-0 z-10 shadow-2xl will-change-transform"
+              tabIndex={0}
+              aria-label={`Project: ${project.title}`}
+            >
+              <div className="w-full h-full relative overflow-hidden bg-black rounded-sm">
+                {project.hero_image_url ? (
+                  project.hero_image_url.endsWith(".mp4") || project.hero_image_url.endsWith(".webm") ? (
+                    <video
+                      src={project.hero_image_url}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="object-cover w-full h-full absolute inset-0"
+                    />
+                  ) : (
+                    <Image
+                      src={project.hero_image_url}
+                      alt={project.title}
+                      fill
+                      sizes="65vw"
+                      className="object-cover"
+                    />
+                  )
+                ) : (
+                  <div className="absolute inset-0 bg-[#111] flex items-center justify-center">
+                    <span className="text-white/10 font-playfair font-black text-[15vw] uppercase tracking-tighter">
+                      {project.title.split(' ').map(n => n[0]).join('').substring(0, 2)}
+                    </span>
+                  </div>
+                )}
+                {/* Mobile overlay */}
+                <div className="mobile-overlay absolute inset-0 transition-colors duration-200" style={{ backgroundColor: 'rgba(0,0,0,0.85)' }} />
+                
+                <div className="absolute inset-x-4 bottom-4 flex flex-col pointer-events-none">
+                  <h3 className="font-playfair text-2xl font-black text-white leading-none mb-1 tracking-tighter uppercase">{project.title}</h3>
+                  <p className="font-montserrat text-[10px] font-bold text-white/80 tracking-[0.2em] uppercase">{project.role}</p>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+</file>
+
+<file path="src/components/sections/AboutVertical.tsx">
+"use client";
+
+import Image from "next/image";
+import { ArrowUpRight } from "lucide-react";
+import LogoShader from "@/components/global/LogoShader";
+import { useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
+
+export default function AboutVertical({ 
+  projectsCount = 0, 
+  articlesCount = 0 
+}: { 
+  projectsCount?: number, 
+  articlesCount?: number 
+}) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  const panelsRef = useRef<(HTMLDivElement | null)[]>([]);
+  
+  const yearsOfExperience = new Date().getFullYear() - 2024;
+  
+  useGSAP(() => {
+    const panels = gsap.utils.toArray('.panel-section') as HTMLElement[];
+    
+    panels.forEach((panel, i) => {
+      // The last panel doesn't need to scale down
+      if (i === panels.length - 1) return;
+
+      const inner = panel.querySelector('.panel-inner');
+      if (!inner) return;
+      
+      ScrollTrigger.create({
+        trigger: panel,
+        start: "top top",
+        endTrigger: panels[i + 1],
+        end: "top top",
+        pin: true,
+        pinSpacing: false,
+        scrub: true,
+        snap: {
+          snapTo: 1, // Snap to start or end of the trigger
+          directional: true,
+          duration: { min: 0.2, max: 0.5 },
+          delay: 0.1,
+          ease: "power1.inOut"
+        },
+        animation: gsap.to(inner, { 
+          scale: 0.85, 
+          opacity: 0.7, 
+          filter: "blur(12px)",
+          ease: "power2.inOut" 
+        })
+      });
+    });
+
+    // Counter Animation
+    const counters = gsap.utils.toArray('.stat-counter') as HTMLElement[];
+    
+    counters.forEach((counter) => {
+      const target = parseFloat(counter.getAttribute('data-target') || '0');
+      
+      ScrollTrigger.create({
+        trigger: counter,
+        start: "top 85%",
+        once: true,
+        onEnter: () => {
+          gsap.fromTo(counter, 
+            { innerText: 0 }, 
+            { 
+              innerText: target, 
+              duration: 2.5, 
+              ease: "power3.out", 
+              snap: { innerText: 1 },
+              onUpdate: function() {
+                counter.innerHTML = Math.ceil(Number(this.targets()[0].innerText)).toString();
+              }
+            }
+          );
+        }
+      });
+    });
+
+
+  }, { scope: containerRef });
+
+  return (
+    <div ref={containerRef} className="bg-white text-black relative z-20 w-full">
+      
+      {/* Panel 3: THE PHILOSOPHY */}
+      <section className="sticky top-0 w-full h-[100svh] overflow-hidden panel-section bg-gray-100">
+        <div className="absolute inset-0 z-0">
+          <Image src="/images/logo-weatso.webp" alt="Background" fill className="object-cover opacity-40 blur-2xl scale-110 pointer-events-none" priority />
+        </div>
+        <div className="panel-inner w-full h-full flex flex-col lg:flex-row border-b border-gray-100 bg-white relative z-10" ref={(el) => { panelsRef.current[0] = el; }}>
+        
+        {/* Left: Visual */}
+        <div className="w-full lg:w-1/2 h-[50svh] lg:h-full relative bg-white flex items-center justify-center overflow-hidden">
+          <LogoShader 
+            className="absolute inset-0 z-10" 
+            imageUrl="/images/logo-weatso.webp" 
+          />
+        </div>
+
+        {/* Right: Text */}
+        <div className="w-full lg:w-1/2 flex flex-col justify-center bg-[var(--chalk)] relative z-10" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(3rem, 8vh, 6rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}>
+          <div className="w-full">
+            <span className="about__label">03 / THE PHILOSOPHY</span>
+            <h2 className="about__title !text-[clamp(1.5rem,4vw,5rem)]" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', hyphens: 'auto' }}>CREATIVE DIGITAL ARCHITECT.</h2>
+            <p className="about__text">
+              &quot;Dalam membangun ekosistem digital, kode yang bersih dengan <i>technical debt</i> minim adalah <i>bare minimum</i>. Nilai sesungguhnya dari sebuah arsitektur IT terletak pada kemampuannya menghadirkan <i>Business Intelligence</i>, mempercepat efisiensi operasional, dan membungkus solusi kompleks tersebut dalam estetika visual yang memukau.&quot;
+            </p>
+          </div>
+        </div>
+
+        </div>
+      </section>
+
+      {/* Panel 4: PRODUCTION LEADERSHIP + Team Photo */}
+      <section className="sticky top-0 w-full h-[100svh] overflow-hidden panel-section bg-gray-100">
+        <div className="absolute inset-0 z-0">
+          <Image src="/images/team.webp" alt="Background" fill className="object-cover opacity-40 blur-2xl scale-110 pointer-events-none" />
+        </div>
+        <div className="panel-inner w-full h-full flex flex-col-reverse lg:flex-row border-b border-gray-100 bg-white relative z-10" ref={(el) => { panelsRef.current[1] = el; }}>
+        
+        {/* Left: Text */}
+        <div className="w-full lg:w-1/2 flex flex-col justify-center bg-[var(--chalk)] relative z-10" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(3rem, 8vh, 6rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}>
+          <div className="w-full">
+            <span className="about__label">04 / PRODUCTION LEADERSHIP</span>
+            <h2 className="about__title !text-[clamp(1.5rem,4vw,5rem)]" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', hyphens: 'auto' }}>WEATSO | Bespoke IT Consultancy &amp; Digital Presence.</h2>
+            <p className="about__text font-bold mb-2">Production Lead &amp; Technical Engineer</p>
+            <p className="about__text">
+              &quot;Memimpin tim lintas fungsi dari tahap negosiasi klien hingga <i>deployment</i>. Saya merancang arsitektur solusi yang paling optimal secara bisnis dan teknis, mengorkestrasi alur kerja tim, memantau progres pengembangan, dan turun langsung menulis kode saat eksekusi menuntut presisi absolut.&quot;
+            </p>
+          </div>
+        </div>
+
+        {/* Right: Photo */}
+        <div className="w-full lg:w-1/2 h-[50svh] lg:h-full relative bg-[var(--chalk)]">
+          <Image 
+            src="/images/team.webp" 
+            alt="WEATSO Team" 
+            fill 
+            className="object-cover object-center" 
+            sizes="(max-width: 1024px) 100vw, 50vw"
+          />
+        </div>
+
+        </div>
+      </section>
+
+      {/* Panel 5: THE EXPERIENCE */}
+      <section className="sticky top-0 w-full h-[100svh] overflow-hidden panel-section bg-gray-100">
+        <div className="absolute inset-0 z-0">
+          <Image src="/images/Experience.webp" alt="Background" fill className="object-cover opacity-40 blur-2xl scale-110 pointer-events-none" />
+        </div>
+        <div className="panel-inner w-full h-full flex flex-col lg:flex-row border-b border-gray-100 bg-white relative z-10" ref={(el) => { panelsRef.current[2] = el; }}>
+        
+        {/* Left: Photo */}
+        <div className="w-full lg:w-1/2 h-[50svh] lg:h-full relative bg-gray-100">
+          <Image 
+            src="/images/Experience.webp" 
+            alt="Experience" 
+            fill 
+            className="object-cover object-center" 
+            sizes="(max-width: 1024px) 100vw, 50vw"
+          />
+        </div>
+
+        {/* Right: Text & Stats */}
+        <div className="w-full lg:w-1/2 flex flex-col justify-center bg-[var(--chalk)] relative z-10" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(3rem, 8vh, 6rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}>
+          <div className="w-full">
+            <span className="about__label">05 / THE EXPERIENCE</span>
+            <h2 className="about__title !text-[clamp(1.5rem,4vw,5rem)]" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', hyphens: 'auto' }}>EXPERIENCE IN NUMBERS.</h2>
+            <p className="about__text mb-12">
+              &quot;Fokus pada hasil akhir (delivery) sejak 2024. Metrik di bawah ini adalah representasi kuantitatif dari proyek yang telah dirilis, validasi profesional, dan jejak teknis yang saya bagikan ke ruang publik.&quot;
+            </p>
+            
+            {/* Stats Grid */}
+            <div className="grid grid-cols-2 gap-8 md:gap-12">
+              
+              {/* Stat 1 */}
+              <div>
+                <div className="flex items-baseline gap-1 font-playfair font-black text-5xl md:text-7xl tracking-tighter">
+                  <span className="stat-counter" data-target={yearsOfExperience}>0</span>
+                  <span className="text-3xl md:text-5xl opacity-50">+</span>
+                </div>
+                <p className="font-montserrat text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mt-2 opacity-60">Years of Experience</p>
+              </div>
+
+              {/* Stat 2 */}
+              <div>
+                <div className="flex items-baseline gap-1 font-playfair font-black text-5xl md:text-7xl tracking-tighter">
+                  <span className="stat-counter" data-target={projectsCount}>0</span>
+                  <span className="text-3xl md:text-5xl opacity-50">++</span>
+                </div>
+                <p className="font-montserrat text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mt-2 opacity-60">Digital Projects</p>
+              </div>
+
+              {/* Stat 3 */}
+              <div>
+                <div className="flex items-baseline gap-1 font-playfair font-black text-5xl md:text-7xl tracking-tighter">
+                  <span className="stat-counter" data-target="10">0</span>
+                  <span className="text-3xl md:text-5xl opacity-50">++</span>
+                </div>
+                <p className="font-montserrat text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mt-2 opacity-60">Certifications</p>
+              </div>
+
+              {/* Stat 4 */}
+              <div>
+                <div className="flex items-baseline gap-1 font-playfair font-black text-5xl md:text-7xl tracking-tighter">
+                  <span className="stat-counter" data-target={articlesCount}>0</span>
+                </div>
+                <p className="font-montserrat text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mt-2 opacity-60">Technical Insights</p>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+
+        </div>
+      </section>
+
+      {/* Panel 6: THE NEXT */}
+      <section className="sticky top-0 w-full h-[100svh] overflow-hidden panel-section bg-white">
+        <div className="panel-inner w-full h-full flex flex-row border-b border-gray-100 bg-white relative z-10" ref={(el) => { panelsRef.current[3] = el; }}>
+        <div className="w-full flex flex-col justify-center items-center bg-[var(--chalk)] relative z-10 text-center" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(4rem, 10vh, 8rem)", paddingBottom: "clamp(4rem, 10vh, 8rem)" }}>
+          <div className="w-full max-w-2xl mx-auto">
+            <span className="about__label mx-auto">06 / THE NEXT</span>
+            <h2 className="about__title !text-[clamp(1.5rem,4vw,5rem)]" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', hyphens: 'auto' }}>WHAT NEXT?</h2>
+            <p className="about__text italic font-playfair font-medium">
+              &quot;Semua ini baru fondasi awal. Ke depannya, masih banyak hal menarik, eksperimen teknis, dan ide bisnis yang akan saya bangun.&quot;
+            </p>
+            <div 
+              className="mt-20 md:mt-32 flex flex-col items-center max-w-full mx-auto group cursor-default"
+            >
+              <a href="https://anugerahventures.com" target="_blank" rel="noopener noreferrer" className="flex flex-wrap justify-center items-center gap-1 md:gap-2 font-montserrat text-[10px] min-[375px]:text-xs md:text-base tracking-[0.1em] md:tracking-[0.2em] font-bold uppercase pointer-events-auto hover:text-gray-600 transition-colors px-2 text-center">
+                <span>NEXT JOURNEY: ANUGERAHVENTURES.COM</span>
+                <ArrowUpRight className="w-3 h-3 md:w-4 md:h-4 transition-transform duration-300 group-hover:rotate-45 flex-shrink-0" strokeWidth={2.5} />
+              </a>
+              <span className="mt-1 w-0 h-[2px] bg-black transition-all duration-300 group-hover:w-[80%] md:group-hover:w-full self-center"></span>
+            </div>
+          </div>
+        </div>
+
+        </div>
+      </section>
+
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/sections/InfiniteArchiveGrid.tsx">
+"use client";
+
+import { useState, useRef } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Project } from "@/lib/supabase";
+import { ArrowRight } from "lucide-react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
+
+const PAD_LEFT = "clamp(1.5rem, 5vw, 6rem)";
+
+export default function InfiniteArchiveGrid({ projects = [] }: { projects: Project[] }) {
+  const router = useRouter();
+  const YEARS = ["ALL", ...Array.from(new Set(projects.map(p => String(p.year))))].sort((a, b) => b.localeCompare(a));
+  
+  const [activeYear, setActiveYear] = useState("ALL");
+  const containerRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  // -- Mobile Vertical Infinite Scroll Refs --
+  const mobileContainerRef = useRef<HTMLDivElement>(null);
+  const mobileGridRef = useRef<HTMLDivElement>(null);
+
+  const filteredProjects = activeYear === "ALL" 
+    ? projects 
+    : projects.filter(p => String(p.year) === activeYear);
+
+  // Base duplications for Infinite Scroll
+  const minItemsRequired = 8; 
+  let BaseSet = [...filteredProjects];
+  if (BaseSet.length > 0) {
+    while (BaseSet.length < minItemsRequired) {
+      BaseSet = [...BaseSet, ...filteredProjects];
+    }
+  }
+  const displayProjects = [...BaseSet, ...BaseSet];
+
+  // GSAP Virtual Infinite Scroll (Desktop Horizontal & Mobile Vertical)
+  useGSAP(() => {
+    const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
+    
+    // ============================================
+    // DESKTOP LOGIC (Horizontal Scroll)
+    // ============================================
+    if (isDesktop && containerRef.current && trackRef.current) {
+      const cards = gsap.utils.toArray('.desktop-card') as HTMLElement[];
+      if (cards.length === 0) return;
+
+      let logicalCards = [...cards];
+      let currentScroll = 0;
+      let autoScrollOffset = 0;
+      let isIdle = true;
+      let idleTimer: NodeJS.Timeout;
+
+      const resetIdle = () => {
+        isIdle = false;
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => { isIdle = true; }, 2000);
+      };
+
+      window.scrollTo(0, 25000);
+
+      const handleScroll = () => resetIdle();
+      window.addEventListener("scroll", handleScroll, { passive: true });
+      window.addEventListener("wheel", handleScroll, { passive: true });
+      window.addEventListener("touchmove", handleScroll, { passive: true });
+
+      resetIdle();
+
+      const ticker = () => {
+        const lenis = (window as any).lenis;
+        if (isIdle) autoScrollOffset -= 1.5;
+
+        const scrollY = lenis ? lenis.scroll : window.scrollY;
+
+        if (scrollY < 5000) {
+          const diff = 25000 - scrollY;
+          if (lenis) lenis.scrollTo(25000, { immediate: true });
+          else window.scrollTo(0, 25000);
+          autoScrollOffset -= diff;
+        } else if (scrollY > 45000) {
+          const diff = scrollY - 25000;
+          if (lenis) lenis.scrollTo(25000, { immediate: true });
+          else window.scrollTo(0, 25000);
+          autoScrollOffset += diff;
+        }
+
+        currentScroll = -scrollY + autoScrollOffset;
+
+        const screenWidth = window.innerWidth;
+        const screenHeight = window.innerHeight;
+        const minHeight = 45;
+        const maxHeight = 95;
+        const textRightEdge = screenWidth * 0.45;
+        const focalPoint = screenWidth * 0.6;
+        const minWidthPx = (minHeight * 1.777) * (screenHeight / 100);
+
+        while (currentScroll <= -minWidthPx) {
+          currentScroll += minWidthPx;
+          autoScrollOffset += minWidthPx;
+          logicalCards.push(logicalCards.shift()!);
+        }
+        while (currentScroll > 0) {
+          currentScroll -= minWidthPx;
+          autoScrollOffset -= minWidthPx;
+          logicalCards.unshift(logicalCards.pop()!);
+        }
+        
+        let x = currentScroll;
+        let activeIndex = -1;
+        let minDistance = Infinity;
+
+        for (let i = 0; i < logicalCards.length; i++) {
+          const card = logicalCards[i];
+          let progress = (x - textRightEdge) / (screenWidth - textRightEdge);
+          progress = Math.max(0, Math.min(1, progress));
+          const heightVh = minHeight + (maxHeight - minHeight) * progress;
+          const widthPx = (heightVh * 1.777) * (screenHeight / 100);
+          
+          const cardCenter = x + (widthPx / 2);
+          const dist = Math.abs(cardCenter - focalPoint);
+          if (dist < minDistance) {
+            minDistance = dist;
+            activeIndex = i;
+          }
+          
+          (card as any)._x = x;
+          (card as any)._widthPx = widthPx;
+          (card as any)._heightVh = heightVh;
+          x += widthPx;
+        }
+
+        for (let i = 0; i < logicalCards.length; i++) {
+          const card = logicalCards[i];
+          const isActive = i === activeIndex;
+          gsap.set(card, {
+            x: (card as any)._x,
+            width: `${(card as any)._widthPx}px`,
+            height: `${(card as any)._heightVh}vh`,
+            zIndex: isActive ? 10 : 1,
+            filter: `brightness(${isActive ? 1 : 0.6})`
+          });
+          if (isActive) card.classList.add('is-active');
+          else card.classList.remove('is-active');
+        }
+      };
+
+      gsap.ticker.add(ticker);
+      return () => {
+        window.removeEventListener("scroll", handleScroll);
+        window.removeEventListener("wheel", handleScroll);
+        window.removeEventListener("touchmove", handleScroll);
+        gsap.ticker.remove(ticker);
+        clearTimeout(idleTimer);
+      };
+    } 
+  }, { dependencies: [activeYear], scope: containerRef });
+
+  return (
+    <div key={activeYear} className="min-h-[100svh]">
+      
+      {/* Hide Global Noise Overlay on Desktop only */}
+      <style>{`
+        @media (min-width: 1024px) {
+          .noise-overlay { display: none !important; }
+        }
+      `}</style>
+
+      {/* Huge invisible scroll area to power native Lenis scroll (for Desktop infinite logic) */}
+      <div className="hidden lg:block" style={{ height: "50000px", position: "absolute", width: "1px", pointerEvents: "none" }} />
+
+      {/* ── Fixed Header ────────────────────────────────────────────── */}
+      <div 
+        className="fixed top-0 left-0 right-0 z-50 flex justify-between items-start pointer-events-none mix-blend-difference text-white"
+        style={{ 
+          paddingLeft: PAD_LEFT, paddingRight: PAD_LEFT, paddingTop: "clamp(1.25rem, 3vh, 2.5rem)"
+        }}
+      >
+        <button onClick={() => router.push("/#work")} style={{ background: "none", border: "none", color: "white", cursor: "pointer", fontFamily: "inherit", fontSize: "0.75rem", letterSpacing: "0.3em", textTransform: "uppercase", display: "flex", alignItems: "center", gap: "0.5rem", pointerEvents: "auto" }}>
+          <ArrowRight size={16} className="rotate-180" /> BACK
+        </button>
+
+        <div className="flex flex-col items-end gap-2 pointer-events-auto">
+          <span className="opacity-50 text-[10px] tracking-[0.2em] uppercase mb-1">Filter</span>
+          <div className="flex gap-3 flex-wrap justify-end max-w-[60vw] lg:max-w-none">
+            {YEARS.map(year => (
+              <button
+                key={year}
+                onClick={() => {
+                  window.scrollTo(0, 0);
+                  setActiveYear(year);
+                }}
+                className={`text-[10px] lg:text-xs font-bold tracking-widest uppercase transition-all duration-300 relative group ${activeYear === year ? 'opacity-100' : 'opacity-40 hover:opacity-100'}`}
+              >
+                {year}
+                <span className={`absolute -bottom-1 left-0 h-[1px] bg-white transition-all duration-300 ${activeYear === year ? 'w-full' : 'w-0 group-hover:w-1/2'}`}></span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Fixed Left Typography ─────────────────────────────────────── */}
+      <div 
+        className="fixed z-40 pointer-events-none mix-blend-difference text-white flex flex-col"
+        style={{ 
+          left: 0, 
+          top: "25vh", // Kembali ke 25% dari atas (75% di atas layar) sesuai request
+          transform: "translateY(-50%)",
+          paddingLeft: "clamp(1.5rem, 5vw, 6rem)", 
+          paddingRight: "clamp(1.5rem, 5vw, 6rem)",
+          width: "42%",
+          maxWidth: "500px"
+        }}
+      >
+        <h1 
+          className="font-playfair font-black leading-[0.85] uppercase tracking-tighter"
+          style={{ fontSize: "clamp(3.5rem, 8vw, 12rem)" }}
+        >
+          PROJECT<br />ARCHIVE
+        </h1>
+        <p className="mt-6 md:mt-8 max-w-sm font-montserrat text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase leading-relaxed opacity-80">
+          A collection of digital experiences, branding, and visual productions.
+        </p>
+      </div>
+
+      {/* ── DESKTOP LAYOUT (Infinite Virtual Scroll - Light Mode) ─────── */}
+      <div className="hidden lg:block bg-[#f5f5f5] min-h-screen text-black font-montserrat">
+        <section ref={containerRef} className="fixed top-0 left-0 w-full h-screen overflow-hidden bg-[#f5f5f5]">
+          <div className="absolute top-0 left-0 w-full h-full flex items-end pb-[10vh] pointer-events-none">
+            <div ref={trackRef} className="relative w-full h-full pointer-events-auto border-b border-black/10">
+              {displayProjects.map((project, idx) => (
+                <Link 
+                  href={`/portfolio/${project.slug}`}
+                  key={`desktop-${project.slug}-${idx}`} 
+                  className="desktop-card block group absolute bottom-0 left-0 overflow-hidden bg-black cursor-pointer will-change-[width,height,transform]"
+                  style={{ width: "25vw", height: "40vh" }} // Initial small state
+                >
+                  {project.hero_image_url ? (
+                    project.hero_image_url.endsWith(".mp4") || project.hero_image_url.endsWith(".webm") ? (
+                      <video src={project.hero_image_url} autoPlay loop muted playsInline className="object-cover object-center w-full h-full absolute inset-0" />
+                    ) : (
+                      <Image src={project.hero_image_url} alt={project.title} fill className="object-cover object-center" sizes="(max-width: 1024px) 50vw, 30vw" />
+                    )
+                  ) : (
+                    <div className="absolute inset-0 bg-[#111] flex items-center justify-center">
+                      <span className="text-white/10 font-playfair font-black text-6xl md:text-8xl uppercase tracking-tighter">
+                        {project.title.split(' ').map(n => n[0]).join('').substring(0, 2)}
+                      </span>
+                    </div>
+                  )}
+                  
+                  <div className="absolute inset-0 bg-black/65 transition-colors duration-300 [.is-active_&]:bg-black/40" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 transition-opacity duration-300 [.is-active_&]:opacity-100" />
+                  
+                  <div className="absolute inset-0 p-8 flex flex-col justify-end opacity-0 translate-y-4 transition-all duration-500 [.is-active_&]:opacity-100 [.is-active_&]:translate-y-0">
+                    <h3 className="font-playfair text-3xl md:text-5xl text-white font-black uppercase tracking-tighter">{project.title}</h3>
+                    <p className="font-montserrat text-xs md:text-sm font-bold text-white/80 tracking-[0.2em] uppercase mt-2">{project.role}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      </div>
+
+      {/* ── MOBILE / TABLET LAYOUT (Standard Vertical Scroll - Dark) ──── */}
+      <section className="block lg:hidden relative w-full min-h-[100svh] bg-[#111] z-10">
+        <div className="relative w-full pt-[20vh] pb-[10vh]">
+          <div className="px-4 grid grid-cols-2 gap-3">
+            {filteredProjects.map((project, idx) => (
+              <Link
+                href={`/portfolio/${project.slug}`}
+                key={`mobile-${project.slug}-${idx}`}
+                className="mobile-card relative block overflow-hidden bg-[#222] aspect-[4/5] group"
+              >
+                {project.hero_image_url ? (
+                  project.hero_image_url.endsWith(".mp4") || project.hero_image_url.endsWith(".webm") ? (
+                    <video src={project.hero_image_url} autoPlay loop muted playsInline className="object-cover object-center w-full h-full absolute inset-0" />
+                  ) : (
+                    <Image src={project.hero_image_url} alt={project.title} fill className="object-cover object-center" sizes="50vw" />
+                  )
+                ) : (
+                  <div className="absolute inset-0 bg-[#1a1a1a] flex items-center justify-center">
+                    <span className="text-white/10 font-playfair font-black text-6xl uppercase tracking-tighter">
+                      {project.title.split(' ').map(n => n[0]).join('').substring(0, 2)}
+                    </span>
+                  </div>
+                )}
+                
+                <div className="absolute inset-0 bg-black/50 transition-colors duration-300 group-hover:bg-black/20" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80" />
+                
+                <div className="absolute inset-0 p-4 flex flex-col justify-end">
+                  <h3 className="font-playfair text-sm sm:text-base text-white font-black uppercase tracking-tighter leading-tight line-clamp-3">{project.title}</h3>
+                  <p className="font-montserrat text-[9px] sm:text-[10px] font-bold text-white/70 tracking-[0.1em] uppercase mt-1 line-clamp-1">{project.role}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+    </div>
+  );
+}
+</file>
+
+<file path="src/components/sections/HeroSection.tsx">
+"use client";
+
+import { useRef, useEffect } from "react";
+import Image from "next/image";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
+
+ScrollTrigger.config({ ignoreMobileResize: true });
+
+export default function HeroSection() {
+  const sectionRef       = useRef<HTMLDivElement>(null);
+  const overlayRef       = useRef<HTMLDivElement>(null);
+  const nameLeftRef      = useRef<HTMLSpanElement>(null);
+  const nameRightRef     = useRef<HTMLSpanElement>(null);
+  const taglineRef       = useRef<HTMLParagraphElement>(null);
+  const scrollHintRef    = useRef<HTMLDivElement>(null);
+  const indexRef         = useRef<HTMLSpanElement>(null);
+  const mobileNoticeRef  = useRef<HTMLParagraphElement>(null);
+  
+  const photoContainerRef = useRef<HTMLDivElement>(null);
+  const imgRef           = useRef<HTMLImageElement>(null);
+  
+  const aboutWrapperRef  = useRef<HTMLDivElement>(null);
+  const panelsRef        = useRef<(HTMLDivElement | null)[]>([]);
+
+  // 1. ZOOM/RESIZE DEBOUNCE
+  useEffect(() => {
+    let resizeTimer: NodeJS.Timeout;
+    const handleResize = () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 250);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      clearTimeout(resizeTimer);
+    };
+  }, []);
+
+  useGSAP(
+    () => {
+      if (!sectionRef.current || !overlayRef.current || !aboutWrapperRef.current) return;
+
+      const mm = gsap.matchMedia();
+
+      // =========================================================
+      // DESKTOP LOGIC (100% KODE ANDA YANG SUDAH FIX)
+      // =========================================================
+      mm.add("(min-width: 1024px)", () => {
+        const ctx = gsap.context(() => {
+          const tl = gsap.timeline({ delay: 1.5 });
+
+          tl.fromTo(
+              indexRef.current,
+              { opacity: 0, y: -10 },
+              { opacity: 1, y: 0, duration: 0.8, ease: "expo.out" }
+            )
+            .fromTo(
+              taglineRef.current,
+              { opacity: 0, y: 15 },
+              { opacity: 1, y: 0, duration: 0.8, ease: "expo.out" },
+              "-=0.6"
+            )
+            .fromTo(
+              scrollHintRef.current,
+              { opacity: 0 },
+              { opacity: 1, duration: 0.6 },
+              "-=0.4"
+            );
+
+          ScrollTrigger.create({
+            trigger: sectionRef.current,
+            start: "top top",
+            end: "bottom bottom",
+            scrub: true,
+            onUpdate: (self) => {
+              const p = self.progress;
+              const bgAlpha = 1 - p;
+              if (overlayRef.current) overlayRef.current.style.backgroundColor = `rgba(255, 255, 255, ${bgAlpha})`;
+              const textVal = Math.round(p * 255);
+              const textColor = `rgb(${textVal}, ${textVal}, ${textVal})`;
+              if (nameLeftRef.current) nameLeftRef.current.style.color = textColor;
+              if (nameRightRef.current) nameRightRef.current.style.color = textColor;
+              const labelVal = Math.round(60 + (p * 195));
+              const labelColor = `rgb(${labelVal}, ${labelVal}, ${labelVal})`;
+              if (indexRef.current) indexRef.current.style.color = labelColor;
+              if (taglineRef.current) taglineRef.current.style.color = labelColor;
+              if (scrollHintRef.current) {
+                scrollHintRef.current.style.color = labelColor;
+                const line = scrollHintRef.current.querySelector(".hero__scroll-line") as HTMLElement | null;
+                if (line) line.style.backgroundColor = labelColor;
+              }
+            },
+          });
+
+          gsap.to(imgRef.current, {
+            y: () => {
+              if (!imgRef.current) return 0;
+              const overflow = imgRef.current.offsetHeight - window.innerHeight;
+              return overflow > 0 ? -(overflow * 0.8) : 0;
+            },
+            ease: "none",
+            scrollTrigger: { trigger: sectionRef.current, start: "top top", end: "bottom bottom", scrub: true }
+          });
+
+          const panels = panelsRef.current.filter(Boolean);
+          const scrollTl = gsap.timeline({
+            scrollTrigger: {
+              id: "about-scroll",
+              trigger: sectionRef.current,
+              start: "bottom bottom",
+              pin: true,
+              scrub: true,
+              snap: {
+                snapTo: [0, ...panels.map((_, i) => (0.5 + i + 1) / (0.5 + panels.length))],
+                directional: true,
+                duration: { min: 1.0, max: 1.8 },
+                delay: 0,
+                ease: "power3.inOut"
+              },
+              end: () => `+=${window.innerWidth * panels.length}`,
+            },
+          });
+
+          gsap.set(photoContainerRef.current, { clipPath: "inset(0% 0%)" });
+          scrollTl.fromTo(photoContainerRef.current, { clipPath: "inset(0% 0%)" }, { clipPath: "inset(4vh 4vw)", ease: "power2.inOut", duration: window.innerWidth * 0.5 }, 0);
+          scrollTl.to(overlayRef.current, { opacity: 0, duration: window.innerWidth * 0.25, ease: "power2.in" }, window.innerWidth * 0.25);
+          scrollTl.to(aboutWrapperRef.current, { xPercent: -100, ease: "none", duration: window.innerWidth * panels.length }, window.innerWidth * 0.5);
+
+        }, sectionRef);
+
+        return () => ctx.revert();
+      });
+
+      // =========================================================
+      // MOBILE LOGIC: MORPH PRELOADER + VERTICAL TO HORIZONTAL SCROLL
+      // =========================================================
+      mm.add("(max-width: 1023px)", () => {
+        // 1. SETUP LAYOUT
+        gsap.set(sectionRef.current, { height: "auto", position: "relative", display: "flex", flexDirection: "column", overflow: "hidden" });
+        gsap.set(photoContainerRef.current, { position: "relative", top: "auto", left: "auto", width: "100%", height: "100svh", zIndex: 1 });
+        
+        // Memaksa About Wrapper membentang 2x layar ke samping (Horizontal Ready)
+        gsap.set(aboutWrapperRef.current, {
+          position: "relative", top: "auto", left: "auto", width: "200vw", height: "100svh",
+          display: "flex", flexDirection: "row", zIndex: 10
+        });
+
+        // Panel 01 dan 02 diset sebelahan di dalam wrapper 200vw
+        gsap.set(panelsRef.current, { width: "100vw", height: "100svh", display: "flex", flexDirection: "column", flexShrink: 0 });
+        if (panelsRef.current[0] && panelsRef.current[1]) {
+          const children = [...panelsRef.current[0].children, ...panelsRef.current[1].children];
+          gsap.set(children, { height: "50svh", width: "100%", flex: "none" });
+        }
+
+        // 2. ANIMASI MORPH PRELOADER (1.5 DETIK)
+        const initTl = gsap.timeline({ delay: 1.5 });
+        
+        // Background Putih -> Hitam Transparan (50%)
+        initTl.to(overlayRef.current, { backgroundColor: "rgba(0, 0, 0, 0.5)", duration: 1.2, ease: "power2.inOut" }, 0);
+        
+        // Teks Hitam -> Teks Putih
+        initTl.to([nameLeftRef.current, nameRightRef.current], { color: "rgb(255, 255, 255)", duration: 1.2, ease: "power2.inOut" }, 0);
+        initTl.to([indexRef.current, taglineRef.current, scrollHintRef.current], { color: "rgba(255, 255, 255, 0.8)", duration: 1.2, ease: "power2.inOut" }, 0);
+        if (mobileNoticeRef.current) {
+          initTl.to(mobileNoticeRef.current, { color: "rgba(255, 255, 255, 0.6)", duration: 1.2, ease: "power2.inOut" }, 0);
+        }
+
+        // Cinematic reveal foto
+        if (imgRef.current) {
+          initTl.fromTo(imgRef.current, { scale: 1.15 }, { scale: 1, duration: 2, ease: "power2.out" }, 0);
+        }
+
+        // 3. PARALLAX NATIVE SCROLL PADA HERO (LCP)
+        gsap.to(imgRef.current, {
+          yPercent: 15,
+          ease: "none",
+          scrollTrigger: {
+            trigger: photoContainerRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: true
+          }
+        });
+
+        // 4. EFEK "AKSEN KHUSUS": PANEL 02 MELUNCUR DARI KANAN
+        // Scroll vertical akan normal sampai Panel 01 mentok di atas layar.
+        // Saat mentok, layar ditahan, dan user scroll untuk menarik Panel 02 masuk.
+        gsap.to(aboutWrapperRef.current, {
+          x: () => -window.innerWidth, // Menggeser kontainer ke kiri sejauh 1 layar
+          ease: "none",
+          scrollTrigger: {
+            id: "mobile-horizontal",
+            trigger: aboutWrapperRef.current,
+            start: "top top",
+            end: () => `+=${window.innerWidth}`,
+            pin: true,                        // Mengunci layar
+            scrub: true,                      // Terikat pada scroll pengguna
+            invalidateOnRefresh: true,
+            snap: {
+              snapTo: 1, // Snap to start (0) or end (1) of the animation
+              directional: true,
+              duration: { min: 0.2, max: 0.5 },
+              delay: 0.1,
+              ease: "power1.inOut"
+            }
+          }
+        });
+      });
+
+      return () => mm.revert();
+    },
+    { scope: sectionRef }
+  );
+
+  return (
+    <section ref={sectionRef} className="hero" id="home" aria-label="Hero section">
+      
+      {/* Layer 1: Overlay (Morph Target) */}
+      <div 
+        className="hero__overlay-wrapper max-lg:absolute max-lg:inset-0 max-lg:z-50 max-lg:flex max-lg:flex-col max-lg:justify-center" 
+        ref={overlayRef} 
+        style={{ backgroundColor: "rgba(255, 255, 255, 1)" }}
+      >
+        <span ref={indexRef} className="hero__index" style={{ color: "rgb(60, 60, 60)" }}>
+          Portfolio &nbsp;&bull;&nbsp; {new Date().getFullYear()}
+        </span>
+
+        <h1 className="hero__name" aria-label="NATANAEL ALEXANDER">
+          <span ref={nameLeftRef} className="hero__name-left" style={{ color: "rgb(0, 0, 0)" }}>
+            NATANAEL
+          </span>
+          <span ref={nameRightRef} className="hero__name-right" style={{ color: "rgb(0, 0, 0)" }}>
+            ALEXANDER
+          </span>
+        </h1>
+
+        <p ref={taglineRef} className="hero__tagline" style={{ color: "rgb(60, 60, 60)" }}>
+          Creative Digital Architect
+        </p>
+
+        <p
+          ref={mobileNoticeRef}
+          className="lg:hidden absolute bottom-6 left-0 right-0 text-center font-montserrat tracking-widest uppercase text-[0.6rem] sm:text-[0.65rem] px-4"
+          style={{ color: "rgba(60,60,60,0.7)" }}
+        >
+          ✦ Open on Laptop / Desktop for best experience
+        </p>
+
+        <div ref={scrollHintRef} className="hero__scroll-hint hidden lg:flex" style={{ color: "rgb(60, 60, 60)" }}>
+          <span className="hero__scroll-line" aria-hidden="true" style={{ backgroundColor: "rgb(60, 60, 60)" }} />
+          Scroll to reveal
+        </div>
+      </div>
+
+      {/* Layer 2: The photo itself */}
+      <div className="hero__bg-photo" ref={photoContainerRef}>
+        <Image
+          ref={imgRef}
+          src="/images/Hero.webp"
+          alt="Natanael Alexander Hero"
+          width={1920}
+          height={2560}
+          className="hero__img object-cover object-center w-full h-full"
+          fetchPriority="high"
+          priority
+          quality={80}
+          sizes="(max-width: 1023px) 100vw, 100vw"
+        />
+        <div className="hero__photo-vignette" aria-hidden="true" />
+      </div>
+
+      {/* Layer 3: About Section Panels */}
+      <div
+        className="about-wrapper z-30"
+        ref={aboutWrapperRef}
+        id="about"
+      >
+        {/* Panel 1: THE MINDSET */}
+        <div
+          className="w-[100vw] h-[100svh] lg:min-h-screen lg:h-[100vh] flex flex-col lg:flex-row max-lg:flex-shrink-0 bg-[#0a0a0a]"
+          ref={(el) => { panelsRef.current[0] = el; }}
+        >
+          <div
+            className="w-full h-[50svh] lg:h-full lg:w-1/2 flex-1 flex flex-col justify-center bg-[var(--chalk)] relative z-10 px-6 py-6 lg:p-24"
+            style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(3rem, 8vh, 6rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}
+          >
+            <div className="w-full">
+              <span className="about__label">01 / THE MINDSET</span>
+              <h2 className="about__title !text-[clamp(1.5rem,4vw,5rem)]" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', hyphens: 'auto' }}>THE CATALYST.</h2>
+              <p className="about__text">
+                &quot;Saya Natanael Alexander. Rutinitas yang monoton tidak pernah menjadi tempat saya. Sebagai seorang <i>problem solver</i>, kompleksitas adalah hal yang menghidupkan <i>passion</i> saya. Kebuntuan teknis maupun bisnis bukanlah batas akhir. Prinsip eksekusi saya sederhana:&quot;
+                <br /><br />
+                <span className="font-playfair italic text-[1.1em] font-medium tracking-wide">
+                  &quot;Tidak ada hal yang tidak mungkin, hanya ada tidak mau.&quot;
+                </span>
+              </p>
+            </div>
+          </div>
+          <div className="w-full h-[50svh] lg:h-full lg:w-1/2 relative bg-[var(--chalk)]">
+            <Image
+              alt="Natanael Alexander Casual"
+              className="object-cover object-center"
+              fill
+              sizes="(max-width: 1023px) 100vw, 50vw"
+              src="/images/casual.webp"
+            />
+          </div>
+        </div>
+
+        {/* Panel 2: THE FOUNDATION */}
+        <div
+          className="w-[100vw] h-[100svh] lg:min-h-screen lg:h-[100vh] flex flex-col-reverse lg:flex-row-reverse max-lg:flex-shrink-0 bg-[#0a0a0a]"
+          ref={(el) => { panelsRef.current[1] = el; }}
+        >
+          <div className="w-full h-[50svh] lg:h-full lg:w-1/2 relative bg-[var(--chalk)]">
+            <Image
+              alt="Natanael Alexander Formal"
+              className="object-cover object-center"
+              fill
+              sizes="(max-width: 1023px) 100vw, 50vw"
+              src="/images/formal.webp"
+            />
+          </div>
+          <div
+            className="w-full h-[50svh] lg:h-full lg:w-1/2 lg:flex-1 flex flex-col justify-center bg-[var(--chalk)] relative z-10 px-6 py-6 lg:p-24"
+            style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(2rem, 10vh, 8rem)", paddingBottom: "clamp(2rem, 10vh, 8rem)" }}
+          >
+            <div className="w-full">
+              <span className="about__label">02 / THE FOUNDATION</span>
+              <h2 className="about__title !text-[clamp(1.5rem,4vw,5rem)]" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', hyphens: 'auto' }}>DUAL PERSPECTIVE.</h2>
+              <p className="about__text">
+                &quot;Dorongan untuk memecahkan masalah secara komprehensif membawa saya meraih gelar ganda S.Kom (Sistem Informasi) dan S.Ak (Akuntansi). Latar belakang keilmuan ini mendikte cara berpikir saya: sebuah arsitektur teknologi tidak boleh hanya dinilai dari kecanggihan teknis, melainkan wajib divalidasi oleh logika finansial dan metrik bisnis yang terukur.&quot;
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+</file>
+
+</files>

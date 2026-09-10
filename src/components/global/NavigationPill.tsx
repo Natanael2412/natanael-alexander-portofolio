@@ -6,16 +6,15 @@ import { usePathname } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import LanguageSwitcher from "./LanguageSwitcher";
-
 
 gsap.registerPlugin(ScrollTrigger);
 
+// KUNCI FIX 404: Menggunakan hash (/#) agar tidak memicu 404 saat hard refresh
 const NAV_ITEMS = [
   { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Work", href: "/work" },
-  { label: "Contact", href: "/contact" },
+  { label: "About", href: "/#about" },
+  { label: "Work", href: "/#work" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 export default function NavigationPill() {
@@ -101,28 +100,27 @@ export default function NavigationPill() {
         const contactSection = document.getElementById("contact");
         
         // GUARD: Only run ScrollSpy if we are actually on a page that has these sections (like the homepage)
-        // This prevents the URL from being forcefully reset to '/' when on the /portfolio page.
         if (!aboutSection && !workSection && !contactSection) return;
         
         const halfScreen = window.innerHeight / 2;
 
         if (contactSection && contactSection.getBoundingClientRect().top <= halfScreen) {
-          currentSection = "/contact";
+          currentSection = "/#contact";
         } else if (workSection && workSection.getBoundingClientRect().top <= halfScreen) {
-          currentSection = "/work";
+          currentSection = "/#work";
         } else if (aboutSection && aboutSection.getBoundingClientRect().top <= halfScreen) {
-          currentSection = "/about";
+          currentSection = "/#about";
         }
         
-        if (window.location.pathname !== currentSection) {
-          window.history.replaceState(null, '', currentSection);
+        if (window.location.hash !== currentSection.replace('/', '')) {
+          window.history.replaceState(null, '', currentSection === "/" ? window.location.pathname : currentSection);
           
           // Dynamically update the browser tab title based on the active section for better UX
           const titleMap: Record<string, string> = {
             "/": "Natanael Alexander — Creative Digital Architect",
-            "/about": "About | Natanael Alexander",
-            "/work": "Selected Work | Natanael Alexander",
-            "/contact": "Contact | Natanael Alexander"
+            "/#about": "About | Natanael Alexander",
+            "/#work": "Selected Work | Natanael Alexander",
+            "/#contact": "Contact | Natanael Alexander"
           };
           document.title = titleMap[currentSection] || "Natanael Alexander";
         }
@@ -204,7 +202,7 @@ export default function NavigationPill() {
               return;
             }
 
-            if (item.href === "/about") {
+            if (item.href === "/#about") {
               const aboutTrigger = ScrollTrigger.getById("about-scroll");
               if (aboutTrigger) {
                 // Target Y = Start of pin + window.innerHeight (shrinking distance) + window.innerWidth (slide panel 1 in)
@@ -215,7 +213,7 @@ export default function NavigationPill() {
               }
             }
 
-            const targetId = item.href.replace('/', '');
+            const targetId = item.href.replace('/#', '');
             const targetEl = document.getElementById(targetId);
             if (targetEl) {
               if (lenis) {
