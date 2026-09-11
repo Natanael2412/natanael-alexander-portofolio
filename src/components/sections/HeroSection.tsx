@@ -191,6 +191,12 @@ export default function HeroSection() {
             pin: true,
             scrub: true,
             invalidateOnRefresh: true,
+            snap: {
+              snapTo: [0, 1],
+              delay: 0.1,
+              duration: { min: 0.4, max: 0.8 },
+              ease: "power2.out"
+            },
           }
         });
       });

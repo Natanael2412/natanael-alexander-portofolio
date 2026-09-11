@@ -7,10 +7,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export default function LenisProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
-    // Skip Lenis on mobile/tablet — native touch scroll is smooth enough
-    // and Lenis's lerp interpolation fights with GSAP scrub causing jitter
-    if (window.innerWidth < 1024) return;
-
     // Initialize Lenis
     const lenis = new Lenis({
       lerp: 0.08,
