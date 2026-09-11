@@ -176,7 +176,7 @@ export default function HeroSection() {
             trigger: photoContainerRef.current,
             start: "top top",
             end: "bottom top",
-            scrub: 0.5
+            scrub: true
           }
         });
 
@@ -189,7 +189,7 @@ export default function HeroSection() {
             start: "top top",
             end: () => `+=${window.innerWidth}`,
             pin: true,
-            scrub: 0.5,
+            scrub: true,
             invalidateOnRefresh: true,
           }
         });

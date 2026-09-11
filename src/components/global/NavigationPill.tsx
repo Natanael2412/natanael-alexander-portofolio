@@ -205,8 +205,9 @@ export default function NavigationPill() {
             if (item.href === "/#about") {
               const aboutTrigger = ScrollTrigger.getById("about-scroll");
               if (aboutTrigger) {
-                // Target Y = Start of pin + window.innerHeight (shrinking distance) + window.innerWidth (slide panel 1 in)
-                const targetY = aboutTrigger.start + window.innerHeight + window.innerWidth;
+                // ClipPath shrink phase = 0.5 * innerWidth of scroll distance
+                // Panel 01 starts right after that. Land just past the shrink.
+                const targetY = aboutTrigger.start + (window.innerWidth * 0.5);
                 if (lenis) lenis.scrollTo(targetY, scrollConfig);
                 else window.scrollTo({ top: targetY, behavior: 'smooth' });
                 return;
