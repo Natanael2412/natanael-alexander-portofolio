@@ -43,7 +43,7 @@ export default function AboutVertical({
           pinSpacing: false,
           scrub: true,
           snap: {
-            snapTo: 1,
+            snapTo: [0, 1],
             delay: 0.15,
             duration: { min: 0.6, max: 1.2 },
             ease: "power2.out"
@@ -58,7 +58,7 @@ export default function AboutVertical({
       });
     });
 
-    // Mobile: panels pin + shrink, NO snap (native fluid scroll)
+    // Mobile: panels pin + shrink + SNAP
     mm.add("(max-width: 1023px)", () => {
       panels.forEach((panel, i) => {
         if (i === panels.length - 1) return;
@@ -73,6 +73,12 @@ export default function AboutVertical({
           pin: true,
           pinSpacing: false,
           scrub: true,
+          snap: {
+            snapTo: [0, 1],
+            delay: 0.15,
+            duration: { min: 0.6, max: 1.2 },
+            ease: "power2.out"
+          },
           animation: gsap.to(inner, { 
             scale: 0.85, 
             opacity: 0.7, 
