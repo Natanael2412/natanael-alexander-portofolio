@@ -25,29 +25,61 @@ export default function AboutVertical({
   
   useGSAP(() => {
     const panels = gsap.utils.toArray('.panel-section') as HTMLElement[];
-    
-    panels.forEach((panel, i) => {
-      // The last panel doesn't need to scale down
-      if (i === panels.length - 1) return;
+    const mm = gsap.matchMedia();
 
-      const inner = panel.querySelector('.panel-inner');
-      if (!inner) return;
-      
-      // SNAP DIHAPUS SEPENUHNYA AGAR SCROLL SANGAT SMOOTH DAN NATURAL (TIDAK BRUTAL)
-      ScrollTrigger.create({
-        trigger: panel,
-        start: "top top",
-        endTrigger: panels[i + 1],
-        end: "top top",
-        pin: true,
-        pinSpacing: false,
-        scrub: true,
-        animation: gsap.to(inner, { 
-          scale: 0.85, 
-          opacity: 0.7, 
-          filter: "blur(12px)",
-          ease: "power2.inOut" 
-        })
+    // Desktop: panels pin + shrink + SNAP
+    mm.add("(min-width: 1024px)", () => {
+      panels.forEach((panel, i) => {
+        if (i === panels.length - 1) return;
+        const inner = panel.querySelector('.panel-inner');
+        if (!inner) return;
+
+        ScrollTrigger.create({
+          trigger: panel,
+          start: "top top",
+          endTrigger: panels[i + 1],
+          end: "top top",
+          pin: true,
+          pinSpacing: false,
+          scrub: true,
+          snap: {
+            snapTo: 1,
+            delay: 0.15,
+            duration: { min: 0.6, max: 1.2 },
+            ease: "power2.out"
+          },
+          animation: gsap.to(inner, { 
+            scale: 0.85, 
+            opacity: 0.7, 
+            filter: "blur(12px)",
+            ease: "power2.inOut" 
+          })
+        });
+      });
+    });
+
+    // Mobile: panels pin + shrink, NO snap (native fluid scroll)
+    mm.add("(max-width: 1023px)", () => {
+      panels.forEach((panel, i) => {
+        if (i === panels.length - 1) return;
+        const inner = panel.querySelector('.panel-inner');
+        if (!inner) return;
+
+        ScrollTrigger.create({
+          trigger: panel,
+          start: "top top",
+          endTrigger: panels[i + 1],
+          end: "top top",
+          pin: true,
+          pinSpacing: false,
+          scrub: true,
+          animation: gsap.to(inner, { 
+            scale: 0.85, 
+            opacity: 0.7, 
+            filter: "blur(12px)",
+            ease: "power2.inOut" 
+          })
+        });
       });
     });
 
@@ -78,6 +110,7 @@ export default function AboutVertical({
       });
     });
 
+    return () => mm.revert();
   }, { scope: containerRef });
 
   return (

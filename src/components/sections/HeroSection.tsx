@@ -176,7 +176,7 @@ export default function HeroSection() {
             trigger: photoContainerRef.current,
             start: "top top",
             end: "bottom top",
-            scrub: true
+            scrub: 0.5
           }
         });
 
@@ -189,9 +189,8 @@ export default function HeroSection() {
             start: "top top",
             end: () => `+=${window.innerWidth}`,
             pin: true,
-            scrub: true,
+            scrub: 0.5,
             invalidateOnRefresh: true,
-            // DI SINI SNAP SUDAH DIHAPUS SEPENUHNYA AGAR TIDAK MELOMPAT BRUTAL
           }
         });
       });

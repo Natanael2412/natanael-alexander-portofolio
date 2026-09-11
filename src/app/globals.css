@@ -823,14 +823,14 @@ body:has(button:hover) .cursor-ring {
 @media (max-width: 1023px) {
   .hero {
     height: auto;
-    min-height: 100svh;
+    min-height: 100vh;
   }
 
   .hero__bg-photo {
     /* Keep sticky so the photo stays pinned while sections below slide up to cover it */
     position: sticky;
     top: 0;
-    height: 100svh;
+    height: 100vh;
     z-index: 1;
   }
 
@@ -840,7 +840,7 @@ body:has(button:hover) .cursor-ring {
   }
 
   .hero__img {
-    height: 100svh;
+    height: 100vh;
   }
 
   /* About wrapper: absolute positioned off-screen to the right to allow GSAP horizontal sliding */
@@ -849,7 +849,7 @@ body:has(button:hover) .cursor-ring {
     left: 100vw;
     top: 0;
     width: 200vw;
-    height: 100svh !important;
+    height: 100vh !important;
     min-height: unset !important;
     flex-direction: row;
     z-index: 10; /* Must be above the sticky photo (z-index: 1) */
@@ -865,8 +865,8 @@ body:has(button:hover) .cursor-ring {
   /* Panels inside about-wrapper must be horizontal and take full screen on mobile */
   .about-wrapper > div {
     width: 100vw !important;
-    height: 100svh !important;
-    min-height: 100svh;
+    height: 100vh !important;
+    min-height: 100vh;
   }
 }
 
@@ -885,7 +885,7 @@ body:has(button:hover) .cursor-ring {
 
   /* Image half becomes fixed height on mobile */
   .about-panel-row .about-panel-image {
-    height: 50svh;
+    height: 50vh;
     min-height: 300px;
   }
 }

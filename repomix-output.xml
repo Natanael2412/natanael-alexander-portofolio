@@ -1263,13 +1263,17 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 export default function LenisProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
+    // Skip Lenis on mobile/tablet — native touch scroll is smooth enough
+    // and Lenis's lerp interpolation fights with GSAP scrub causing jitter
+    if (window.innerWidth < 1024) return;
+
     // Initialize Lenis
     const lenis = new Lenis({
-      lerp: 0.08, // Dinaikkan dari 0.03 ke 0.08 agar momentum scroll lebih cepat berhenti
+      lerp: 0.08,
       orientation: "vertical",
       gestureOrientation: "vertical",
       smoothWheel: true,
-      wheelMultiplier: 1.0, // Dikembalikan ke normal
+      wheelMultiplier: 1.0,
       touchMultiplier: 1.5,
     });
 
@@ -1295,50 +1299,6 @@ export default function LenisProvider({ children }: { children: React.ReactNode 
   }, []);
 
   return <>{children}</>;
-}
-</file>
-
-<file path="src/components/global/PageTransition.tsx">
-"use client";
-
-import { useRef, useEffect } from "react";
-import { usePathname } from "next/navigation";
-import gsap from "gsap";
-
-export default function PageTransition({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const curtainRef = useRef<HTMLDivElement>(null);
-  const pathname = usePathname();
-
-  // Entrance animation only on initial mount for SPA
-  useEffect(() => {
-    if (!curtainRef.current) return;
-
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        curtainRef.current,
-        { scaleY: 1, transformOrigin: "top" },
-        {
-          scaleY: 0,
-          duration: 0.9,
-          ease: "expo.inOut",
-          delay: 0.1,
-        }
-      );
-    });
-
-    return () => ctx.revert();
-  }, []);
-
-  return (
-    <>
-      <div ref={curtainRef} className="page-curtain" aria-hidden="true" />
-      <main>{children}</main>
-    </>
-  );
 }
 </file>
 
@@ -1967,6 +1927,45 @@ export default function LogoShader({ className, imageUrl = "/images/logo-weatso.
       ref={canvasRef}
       className={`w-full h-full block cursor-crosshair ${className || ""}`}
     />
+  );
+}
+</file>
+
+<file path="src/components/global/PageTransition.tsx">
+"use client";
+
+import { useRef, useEffect } from "react";
+import gsap from "gsap";
+
+export default function PageTransition({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const curtainRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!curtainRef.current) return;
+    
+    // Animasi curtain hanya berjalan di Desktop
+    const mm = gsap.matchMedia();
+    mm.add("(min-width: 1024px)", () => {
+      gsap.fromTo(
+        curtainRef.current,
+        { scaleY: 1, transformOrigin: "top" },
+        { scaleY: 0, duration: 0.9, ease: "expo.inOut", delay: 0.1 }
+      );
+    });
+
+    return () => mm.revert();
+  }, []);
+
+  return (
+    <>
+      {/* KUNCI: Class 'hidden lg:block' memastikan curtain tidak pernah ada di Mobile */}
+      <div ref={curtainRef} className="page-curtain hidden lg:block" aria-hidden="true" />
+      <main>{children}</main>
+    </>
   );
 }
 </file>
@@ -3310,14 +3309,14 @@ body:has(button:hover) .cursor-ring {
 @media (max-width: 1023px) {
   .hero {
     height: auto;
-    min-height: 100svh;
+    min-height: 100vh;
   }
 
   .hero__bg-photo {
     /* Keep sticky so the photo stays pinned while sections below slide up to cover it */
     position: sticky;
     top: 0;
-    height: 100svh;
+    height: 100vh;
     z-index: 1;
   }
 
@@ -3327,7 +3326,7 @@ body:has(button:hover) .cursor-ring {
   }
 
   .hero__img {
-    height: 100svh;
+    height: 100vh;
   }
 
   /* About wrapper: absolute positioned off-screen to the right to allow GSAP horizontal sliding */
@@ -3336,7 +3335,7 @@ body:has(button:hover) .cursor-ring {
     left: 100vw;
     top: 0;
     width: 200vw;
-    height: 100svh !important;
+    height: 100vh !important;
     min-height: unset !important;
     flex-direction: row;
     z-index: 10; /* Must be above the sticky photo (z-index: 1) */
@@ -3352,8 +3351,8 @@ body:has(button:hover) .cursor-ring {
   /* Panels inside about-wrapper must be horizontal and take full screen on mobile */
   .about-wrapper > div {
     width: 100vw !important;
-    height: 100svh !important;
-    min-height: 100svh;
+    height: 100vh !important;
+    min-height: 100vh;
   }
 }
 
@@ -3372,7 +3371,7 @@ body:has(button:hover) .cursor-ring {
 
   /* Image half becomes fixed height on mobile */
   .about-panel-row .about-panel-image {
-    height: 50svh;
+    height: 50vh;
     min-height: 300px;
   }
 }
@@ -3614,6 +3613,88 @@ export default function ContactFooter() {
 }
 </file>
 
+<file path="next.config.ts">
+import type { NextConfig } from "next";
+import createNextIntlPlugin from 'next-intl/plugin';
+
+const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
+
+const nextConfig: NextConfig = {
+  poweredByHeader: false,
+  productionBrowserSourceMaps: false,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production"
+      ? { exclude: ["error"] }
+      : false,
+  },
+  images: {
+    formats: ["image/avif", "image/webp"],
+    qualities: [75, 80, 95, 100],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cdn.anugerahventures.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "pub-3f5c4bd8e0904cd59374f969e476a0c2.r2.dev",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        port: "",
+        pathname: "/**",
+      },
+    ],
+  },
+  async rewrites() {
+    return [
+      // Default locale (id) — no prefix
+      {
+        source: "/about",
+        destination: "/",
+      },
+      {
+        source: "/work",
+        destination: "/",
+      },
+      {
+        source: "/contact",
+        destination: "/",
+      },
+      // Non-default locale (en) — with prefix
+      {
+        source: "/en/about",
+        destination: "/en",
+      },
+      {
+        source: "/en/work",
+        destination: "/en",
+      },
+      {
+        source: "/en/contact",
+        destination: "/en",
+      },
+    ];
+  },
+  async redirects() {
+    return [
+      {
+        source: "/portofolio",
+        destination: "/portfolio",
+        permanent: true,
+      },
+    ];
+  },
+};
+
+export default withNextIntl(nextConfig);
+</file>
+
 <file path="src/components/global/NavigationPill.tsx">
 "use client";
 
@@ -3623,16 +3704,15 @@ import { usePathname } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import LanguageSwitcher from "./LanguageSwitcher";
-
 
 gsap.registerPlugin(ScrollTrigger);
 
+// KUNCI FIX 404: Menggunakan hash (/#) agar tidak memicu 404 saat hard refresh
 const NAV_ITEMS = [
   { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Work", href: "/work" },
-  { label: "Contact", href: "/contact" },
+  { label: "About", href: "/#about" },
+  { label: "Work", href: "/#work" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 export default function NavigationPill() {
@@ -3718,28 +3798,27 @@ export default function NavigationPill() {
         const contactSection = document.getElementById("contact");
         
         // GUARD: Only run ScrollSpy if we are actually on a page that has these sections (like the homepage)
-        // This prevents the URL from being forcefully reset to '/' when on the /portfolio page.
         if (!aboutSection && !workSection && !contactSection) return;
         
         const halfScreen = window.innerHeight / 2;
 
         if (contactSection && contactSection.getBoundingClientRect().top <= halfScreen) {
-          currentSection = "/contact";
+          currentSection = "/#contact";
         } else if (workSection && workSection.getBoundingClientRect().top <= halfScreen) {
-          currentSection = "/work";
+          currentSection = "/#work";
         } else if (aboutSection && aboutSection.getBoundingClientRect().top <= halfScreen) {
-          currentSection = "/about";
+          currentSection = "/#about";
         }
         
-        if (window.location.pathname !== currentSection) {
-          window.history.replaceState(null, '', currentSection);
+        if (window.location.hash !== currentSection.replace('/', '')) {
+          window.history.replaceState(null, '', currentSection === "/" ? window.location.pathname : currentSection);
           
           // Dynamically update the browser tab title based on the active section for better UX
           const titleMap: Record<string, string> = {
             "/": "Natanael Alexander — Creative Digital Architect",
-            "/about": "About | Natanael Alexander",
-            "/work": "Selected Work | Natanael Alexander",
-            "/contact": "Contact | Natanael Alexander"
+            "/#about": "About | Natanael Alexander",
+            "/#work": "Selected Work | Natanael Alexander",
+            "/#contact": "Contact | Natanael Alexander"
           };
           document.title = titleMap[currentSection] || "Natanael Alexander";
         }
@@ -3821,7 +3900,7 @@ export default function NavigationPill() {
               return;
             }
 
-            if (item.href === "/about") {
+            if (item.href === "/#about") {
               const aboutTrigger = ScrollTrigger.getById("about-scroll");
               if (aboutTrigger) {
                 // Target Y = Start of pin + window.innerHeight (shrinking distance) + window.innerWidth (slide panel 1 in)
@@ -3832,7 +3911,7 @@ export default function NavigationPill() {
               }
             }
 
-            const targetId = item.href.replace('/', '');
+            const targetId = item.href.replace('/#', '');
             const targetEl = document.getElementById(targetId);
             if (targetEl) {
               if (lenis) {
@@ -3850,88 +3929,6 @@ export default function NavigationPill() {
     </nav>
   );
 }
-</file>
-
-<file path="next.config.ts">
-import type { NextConfig } from "next";
-import createNextIntlPlugin from 'next-intl/plugin';
-
-const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts');
-
-const nextConfig: NextConfig = {
-  poweredByHeader: false,
-  productionBrowserSourceMaps: false,
-  compiler: {
-    removeConsole: process.env.NODE_ENV === "production"
-      ? { exclude: ["error"] }
-      : false,
-  },
-  images: {
-    formats: ["image/avif", "image/webp"],
-    qualities: [75, 80, 95, 100],
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "cdn.anugerahventures.com",
-        port: "",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "pub-3f5c4bd8e0904cd59374f969e476a0c2.r2.dev",
-        port: "",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-        port: "",
-        pathname: "/**",
-      },
-    ],
-  },
-  async rewrites() {
-    return [
-      // Default locale (id) — no prefix
-      {
-        source: "/about",
-        destination: "/",
-      },
-      {
-        source: "/work",
-        destination: "/",
-      },
-      {
-        source: "/contact",
-        destination: "/",
-      },
-      // Non-default locale (en) — with prefix
-      {
-        source: "/en/about",
-        destination: "/en",
-      },
-      {
-        source: "/en/work",
-        destination: "/en",
-      },
-      {
-        source: "/en/contact",
-        destination: "/en",
-      },
-    ];
-  },
-  async redirects() {
-    return [
-      {
-        source: "/portofolio",
-        destination: "/portfolio",
-        permanent: true,
-      },
-    ];
-  },
-};
-
-export default withNextIntl(nextConfig);
 </file>
 
 <file path="src/components/sections/SelectedWork.tsx">
@@ -4300,35 +4297,61 @@ export default function AboutVertical({
   
   useGSAP(() => {
     const panels = gsap.utils.toArray('.panel-section') as HTMLElement[];
-    
-    panels.forEach((panel, i) => {
-      // The last panel doesn't need to scale down
-      if (i === panels.length - 1) return;
+    const mm = gsap.matchMedia();
 
-      const inner = panel.querySelector('.panel-inner');
-      if (!inner) return;
-      
-      ScrollTrigger.create({
-        trigger: panel,
-        start: "top top",
-        endTrigger: panels[i + 1],
-        end: "top top",
-        pin: true,
-        pinSpacing: false,
-        scrub: true,
-        snap: {
-          snapTo: 1, // Snap to start or end of the trigger
-          directional: true,
-          duration: { min: 0.2, max: 0.5 },
-          delay: 0.1,
-          ease: "power1.inOut"
-        },
-        animation: gsap.to(inner, { 
-          scale: 0.85, 
-          opacity: 0.7, 
-          filter: "blur(12px)",
-          ease: "power2.inOut" 
-        })
+    // Desktop: panels pin + shrink + SNAP
+    mm.add("(min-width: 1024px)", () => {
+      panels.forEach((panel, i) => {
+        if (i === panels.length - 1) return;
+        const inner = panel.querySelector('.panel-inner');
+        if (!inner) return;
+
+        ScrollTrigger.create({
+          trigger: panel,
+          start: "top top",
+          endTrigger: panels[i + 1],
+          end: "top top",
+          pin: true,
+          pinSpacing: false,
+          scrub: true,
+          snap: {
+            snapTo: 1,
+            delay: 0.15,
+            duration: { min: 0.6, max: 1.2 },
+            ease: "power2.out"
+          },
+          animation: gsap.to(inner, { 
+            scale: 0.85, 
+            opacity: 0.7, 
+            filter: "blur(12px)",
+            ease: "power2.inOut" 
+          })
+        });
+      });
+    });
+
+    // Mobile: panels pin + shrink, NO snap (native fluid scroll)
+    mm.add("(max-width: 1023px)", () => {
+      panels.forEach((panel, i) => {
+        if (i === panels.length - 1) return;
+        const inner = panel.querySelector('.panel-inner');
+        if (!inner) return;
+
+        ScrollTrigger.create({
+          trigger: panel,
+          start: "top top",
+          endTrigger: panels[i + 1],
+          end: "top top",
+          pin: true,
+          pinSpacing: false,
+          scrub: true,
+          animation: gsap.to(inner, { 
+            scale: 0.85, 
+            opacity: 0.7, 
+            filter: "blur(12px)",
+            ease: "power2.inOut" 
+          })
+        });
       });
     });
 
@@ -4359,29 +4382,30 @@ export default function AboutVertical({
       });
     });
 
-
+    return () => mm.revert();
   }, { scope: containerRef });
 
   return (
     <div ref={containerRef} className="bg-white text-black relative z-20 w-full">
       
       {/* Panel 3: THE PHILOSOPHY */}
-      <section className="sticky top-0 w-full h-[100svh] overflow-hidden panel-section bg-gray-100">
+      {/* PERBAIKAN: svh -> vh */}
+      <section className="sticky top-0 w-full h-[100vh] overflow-hidden panel-section bg-gray-100">
         <div className="absolute inset-0 z-0">
           <Image src="/images/logo-weatso.webp" alt="Background" fill className="object-cover opacity-40 blur-2xl scale-110 pointer-events-none" priority />
         </div>
         <div className="panel-inner w-full h-full flex flex-col lg:flex-row border-b border-gray-100 bg-white relative z-10" ref={(el) => { panelsRef.current[0] = el; }}>
         
-        {/* Left: Visual */}
-        <div className="w-full lg:w-1/2 h-[50svh] lg:h-full relative bg-white flex items-center justify-center overflow-hidden">
+        {/* Left: Visual - PERBAIKAN: h-[50%] untuk presisi Mobile */}
+        <div className="w-full h-[50%] lg:w-1/2 lg:h-full relative bg-white flex items-center justify-center overflow-hidden">
           <LogoShader 
             className="absolute inset-0 z-10" 
             imageUrl="/images/logo-weatso.webp" 
           />
         </div>
 
-        {/* Right: Text */}
-        <div className="w-full lg:w-1/2 flex flex-col justify-center bg-[var(--chalk)] relative z-10" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(3rem, 8vh, 6rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}>
+        {/* Right: Text - PERBAIKAN: h-[50%] untuk presisi Mobile */}
+        <div className="w-full h-[50%] lg:w-1/2 lg:h-full flex flex-col justify-center bg-[var(--chalk)] relative z-10" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(3rem, 8vh, 6rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}>
           <div className="w-full">
             <span className="about__label">03 / THE PHILOSOPHY</span>
             <h2 className="about__title !text-[clamp(1.5rem,4vw,5rem)]" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', hyphens: 'auto' }}>CREATIVE DIGITAL ARCHITECT.</h2>
@@ -4395,14 +4419,14 @@ export default function AboutVertical({
       </section>
 
       {/* Panel 4: PRODUCTION LEADERSHIP + Team Photo */}
-      <section className="sticky top-0 w-full h-[100svh] overflow-hidden panel-section bg-gray-100">
+      <section className="sticky top-0 w-full h-[100vh] overflow-hidden panel-section bg-gray-100">
         <div className="absolute inset-0 z-0">
           <Image src="/images/team.webp" alt="Background" fill className="object-cover opacity-40 blur-2xl scale-110 pointer-events-none" />
         </div>
         <div className="panel-inner w-full h-full flex flex-col-reverse lg:flex-row border-b border-gray-100 bg-white relative z-10" ref={(el) => { panelsRef.current[1] = el; }}>
         
         {/* Left: Text */}
-        <div className="w-full lg:w-1/2 flex flex-col justify-center bg-[var(--chalk)] relative z-10" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(3rem, 8vh, 6rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}>
+        <div className="w-full h-[50%] lg:w-1/2 lg:h-full flex flex-col justify-center bg-[var(--chalk)] relative z-10" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(3rem, 8vh, 6rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}>
           <div className="w-full">
             <span className="about__label">04 / PRODUCTION LEADERSHIP</span>
             <h2 className="about__title !text-[clamp(1.5rem,4vw,5rem)]" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', hyphens: 'auto' }}>WEATSO | Bespoke IT Consultancy &amp; Digital Presence.</h2>
@@ -4414,7 +4438,7 @@ export default function AboutVertical({
         </div>
 
         {/* Right: Photo */}
-        <div className="w-full lg:w-1/2 h-[50svh] lg:h-full relative bg-[var(--chalk)]">
+        <div className="w-full h-[50%] lg:w-1/2 lg:h-full relative bg-[var(--chalk)]">
           <Image 
             src="/images/team.webp" 
             alt="WEATSO Team" 
@@ -4428,14 +4452,14 @@ export default function AboutVertical({
       </section>
 
       {/* Panel 5: THE EXPERIENCE */}
-      <section className="sticky top-0 w-full h-[100svh] overflow-hidden panel-section bg-gray-100">
+      <section className="sticky top-0 w-full h-[100vh] overflow-hidden panel-section bg-gray-100">
         <div className="absolute inset-0 z-0">
           <Image src="/images/Experience.webp" alt="Background" fill className="object-cover opacity-40 blur-2xl scale-110 pointer-events-none" />
         </div>
         <div className="panel-inner w-full h-full flex flex-col lg:flex-row border-b border-gray-100 bg-white relative z-10" ref={(el) => { panelsRef.current[2] = el; }}>
         
         {/* Left: Photo */}
-        <div className="w-full lg:w-1/2 h-[50svh] lg:h-full relative bg-gray-100">
+        <div className="w-full h-[50%] lg:w-1/2 lg:h-full relative bg-gray-100">
           <Image 
             src="/images/Experience.webp" 
             alt="Experience" 
@@ -4446,7 +4470,7 @@ export default function AboutVertical({
         </div>
 
         {/* Right: Text & Stats */}
-        <div className="w-full lg:w-1/2 flex flex-col justify-center bg-[var(--chalk)] relative z-10" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(3rem, 8vh, 6rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}>
+        <div className="w-full h-[50%] lg:w-1/2 lg:h-full flex flex-col justify-center bg-[var(--chalk)] relative z-10" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(3rem, 8vh, 6rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}>
           <div className="w-full">
             <span className="about__label">05 / THE EXPERIENCE</span>
             <h2 className="about__title !text-[clamp(1.5rem,4vw,5rem)]" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', hyphens: 'auto' }}>EXPERIENCE IN NUMBERS.</h2>
@@ -4457,7 +4481,6 @@ export default function AboutVertical({
             {/* Stats Grid */}
             <div className="grid grid-cols-2 gap-8 md:gap-12">
               
-              {/* Stat 1 */}
               <div>
                 <div className="flex items-baseline gap-1 font-playfair font-black text-5xl md:text-7xl tracking-tighter">
                   <span className="stat-counter" data-target={yearsOfExperience}>0</span>
@@ -4466,7 +4489,6 @@ export default function AboutVertical({
                 <p className="font-montserrat text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mt-2 opacity-60">Years of Experience</p>
               </div>
 
-              {/* Stat 2 */}
               <div>
                 <div className="flex items-baseline gap-1 font-playfair font-black text-5xl md:text-7xl tracking-tighter">
                   <span className="stat-counter" data-target={projectsCount}>0</span>
@@ -4475,7 +4497,6 @@ export default function AboutVertical({
                 <p className="font-montserrat text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mt-2 opacity-60">Digital Projects</p>
               </div>
 
-              {/* Stat 3 */}
               <div>
                 <div className="flex items-baseline gap-1 font-playfair font-black text-5xl md:text-7xl tracking-tighter">
                   <span className="stat-counter" data-target="10">0</span>
@@ -4484,7 +4505,6 @@ export default function AboutVertical({
                 <p className="font-montserrat text-[10px] md:text-xs font-bold tracking-[0.2em] uppercase mt-2 opacity-60">Certifications</p>
               </div>
 
-              {/* Stat 4 */}
               <div>
                 <div className="flex items-baseline gap-1 font-playfair font-black text-5xl md:text-7xl tracking-tighter">
                   <span className="stat-counter" data-target={articlesCount}>0</span>
@@ -4500,9 +4520,9 @@ export default function AboutVertical({
       </section>
 
       {/* Panel 6: THE NEXT */}
-      <section className="sticky top-0 w-full h-[100svh] overflow-hidden panel-section bg-white">
+      <section className="sticky top-0 w-full h-[100vh] overflow-hidden panel-section bg-white">
         <div className="panel-inner w-full h-full flex flex-row border-b border-gray-100 bg-white relative z-10" ref={(el) => { panelsRef.current[3] = el; }}>
-        <div className="w-full flex flex-col justify-center items-center bg-[var(--chalk)] relative z-10 text-center" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(4rem, 10vh, 8rem)", paddingBottom: "clamp(4rem, 10vh, 8rem)" }}>
+        <div className="w-full h-full flex flex-col justify-center items-center bg-[var(--chalk)] relative z-10 text-center" style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(4rem, 10vh, 8rem)", paddingBottom: "clamp(4rem, 10vh, 8rem)" }}>
           <div className="w-full max-w-2xl mx-auto">
             <span className="about__label mx-auto">06 / THE NEXT</span>
             <h2 className="about__title !text-[clamp(1.5rem,4vw,5rem)]" style={{ wordBreak: 'break-word', overflowWrap: 'break-word', hyphens: 'auto' }}>WHAT NEXT?</h2>
@@ -4985,44 +5005,36 @@ export default function HeroSection() {
 
       // =========================================================
       // MOBILE LOGIC: MORPH PRELOADER + VERTICAL TO HORIZONTAL SCROLL
+      // PERBAIKAN: HAPUS svh JADI vh/%, HAPUS SNAPPING
       // =========================================================
       mm.add("(max-width: 1023px)", () => {
-        // 1. SETUP LAYOUT
         gsap.set(sectionRef.current, { height: "auto", position: "relative", display: "flex", flexDirection: "column", overflow: "hidden" });
-        gsap.set(photoContainerRef.current, { position: "relative", top: "auto", left: "auto", width: "100%", height: "100svh", zIndex: 1 });
+        gsap.set(photoContainerRef.current, { position: "relative", top: "auto", left: "auto", width: "100%", height: "100vh", zIndex: 1 }); // vh
         
-        // Memaksa About Wrapper membentang 2x layar ke samping (Horizontal Ready)
         gsap.set(aboutWrapperRef.current, {
-          position: "relative", top: "auto", left: "auto", width: "200vw", height: "100svh",
+          position: "relative", top: "auto", left: "auto", width: "200vw", height: "100vh", // vh
           display: "flex", flexDirection: "row", zIndex: 10
         });
 
-        // Panel 01 dan 02 diset sebelahan di dalam wrapper 200vw
-        gsap.set(panelsRef.current, { width: "100vw", height: "100svh", display: "flex", flexDirection: "column", flexShrink: 0 });
+        gsap.set(panelsRef.current, { width: "100vw", height: "100vh", display: "flex", flexDirection: "column", flexShrink: 0 }); // vh
         if (panelsRef.current[0] && panelsRef.current[1]) {
           const children = [...panelsRef.current[0].children, ...panelsRef.current[1].children];
-          gsap.set(children, { height: "50svh", width: "100%", flex: "none" });
+          gsap.set(children, { height: "50%", width: "100%", flex: "none" }); // 50%
         }
 
-        // 2. ANIMASI MORPH PRELOADER (1.5 DETIK)
         const initTl = gsap.timeline({ delay: 1.5 });
         
-        // Background Putih -> Hitam Transparan (50%)
         initTl.to(overlayRef.current, { backgroundColor: "rgba(0, 0, 0, 0.5)", duration: 1.2, ease: "power2.inOut" }, 0);
-        
-        // Teks Hitam -> Teks Putih
         initTl.to([nameLeftRef.current, nameRightRef.current], { color: "rgb(255, 255, 255)", duration: 1.2, ease: "power2.inOut" }, 0);
         initTl.to([indexRef.current, taglineRef.current, scrollHintRef.current], { color: "rgba(255, 255, 255, 0.8)", duration: 1.2, ease: "power2.inOut" }, 0);
         if (mobileNoticeRef.current) {
           initTl.to(mobileNoticeRef.current, { color: "rgba(255, 255, 255, 0.6)", duration: 1.2, ease: "power2.inOut" }, 0);
         }
 
-        // Cinematic reveal foto
         if (imgRef.current) {
           initTl.fromTo(imgRef.current, { scale: 1.15 }, { scale: 1, duration: 2, ease: "power2.out" }, 0);
         }
 
-        // 3. PARALLAX NATIVE SCROLL PADA HERO (LCP)
         gsap.to(imgRef.current, {
           yPercent: 15,
           ease: "none",
@@ -5030,31 +5042,21 @@ export default function HeroSection() {
             trigger: photoContainerRef.current,
             start: "top top",
             end: "bottom top",
-            scrub: true
+            scrub: 0.5
           }
         });
 
-        // 4. EFEK "AKSEN KHUSUS": PANEL 02 MELUNCUR DARI KANAN
-        // Scroll vertical akan normal sampai Panel 01 mentok di atas layar.
-        // Saat mentok, layar ditahan, dan user scroll untuk menarik Panel 02 masuk.
         gsap.to(aboutWrapperRef.current, {
-          x: () => -window.innerWidth, // Menggeser kontainer ke kiri sejauh 1 layar
+          x: () => -window.innerWidth,
           ease: "none",
           scrollTrigger: {
             id: "mobile-horizontal",
             trigger: aboutWrapperRef.current,
             start: "top top",
             end: () => `+=${window.innerWidth}`,
-            pin: true,                        // Mengunci layar
-            scrub: true,                      // Terikat pada scroll pengguna
+            pin: true,
+            scrub: 0.5,
             invalidateOnRefresh: true,
-            snap: {
-              snapTo: 1, // Snap to start (0) or end (1) of the animation
-              directional: true,
-              duration: { min: 0.2, max: 0.5 },
-              delay: 0.1,
-              ease: "power1.inOut"
-            }
           }
         });
       });
@@ -5065,9 +5067,8 @@ export default function HeroSection() {
   );
 
   return (
-    <section ref={sectionRef} className="hero" id="home" aria-label="Hero section">
+    <section ref={sectionRef} className="hero bg-[#0a0a0a]" id="home" aria-label="Hero section">
       
-      {/* Layer 1: Overlay (Morph Target) */}
       <div 
         className="hero__overlay-wrapper max-lg:absolute max-lg:inset-0 max-lg:z-50 max-lg:flex max-lg:flex-col max-lg:justify-center" 
         ref={overlayRef} 
@@ -5104,7 +5105,6 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* Layer 2: The photo itself */}
       <div className="hero__bg-photo" ref={photoContainerRef}>
         <Image
           ref={imgRef}
@@ -5121,19 +5121,20 @@ export default function HeroSection() {
         <div className="hero__photo-vignette" aria-hidden="true" />
       </div>
 
-      {/* Layer 3: About Section Panels */}
       <div
-        className="about-wrapper z-30"
+        className="about-wrapper z-30 bg-[#0a0a0a]"
         ref={aboutWrapperRef}
         id="about"
       >
-        {/* Panel 1: THE MINDSET */}
+        {/* Panel 1 */}
+        {/* PERBAIKAN: h-[100svh] diganti ke h-[100vh] */}
         <div
-          className="w-[100vw] h-[100svh] lg:min-h-screen lg:h-[100vh] flex flex-col lg:flex-row max-lg:flex-shrink-0 bg-[#0a0a0a]"
+          className="w-[100vw] h-[100vh] lg:min-h-screen lg:h-[100vh] flex flex-col lg:flex-row max-lg:flex-shrink-0 bg-[#0a0a0a]"
           ref={(el) => { panelsRef.current[0] = el; }}
         >
+          {/* PERBAIKAN: h-[50svh] diganti ke h-[50%] */}
           <div
-            className="w-full h-[50svh] lg:h-full lg:w-1/2 flex-1 flex flex-col justify-center bg-[var(--chalk)] relative z-10 px-6 py-6 lg:p-24"
+            className="w-full h-[50%] lg:h-full lg:w-1/2 flex-1 flex flex-col justify-center bg-[var(--chalk)] relative z-10 px-6 py-6 lg:p-24"
             style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(3rem, 8vh, 6rem)", paddingBottom: "clamp(3rem, 8vh, 6rem)" }}
           >
             <div className="w-full">
@@ -5148,7 +5149,8 @@ export default function HeroSection() {
               </p>
             </div>
           </div>
-          <div className="w-full h-[50svh] lg:h-full lg:w-1/2 relative bg-[var(--chalk)]">
+          {/* PERBAIKAN: h-[50svh] diganti ke h-[50%] */}
+          <div className="w-full h-[50%] lg:h-full lg:w-1/2 relative bg-[var(--chalk)]">
             <Image
               alt="Natanael Alexander Casual"
               className="object-cover object-center"
@@ -5159,12 +5161,14 @@ export default function HeroSection() {
           </div>
         </div>
 
-        {/* Panel 2: THE FOUNDATION */}
+        {/* Panel 2 */}
+        {/* PERBAIKAN: h-[100svh] diganti ke h-[100vh] */}
         <div
-          className="w-[100vw] h-[100svh] lg:min-h-screen lg:h-[100vh] flex flex-col-reverse lg:flex-row-reverse max-lg:flex-shrink-0 bg-[#0a0a0a]"
+          className="w-[100vw] h-[100vh] lg:min-h-screen lg:h-[100vh] flex flex-col-reverse lg:flex-row-reverse max-lg:flex-shrink-0 bg-[#0a0a0a]"
           ref={(el) => { panelsRef.current[1] = el; }}
         >
-          <div className="w-full h-[50svh] lg:h-full lg:w-1/2 relative bg-[var(--chalk)]">
+          {/* PERBAIKAN: h-[50svh] diganti ke h-[50%] */}
+          <div className="w-full h-[50%] lg:h-full lg:w-1/2 relative bg-[var(--chalk)]">
             <Image
               alt="Natanael Alexander Formal"
               className="object-cover object-center"
@@ -5173,8 +5177,9 @@ export default function HeroSection() {
               src="/images/formal.webp"
             />
           </div>
+          {/* PERBAIKAN: h-[50svh] diganti ke h-[50%] */}
           <div
-            className="w-full h-[50svh] lg:h-full lg:w-1/2 lg:flex-1 flex flex-col justify-center bg-[var(--chalk)] relative z-10 px-6 py-6 lg:p-24"
+            className="w-full h-[50%] lg:h-full lg:w-1/2 lg:flex-1 flex flex-col justify-center bg-[var(--chalk)] relative z-10 px-6 py-6 lg:p-24"
             style={{ paddingLeft: "clamp(2rem, 6vw, 8rem)", paddingRight: "clamp(2rem, 6vw, 8rem)", paddingTop: "clamp(2rem, 10vh, 8rem)", paddingBottom: "clamp(2rem, 10vh, 8rem)" }}
           >
             <div className="w-full">
