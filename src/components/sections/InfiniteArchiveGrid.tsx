@@ -255,8 +255,8 @@ export default function InfiniteArchiveGrid({ projects = [] }: { projects: Proje
                     </div>
                   )}
                   
-                  <div className="absolute inset-0 bg-black/65 transition-colors duration-300 [.is-active_&]:bg-black/40" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-0 transition-opacity duration-300 [.is-active_&]:opacity-100" />
+                  <div className="absolute inset-0 bg-black/40 transition-colors duration-300 [.is-active_&]:bg-black/10" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/10 to-transparent opacity-0 transition-opacity duration-300 [.is-active_&]:opacity-100" />
                   
                   <div className="absolute inset-0 p-8 flex flex-col justify-end opacity-0 translate-y-4 transition-all duration-500 [.is-active_&]:opacity-100 [.is-active_&]:translate-y-0">
                     <h3 className="font-playfair text-3xl md:text-5xl text-white font-black uppercase tracking-tighter">{project.title}</h3>
@@ -293,8 +293,8 @@ export default function InfiniteArchiveGrid({ projects = [] }: { projects: Proje
                   </div>
                 )}
                 
-                <div className="absolute inset-0 bg-black/50 transition-colors duration-300 group-hover:bg-black/20" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80" />
+                <div className="absolute inset-0 bg-black/30 transition-colors duration-300 group-hover:bg-black/10" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-80" />
                 
                 <div className="absolute inset-0 p-4 flex flex-col justify-end">
                   <h3 className="font-playfair text-sm sm:text-base text-white font-black uppercase tracking-tighter leading-tight line-clamp-3">{project.title}</h3>
